@@ -1,6 +1,5 @@
 package cosi131;
 
-import java.util.Date;
 import java.util.Random;
 
 class Consumer implements Runnable {
