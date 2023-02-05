@@ -1,21 +1,31 @@
 package cosi131;
+
 import java.util.Date;
+import java.util.Random;
 
 class Consumer implements Runnable {
-	private Channel mbox;
-	public Consumer (Channel m) {mbox = m;}
-
+	private Channel mbox;
+	
+	public Consumer (Channel m) { mbox = m; }
+	
 	public void run() {
-		Date message;
+		String widgetName;
 		while (true) {
-
-			//nap for random time
-			Thread.CurrentThread(;
-
-			// Pick up awaiting message if any
-			message = (Date) mbox.receive();
-			if (message != NULL)
-			   System.out.println (“Consumer consumed” + message);
-		}	
+			
+			// nap for a random time
+			Random r = new Random();
+			try {
+				Thread.sleep(r.nextInt(200,2000));
+				
+			// Pick up waiting message, if any
+				widgetName = (String) mbox.receive();
+				if (widgetName != null) {
+					System.out.println("Consumed: " + widgetName);
+				}
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }
