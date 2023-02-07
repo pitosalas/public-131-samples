@@ -33,7 +33,7 @@ int main()
 {
     l("starting...");
 
-    pipe(pipe_info);  // Creates a new pipe.  File descriptors for the two ends of the pipe are placed in pipefd.
+    pipe(pipe_info);  // Creates a new pipe.  
 
     l("Pipe is built");
 
