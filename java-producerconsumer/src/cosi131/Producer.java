@@ -11,12 +11,12 @@ class Producer implements Runnable {
 
 	public void run() {
 		Integer widgetNumber = 0;
-		while (true) {
+		for (int i=0; i<100; i++) {
 			
 			// nap for a random time
 			Random r = new Random();
 			try {
-				Thread.sleep(r.nextInt(100, 2000));
+				Thread.sleep(r.nextInt(100, 200));
 
 				// produce new item for buffer
 				String widget = "Widget " + widgetNumber++;
@@ -28,7 +28,6 @@ class Producer implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
 	}
 }

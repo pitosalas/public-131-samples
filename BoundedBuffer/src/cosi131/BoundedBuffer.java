@@ -2,11 +2,11 @@ package cosi131;
 
 public class BoundedBuffer {
 	
-	private static final int SIZE = 5;//maximum # items in buffer
-	private int count;  		//# items in buffer
-	private int in;			//index of next free position
+	private static final int SIZE = 10;//maximum # items in buffer
+	public int count;  			//# items in buffer
+	private int in;				//index of next free position
 	private int out;			//index of next full position
-	private String [] buffer;		//buffer array
+	private String [] buffer;	//buffer array
 
 	public BoundedBuffer(){
 		// buffer is initially empty
@@ -17,7 +17,7 @@ public class BoundedBuffer {
 	}
 
 	void insert (String item){
-		while (count == SIZE)  ;//do nothing – no free position
+		while (count == SIZE) Thread.yield(); //do nothing – no free position
 
 		// add item to buffer
 		count ++;
@@ -27,7 +27,7 @@ public class BoundedBuffer {
 
 	public String remove () {
 		String item;
-		while (count == 0) ;		//do nothing – no item to consume
+		while (count == 0) Thread.yield();
 		
 		//remove item from buffer
 		--count;
