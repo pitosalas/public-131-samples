@@ -7,7 +7,7 @@ public class AY implements Mutex {
 		flag0 = flag1 = false;
 	}
 
-	public void enterCS(int t) {
+	public synchronized void enterCS(int t) {
 		if (t == 0) {
 			flag0 = true;
 			while (flag1)
@@ -19,7 +19,7 @@ public class AY implements Mutex {
 		}
 	}
 
-	public void exitCS(int t) {
+	public synchronized void exitCS(int t) {
 		if (t == 0)
 			flag0 = false;
 		else
