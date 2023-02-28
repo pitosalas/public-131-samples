@@ -1,8 +1,9 @@
 package cosi131;
 
+import java.util.Random;
+
 public class Worker implements Runnable {
 
-	
 	private String name;
 	private int id;
 	private Mutex mutex;
@@ -15,30 +16,35 @@ public class Worker implements Runnable {
 	}
 
 	public void run() {
-		while (true) {
-			mutex.enterCS(id);
-			
-			System.out.printf("\n>>> Thread %s enters critical section. (%d)\n", name, id);
-
-			doWork(id);
-
-			System.out.printf("<<< Thread %s departs" + " critical section. (%d)\n", name, id);
-
-			mutex.exitCS(id);
+		try {
+			if (id == 0) {
+				while (true) {
+					System.out.printf("\"entercs\", \"%s\"\n", name);
+					mutex.enterCS(id);
+					Thread.sleep(generateSleepTime(300, 1000));
+					mutex.exitCS(id);
+					System.out.printf("\"exitcs\", \"%s\"\n", name);
+					Thread.sleep(generateSleepTime(600, 2000));
+					System.out.printf("\"exhitwhile\", \"%s\"\n", name);
+				}
+			} else if (id == 1) {
+				System.out.printf("\"entercs\", \"%s\"\n", name);
+				mutex.enterCS(id);
+				Thread.sleep(generateSleepTime(300, 1000));
+				mutex.exitCS(id);
+				System.out.printf("\"exitcs\", \"%s\"\n", name);
+				Thread.sleep(generateSleepTime(50, 100));		
+				System.out.printf("\"exhitwhile\", \"%s\"\n", name);
+			} else
+				System.out.println("Invalid thread number");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
-	private void doWork(int id) {
-		System.out.printf("Doing work for thread: %s\n", name);
-		try {
-			if (id == 0)
-				Thread.sleep(10);
-			else
-				Thread.sleep(10);
-			System.in.read();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+	private int generateSleepTime(int min, int max) {
+		Random rand = new Random();
+		return rand.nextInt((max - min) + 1) + min;
 	}
 }
