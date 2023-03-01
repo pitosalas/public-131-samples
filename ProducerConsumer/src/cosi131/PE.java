@@ -19,14 +19,14 @@ public class PE implements Mutex {
 			turn = 1;
 			while (turn == 1 && flag1) {
 			   System.out.printf("yielded 0 %b %b\n", flag0, flag1);
-				Thread.yield();
+			   Thread.yield();
 			}
 		} else if (t == 1) {
 			flag1 = true;
 			turn = 0;
 			while (turn == 0 && flag0) {
 			   System.out.printf("yielded 1 %b %b\n", flag0, flag1);
-				Thread.yield();
+			   Thread.yield();
 			}
 		} else
 			System.out.println("Invalid t in enterCS");
