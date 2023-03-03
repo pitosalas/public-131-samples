@@ -13,20 +13,21 @@ public class PE implements Mutex {
 
 	@Override
 	public void enterCS(int t) {
+		System.out.printf("Turn: %d, flag 0=%b 1=%b\n", turn, flag0, flag1);
 		// call with t = 0 if thread A, t = 1 if thread B
 		if (t == 0) {
 			flag0 = true;
 			turn = 1;
 			while (turn == 1 && flag1) {
-			   System.out.printf("yielded 0 %b %b\n", flag0, flag1);
-			   Thread.yield();
+				System.out.printf("yielded 0 - turn: %d, flag 0=%b 1=%b\n", turn, flag0, flag1);
+				Thread.yield();
 			}
 		} else if (t == 1) {
 			flag1 = true;
 			turn = 0;
 			while (turn == 0 && flag0) {
-			   System.out.printf("yielded 1 %b %b\n", flag0, flag1);
-			   Thread.yield();
+				System.out.printf("yielded 1 - turn: %d, flag 0=%b 1=%b\n", turn, flag0, flag1);
+				Thread.yield();
 			}
 		} else
 			System.out.println("Invalid t in enterCS");
@@ -36,8 +37,10 @@ public class PE implements Mutex {
 	public void exitCS(int t) {
 		if (t == 0)
 			flag0 = false;
-		else
+		else if (t == 1) {
 			flag1 = false;
+		} else
+			System.out.println("Invalid t in enterCS");
 	}
 
 }

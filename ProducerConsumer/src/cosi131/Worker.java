@@ -16,35 +16,45 @@ public class Worker implements Runnable {
 	}
 
 	public void run() {
-		try {
-			if (id == 0) {
-				while (true) {
-					System.out.printf("\"entercs\", \"%s\"\n", name);
-					mutex.enterCS(id);
-					Thread.sleep(generateSleepTime(300, 1000));
-					mutex.exitCS(id);
-					System.out.printf("\"exitcs\", \"%s\"\n", name);
-					Thread.sleep(generateSleepTime(600, 2000));
-					System.out.printf("\"exhitwhile\", \"%s\"\n", name);
-				}
-			} else if (id == 1) {
-				System.out.printf("\"entercs\", \"%s\"\n", name);
+		if (id == 0) {
+			while (true) {
+				log("\nwork");
+				generateSleepTime(300, 1000);
 				mutex.enterCS(id);
-				Thread.sleep(generateSleepTime(300, 1000));
+				log("++cs");
+				generateSleepTime(300, 1000);
 				mutex.exitCS(id);
-				System.out.printf("\"exitcs\", \"%s\"\n", name);
-				Thread.sleep(generateSleepTime(50, 100));		
-				System.out.printf("\"exhitwhile\", \"%s\"\n", name);
-			} else
-				System.out.println("Invalid thread number");
+				log("--cs");
+				generateSleepTime(600, 2000);
+				log("done");
+			}
+		} else if (id == 1) {
+			log("\nwork");
+			mutex.enterCS(id);
+			log("++cs");
+			generateSleepTime(300, 1000);
+			mutex.exitCS(id);
+			log("--cs");
+			generateSleepTime(50, 100);
+			log("done");
+		} else
+			System.out.println("Invalid thread number");
+	}
+
+	private void generateSleepTime(int min, int max) {
+		Random rand = new Random();
+		int sleep_ms = rand.nextInt((max - min) + 1) + min;
+		System.out.printf("Sleep(%d): %d\n", id, sleep_ms);
+		try {
+			Thread.sleep(sleep_ms);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	private int generateSleepTime(int min, int max) {
-		Random rand = new Random();
-		return rand.nextInt((max - min) + 1) + min;
+	private void log(String s) {
+		System.out.printf("%s \"%s\"\n", s, name);
+
 	}
 }

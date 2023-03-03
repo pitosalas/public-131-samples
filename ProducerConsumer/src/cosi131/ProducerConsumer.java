@@ -10,8 +10,8 @@ class ProducerConsumer
 		// Mutex alg = new AY();
 		Mutex alg = new PE();
 		
-		Thread one = new Thread (new Worker ("Worker 0", 0, alg));
-		Thread two = new Thread (new Worker ("Worker 1", 1, alg));
+		Thread one = new Thread (new Worker ("Thread A", 0, alg));
+		Thread two = new Thread (new Worker ("Thread B", 1, alg));
 
 		one.start();
 		two.start();
