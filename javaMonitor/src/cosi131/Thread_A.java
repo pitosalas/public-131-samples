@@ -12,6 +12,6 @@ class Thread_A extends Thread {
         this.c = c;
     }
     public void run() {
-        c.displayCounting(5);
+        c.displayCounting(5, "Thread A", 300);
     }
 }
