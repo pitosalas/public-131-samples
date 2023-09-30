@@ -1,0 +1,14 @@
+{
+  "sched_algorithm": "RR",
+  "time_slice": 2,
+  "number_of_processes": 3,
+  "arrival_time": {
+    "from": 1,
+    "to": 10
+  },
+  "burst_time": {
+    "from": 1,
+    "to": 10
+  },
+  "total_time": { "from": 1, "to": 10 }
+}
