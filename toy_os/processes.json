@@ -3,12 +3,12 @@
   "time_slice": 2,
   "number_of_processes": 3,
   "arrival_time": {
-    "from": 3,
-    "to": 6
+    "from": 1,
+    "to": 3
   },
   "burst_time": {
     "from": 1,
-    "to": 10
+    "to": 5
   },
-  "total_time": { "from": 1, "to": 10 }
+  "total_time": { "from": 1, "to": 3 }
 }

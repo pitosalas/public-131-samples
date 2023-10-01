@@ -25,66 +25,47 @@ class PCB:
     def update(self, time):
         if self.status not in ("New", "Terminated"):
             self.wall_time += 1
+    
+    def __repr__(self):
+        return f"PCB({self.pid}, {self.arrival_time}, {self.burst_time}, {self.total_time})"
 
 
 class Queue:
-    """
-    A class representing a queue data structure.
-
-    Attributes:
-    - head: The first element in the queue.
-    - tail: The last element in the queue.
-    - name: The name of the queue.
-
-    Methods:
-    - add(pcb): Adds a Process Control Block (pcb) to the end of the queue.
-    - remove(): Removes and returns the first element in the queue.
-    - print(): Prints all the elements in the queue.
-    """
-
     def __init__(self, name):
-        self.head = None
-        self.tail = None
         self.name = name
+        self._list = []
 
-    def add(self, pcb):
+    def add_at_end(self, pcb):
         pcb.status = self.name
-        if self.head == None:
-            self.head = pcb
-            self.tail = pcb
-            pcb.next = None
-        else:
-            self.tail.next = pcb
-            self.tail = pcb
+        self._list += [pcb]
 
-    def remove(self):
-        if self.head == None:
+    def remove_from_front(self):
+        pcb = self._list[0]
+        self._list = self._list[1:]
+        return pcb
+
+    def remove(self, pcb):
+        self._list.remove(pcb)
+        return pcb
+
+    def empty(self):
+        return len(self._list) == 0
+
+    @property
+    def head(self):
+        if len(self._list) > 0:
+            return self._list[0]
+        else:
             return None
-        else:
-            pcb = self.head
-            self.head = self.head.next
-            pcb.next = None
-            return pcb
 
-    def print(self):
-        console = Console()
-        table = Table(show_header=True, header_style="bold magenta")
-        table.title = self.name
-        table.add_column("Status", style="cyan")
-        table.add_column("PID", style="cyan")
-        table.add_column("Arrival", justify="right", style="green")
-        table.add_column("Burst", justify="right", style="green")
-        table.add_column("Total", justify="right", style="green")
-        table.add_column("Current", justify="right", style="green")
-        table.add_column("Wall Time", justify="right", style="green")
+    def __repr__(self):
+        return f"Queue(\"{self.name}\")"
 
-        pcb = self.head
-        while pcb != None:
+    def print(self, table):
+        for pcb in self._list:
             table.add_row(pcb.status, str(pcb.pid), str(pcb.arrival_time), str(
                 pcb.burst_time), str(pcb.total_time), str(pcb.run_time), str(pcb.wall_time))
             pcb = pcb.next
-        console.print(table)
-
 class Clock:
     """
     A class representing a clock that can be incremented and observed by registered objects.
@@ -96,6 +77,7 @@ class Clock:
     def increment(self):
         self.time += 1
         for obj in self.watchers:
+            print(obj)
             obj.update(self.time)
 
     def get_time(self):
@@ -109,12 +91,13 @@ class Clock:
 
 
 class Scheduler:
-    def __init__(self):
+    def __init__(self, clock):
         self.new_queue = Queue("New")
         self.ready_queue = Queue("Ready Queue")
         self.waiting_queue = Queue("Waiting Queue")
         self.terminated_queue = Queue("Terminated")
         self.running = Queue("Running")
+        self.clock = clock
 
     def all_processes_done(self):
         """
@@ -122,27 +105,46 @@ class Scheduler:
         """
         return self.running.head == None and self.new_queue.head == None and self.ready_queue.head == None and self.waiting_queue.head == None
 
-    def update(self, time):
+    def move_from_ready(self):
         # while there are still pcbs on new queue, remove them from new queue and add them to ready queue
-        while self.new_queue.head != None:
-            pcb = self.new_queue.remove()
-            self.ready_queue.add(pcb)
+
+        for pcb in self.new_queue._list:
+            if pcb.arrival_time <= self.clock.get_time():
+                self.new_queue.remove(pcb)
+                self.ready_queue.add_at_end(pcb)
+
+    def handle_done(self):
         # if there is a running process, check if it is done
-        if self.running.head is not None and self.running.head.run_time == self.running.head.total_time:
-            # if it is done, add it to the terminated queue and set running to None
-            self.terminated_queue.add(self.running.remove())
-        # if there is no running process, remove the first process from the ready queue and run it
-        if self.running.head == None and self.ready_queue.head != None:
-            self.running.add(self.ready_queue.remove())
+        current_process = self.running.head
+        if current_process is not None and current_process.run_time >= current_process.total_time:
+        # if it is done, add it to the terminated queue and set running to None
+            self.terminated_queue.add_at_end(self.running.remove(current_process))
+
+    def schedule_next(self):
+        # Return if no one to run
+        if not self.running.empty() or self.ready_queue.empty():
+            return
+        process_to_run = self.ready_queue.remove_from_front()
+        self.running.add_at_end(process_to_run)
+
+    def update_running_process(self):
         # if there is a running process, increment its time
         if self.running.head is not None:
             self.running.head.run_time += 1
 
+    def update(self, time):
+        self.move_from_ready()
+        self.handle_done()
+        self.schedule_next()
+        self.update_running_process()
+
+    def __repr__(self):
+        return "Scheduler({clock} )"
 
 class Simulation:
     def __init__(self):
-        self.sched = Scheduler()
         self.clock = Clock()
+        self.sched = Scheduler(self.clock)
         self.clock.register_object(self.sched)
 
     def print_status(self):
@@ -151,17 +153,23 @@ class Simulation:
         """
         console = Console()
         console.clear()
+        console.print(f"Clock: {self.clock.get_time()}", style="bold red")
         table = Table(show_header=True, header_style="bold magenta")
         table.title = "Operating System Status"
-        table.add_column("", style="cyan")
-        table.add_column("Value", justify="right", style="green")
-        table.add_row("Time", str(self.clock.get_time()))
+        table.add_column("Status", style="cyan")
+        table.add_column("PID", style="cyan")
+        table.add_column("Arrival", justify="right", style="green")
+        table.add_column("Burst", justify="right", style="green")
+        table.add_column("Total", justify="right", style="green")
+        table.add_column("Current", justify="right", style="green")
+        table.add_column("Wall Time", justify="right", style="green")
+
+        self.sched.running.print(table)
+        self.sched.ready_queue.print(table)
+        self.sched.waiting_queue.print(table)
+        self.sched.terminated_queue.print(table)
+        self.sched.new_queue.print(table)
         console.print(table)
-        self.sched.running.print()
-        self.sched.ready_queue.print()
-        self.sched.waiting_queue.print()
-        self.sched.terminated_queue.print()
-        self.sched.new_queue.print()
 
     # Function to ead the json file
 
@@ -182,9 +190,9 @@ class Simulation:
                 burst_time = random.randint(
                     data['burst_time']['from'], data['burst_time']['to'])
                 total_time = random.randint(
-                    data['total_time']['from'], data['burst_time']['to'])
+                    data['total_time']['from'], data['total_time']['to'])
                 pcb = PCB(pid, arrival_time, burst_time, total_time)
-                self.sched.new_queue.add(pcb)
+                self.sched.new_queue.add_at_end(pcb)
                 self.clock.register_object(pcb)
 
     def run(self):
