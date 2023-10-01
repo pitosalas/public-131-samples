@@ -20,9 +20,12 @@ class PCB:
         self.run_time = 0
         self.wall_time = 0
         self.next = None
+        self.status = "New"
 
     def update(self, time):
-        self.wall_time += 1
+        if self.status not in ("New", "Terminated"):
+            self.wall_time += 1
+
 
 class Queue:
     """
@@ -45,6 +48,7 @@ class Queue:
         self.name = name
 
     def add(self, pcb):
+        pcb.status = self.name
         if self.head == None:
             self.head = pcb
             self.tail = pcb
@@ -52,7 +56,6 @@ class Queue:
         else:
             self.tail.next = pcb
             self.tail = pcb
-
 
     def remove(self):
         if self.head == None:
@@ -67,25 +70,25 @@ class Queue:
         console = Console()
         table = Table(show_header=True, header_style="bold magenta")
         table.title = self.name
+        table.add_column("Status", style="cyan")
         table.add_column("PID", style="cyan")
-        table.add_column("Arrival", justify="right", style="green") 
-        table.add_column("Burst", justify="right", style="green") 
-        table.add_column("Total", justify="right", style="green") 
+        table.add_column("Arrival", justify="right", style="green")
+        table.add_column("Burst", justify="right", style="green")
+        table.add_column("Total", justify="right", style="green")
         table.add_column("Current", justify="right", style="green")
-        table.add_column("Wall Time", justify="right", style="green") 
+        table.add_column("Wall Time", justify="right", style="green")
 
         pcb = self.head
         while pcb != None:
-            table.add_row(str(pcb.pid), str(pcb.arrival_time), str(pcb.burst_time), str(pcb.total_time), str(pcb.run_time), str(pcb.wall_time))
+            table.add_row(pcb.status, str(pcb.pid), str(pcb.arrival_time), str(
+                pcb.burst_time), str(pcb.total_time), str(pcb.run_time), str(pcb.wall_time))
             pcb = pcb.next
         console.print(table)
 
-# I clock class will control the simulation time. It will have a method to increment the
-# time. That incrementing of the time will be communicated to all PCBs and classes so they
-# can maintain their state. Whenever a new object is created that needs to be aware of the time,
-# it registers itself with the clock object
-
 class Clock:
+    """
+    A class representing a clock that can be incremented and observed by registered objects.
+    """
     def __init__(self):
         self.watchers = []
         self.time = 0
@@ -104,12 +107,13 @@ class Clock:
     def unregister_object(self, obj):
         self.watchers.remove(obj)
 
+
 class Scheduler:
     def __init__(self):
-        self.new_queue = Queue("New Queue")
+        self.new_queue = Queue("New")
         self.ready_queue = Queue("Ready Queue")
         self.waiting_queue = Queue("Waiting Queue")
-        self.terminated_queue = Queue("Terminated Queue")
+        self.terminated_queue = Queue("Terminated")
         self.running = Queue("Running")
 
     def all_processes_done(self):
@@ -117,9 +121,8 @@ class Scheduler:
         Returns True if all processes are done, False otherwise.
         """
         return self.running.head == None and self.new_queue.head == None and self.ready_queue.head == None and self.waiting_queue.head == None
-    
+
     def update(self, time):
-        print("Scheduler update")
         # while there are still pcbs on new queue, remove them from new queue and add them to ready queue
         while self.new_queue.head != None:
             pcb = self.new_queue.remove()
@@ -147,10 +150,11 @@ class Simulation:
         Prints the current status of the operating system representing the terminated queue.
         """
         console = Console()
+        console.clear()
         table = Table(show_header=True, header_style="bold magenta")
         table.title = "Operating System Status"
         table.add_column("", style="cyan")
-        table.add_column("Value", justify="right", style="green") 
+        table.add_column("Value", justify="right", style="green")
         table.add_row("Time", str(self.clock.get_time()))
         console.print(table)
         self.sched.running.print()
@@ -159,17 +163,17 @@ class Simulation:
         self.sched.terminated_queue.print()
         self.sched.new_queue.print()
 
-        
     # Function to ead the json file
+
     def import_json_file(self, filename):
         with open(filename, 'r') as f:
             data = json.load(f)
             allowed = {'sched_algorithm', 'time_slice', 'number_of_processes',
-                        'arrival_time', 'burst_time', 'total_time'}
+                       'arrival_time', 'burst_time', 'total_time'}
             if not all(key in allowed for key in data.keys()):
                 print("Error: Invalid JSON file")
-                return
-   
+                exit()
+
     # loop for as mamny processes as specified in the json file
             for i in range(data['number_of_processes']):
                 pid = i + 1
@@ -195,6 +199,7 @@ class Simulation:
                 self.print_status()
             else:
                 print("Invalid response. Try again.")
+
 
 if __name__ == "__main__":
     s = Simulation()
