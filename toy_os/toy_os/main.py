@@ -3,6 +3,31 @@ import json
 import random
 from rich.table import Table
 from rich.console import Console
+from rich.style import Style
+from rich.color import Color, ColorType
+
+"""
+Important definitions:
+
+* Simulation variables:
+    * Time: Simulation time. Measured in 'tics'. Starts at zero.
+
+* Each process is configured initially with
+    * Arrival Time: When the process arrives to the scheduler for the first time
+    * Burst Time: Total number CPU tics the process will use before it has to wait (for I/O etc.)
+    * Total Time: Total number CPU tics the process will use until it exists
+
+* Once the simulation starts, each process tracks the following
+    * Run Time: Number of CPU tics the process has used so far
+    * Wall Time: Number of tics since the process was first run
+    * Wait Time: Total tics a process spends waiting (on ready and wait queues)
+    * Response Time: Number of tics from when a process is first run until it starts running
+    * Start Time: Time(tics) when the process was first run
+
+* When the simulation completes the following are calculated:
+* Throughput: Average number of processes completed per tic
+* Turnaround: Average number of tics used for a process (1/Througput)
+"""
 
 
 class PCB:
@@ -18,14 +43,14 @@ class PCB:
         self.burst_time = burst_time
         self.total_time = total_time
         self.run_time = 0
-        self.wall_time = 0
+        self.wall_time = None
         self.start_time = None
         self.wait_time = 0
         self.status = "New"
 
     def update(self, time):
         if self.status not in ("New", "Terminated"):
-            self.wall_time += 1
+            self.wall_time = time
 
     def __repr__(self):
         return f"PCB({self.pid}, {self.arrival_time}, {self.burst_time}, {self.total_time}, {self.wait_time})"
@@ -65,7 +90,7 @@ class Queue:
     def print(self, table):
         for pcb in self._list:
             table.add_row(pcb.status, str(pcb.pid), str(pcb.arrival_time), str(
-                pcb.burst_time), str(pcb.total_time), str(pcb.run_time), str(pcb.wall_time), str(pcb.start_time),str(pcb.wait_time))
+                pcb.burst_time), str(pcb.total_time), str(pcb.run_time), str(pcb.wall_time), str(pcb.start_time), str(pcb.wait_time))
 
 
 class Clock:
@@ -115,6 +140,7 @@ class Scheduler:
             if pcb.arrival_time <= self.clock.get_time():
                 to_move += [pcb]
         for pcb in to_move:
+            pcb.wall_time = self.clock.get_time()
             self.ready_queue.add_at_end(self.new_queue.remove(pcb))
 
     def handle_done(self):
@@ -149,7 +175,6 @@ class Scheduler:
             ready.wait_time += 1
             if ready.start_time is not None:
                 ready.start_time = self.clock.get_time()
-
 
     def update(self, time):
         self.move_to_ready()
@@ -195,16 +220,22 @@ class Simulation:
         console.print(f"Clock: {self.clock.get_time()}", style="bold red")
         console.print(f"Timeline: {self.sched.progress}", style="bold red")
         table = Table(show_header=True, header_style="bold magenta")
-        table.add_column("Status!", style="cyan")
+        table.add_column("Status!", style="red")
         table.add_column("PID", style="cyan")
-        table.add_column("Arrival Time\n(when process first arrives)", justify="right", style="green")
-        table.add_column("Burst\n(average time of a CPU burst)", justify="right", style="green")
-        table.add_column("Total CPU\n(Total CPU Time required)", justify="right", style="green")
-        table.add_column("Current CPU\n(CPU consumed so far)", justify="right", style="green")
-        table.add_column("Actual Time\n(Actual time since first starting)", justify="right", style="green")
-        table.add_column("Start Time\n(Wating time until started)", justify="right", style="green")
-        table.add_column("Waiting Time\n(Time spent waiting overall)", justify="right", style="green")
-
+        table.add_column(
+            "Arrival Time\n(when process first arrives)", justify="right", style="green")
+        table.add_column("Burst\n(average time of a CPU burst)",
+                         justify="right", header_style="on rgb(220,220,220)")
+        table.add_column("Total CPU\n(Total CPU Time required)",
+                         justify="right", style="green")
+        table.add_column("Current CPU\n(CPU consumed so far)",
+                         justify="right", style="green")
+        table.add_column(
+            "Wall Time\n(Elapsed time since first starting)", justify="right", style="green")
+        table.add_column("Start Time\n(Wating time until started)",
+                         justify="right", style="green")
+        table.add_column(
+            "Waiting Time\n(Time spent waiting overall)", justify="right", style="green")
 
         self.sched.running.print(table)
         self.sched.ready_queue.print(table)
@@ -212,18 +243,22 @@ class Simulation:
         self.sched.terminated_queue.print(table)
         self.sched.new_queue.print(table)
         console.print(table)
-    
+
     def print_summary(self):
         """
         Prints the summary of the operating system representing the terminated queue.
         """
         console = Console()
         console.print(f"Clock: {self.clock.get_time()}", style="bold red")
-        console.print(f"Average Time spent Waiting: {self.sched.get_average_wait_time()}", style="bold red")
-        console.print(f"Average waiting before starting: {self.sched.get_average_start_time()}", style="bold red")
+        console.print(
+            f"Average Time spent Waiting: {self.sched.get_average_wait_time()}", style="bold red")
+        console.print(
+            f"Average waiting before starting: {self.sched.get_average_start_time()}", style="bold red")
 
 
 # Function to ead the json file
+
+
     def import_json_file(self, filename):
         with open(filename, 'r') as f:
             data = json.load(f)
@@ -233,7 +268,7 @@ class Simulation:
                 print("Error: Invalid JSON file")
                 exit()
 # if there is a key "manual", then we generate each process separately. The auto key is followed by an array of
-# zero or more process blocks. Each process block has a pid and a burst time. For each one we create a PCB and 
+# zero or more process blocks. Each process block has a pid and a burst time. For each one we create a PCB and
 # add it to the new queue. We also register the PCB with the clock so that it will be updated each time the clock.abs
 # is incremented.
             for process in data["manual"]:
@@ -246,8 +281,8 @@ class Simulation:
                 self.clock.register_object(pcb)
 
 # if there is a key "auto", then we generate the processes randomly. The number of processes is given by
-# the number_of_processes key. The arrival_time, burst_time, and total_time keys are followed by a from and 
-# to key. We generate a random number between from and to for each process. We also register the PCB with 
+# the number_of_processes key. The arrival_time, burst_time, and total_time keys are followed by a from and
+# to key. We generate a random number between from and to for each process. We also register the PCB with
 # #the clock so that it will be updated each time the clock is incremented.
             pid = 0
             auto = data["auto"]
@@ -264,21 +299,30 @@ class Simulation:
                     self.sched.new_queue.add_at_end(pcb)
                     self.clock.register_object(pcb)
 
+    def stepper(self, count):
+        for i in range(count):
+            self.clock.increment()
+        self.print_status()
+
     def run(self):
         # import the json file
         self.import_json_file("processes.json")
         while (not self.sched.all_processes_done()):
             self.print_status()
-            response = input("[n(ext),s(top): ")
-            if response == 's':
+            response = input("[s(tep),q(uit), g(o): ")
+            if response == 'q':
                 break
-            elif response == 'n':
-                self.clock.increment()
+            elif response == 's':
+                self.stepper(1)
+            elif response == 'g':
+                self.stepper(100)
+                break
             else:
                 print("Invalid response. Try again.")
         self.clock.increment()
         self.print_status()
         self.print_summary()
+
 
 if __name__ == "__main__":
     s = Simulation()
