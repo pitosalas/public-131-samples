@@ -11,6 +11,8 @@ public class WidgetFactory {
 
 		producerThread.start();
 		consumerThread.start();
+		producerThread.start();
+
 	}
 
 	public static void main(String args[]) {
