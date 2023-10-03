@@ -5,9 +5,11 @@ from rich.table import Table
 from rich.console import Console
 from rich.style import Style
 from rich.color import Color, ColorType
+from rich.markdown import Markdown
 
-"""
-Important definitions:
+
+DOC = """
+# Important definitions:
 
 * Simulation variables:
     * Time: Simulation time. Measured in 'tics'. Starts at zero.
@@ -193,7 +195,10 @@ class Scheduler:
         total = 0
         for pcb in self.terminated_queue._list:
             total += pcb.wait_time
-        return float(total) / len(self.terminated_queue._list)
+        if len(self.terminated_queue._list) == 0:
+            return 0
+        else: 
+            return float(total) / len(self.terminated_queue._list)
 
     def get_average_start_time(self):
         """
@@ -202,7 +207,10 @@ class Scheduler:
         total = 0
         for pcb in self.terminated_queue._list:
             total += pcb.start_time
-        return float(total) / len(self.terminated_queue._list)
+        if len(self.terminated_queue._list) == 0:
+            0
+        else:
+            return float(total) / len(self.terminated_queue._list)
 
 
 class Simulation:
@@ -216,16 +224,21 @@ class Simulation:
         Prints the current status of the operating system representing the terminated queue.
         """
         console = Console()
-        console.clear()
+        # console.clear()
+        # md = Markdown(DOC)
+        # console.print(md)
+
         console.print(f"Clock: {self.clock.get_time()}", style="bold red")
         console.print(f"Timeline: {self.sched.progress}", style="bold red")
+
         table = Table(show_header=True, header_style="bold magenta")
         table.add_column("Status!", style="red")
         table.add_column("PID", style="cyan")
         table.add_column(
             "Arrival Time\n(when process first arrives)", justify="right", style="green")
         table.add_column("Burst\n(average time of a CPU burst)",
-                         justify="right", header_style="on rgb(220,220,220)")
+                         justify="right")
+
         table.add_column("Total CPU\n(Total CPU Time required)",
                          justify="right", style="green")
         table.add_column("Current CPU\n(CPU consumed so far)",
