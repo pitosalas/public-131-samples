@@ -1,5 +1,4 @@
 from clock import Clock
-from scheduler import Scheduler
 import json
 from pcb import PCB
 from rich.table import Table
@@ -12,6 +11,29 @@ class Simulation:
         self.format = "full"
         self.sched = Scheduler(self)
         self.clock.register_object(self.sched)
+
+    def stepper(self, count):
+        for i in range(count):
+            self.clock.increment()
+        self.print_status()
+
+    def run(self):
+        # import the json file
+        self.import_json_file("rrp.json")
+        while (not self.sched.all_processes_done()):
+            response = input("[s(tep),q(uit), g(o): ")
+            if response == 'q':
+                break
+            elif response == 's':
+                self.stepper(1)
+            elif response == 'g':
+                self.stepper(100)
+                break
+            else:
+                print("Invalid response. Try again.")
+        self.clock.increment()
+        self.print_status()
+        self.print_summary()
 
     def print_status(self):
         """
@@ -38,12 +60,12 @@ class Simulation:
                          justify="right", style="green")
         if self.format == "full":
             table.add_column(
-            "Wall Time\n(Elapsed time since first starting)", justify="right", style="green")
+                "Wall Time\n(Elapsed time since first starting)", justify="right", style="green")
         table.add_column("Wait Time\n(Wating time until started)",
                          justify="right", style="green")
         if self.format == "full":
             table.add_column(
-            "Waiting Time\n(Time spent waiting overall)", justify="right", style="green")
+                "Waiting Time\n(Time spent waiting overall)", justify="right", style="green")
 
         self.sched.running.print(table)
         self.sched.ready_queue.print(table)
@@ -63,7 +85,6 @@ class Simulation:
         console.print(
             f"Average waiting before starting: {self.sched.get_average_start_time()}", style="bold red")
 
-
 # Function to read the json file
     def import_json_file(self, filename):
         with open(filename, 'r') as f:
@@ -76,6 +97,8 @@ class Simulation:
                 print("Error: Invalid JSON file")
                 exit()
             self.format = data["format"]
+            self.quantum = data["time_slice"]
+
 # if there is a key "manual", then we generate each process separately.
             for process in data["manual"]:
                 pid = process['pid']
@@ -101,27 +124,3 @@ class Simulation:
                     pcb = PCB(pid, arrival_time, burst_time, total_time)
                     self.sched.new_queue.add_at_end(pcb)
                     self.clock.register_object(pcb)
-
-    def stepper(self, count):
-        for i in range(count):
-            self.clock.increment()
-        self.print_status()
-
-    def run(self):
-        # import the json file
-        self.import_json_file("processes.json")
-        while (not self.sched.all_processes_done()):
-            response = input("[s(tep),q(uit), g(o): ")
-            if response == 'q':
-                break
-            elif response == 's':
-                self.stepper(1)
-            elif response == 'g':
-                self.stepper(100)
-                break
-            else:
-                print("Invalid response. Try again.")
-        self.clock.increment()
-        self.print_status()
-        self.print_summary()
-

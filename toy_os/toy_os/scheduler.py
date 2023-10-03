@@ -1,13 +1,14 @@
 from queue import Queue
 
+
 class Scheduler:
-    def __init__(self, simulation):
-        self.new_queue = Queue("New", simulation)
-        self.ready_queue = Queue("Ready Queue", simulation)
-        self.waiting_queue = Queue("Waiting Queue", simulation)
-        self.terminated_queue = Queue("Terminated", simulation)
-        self.running = Queue("Running", simulation)
-        self.simulation = simulation
+    def __init__(self, sim: Simulation):
+        self.new_queue: Queue = Queue("New", sim)
+        self.ready_queue: Queue = Queue("Ready Queue", sim)
+        self.waiting_queue: Queue = Queue("Waiting Queue", sim)
+        self.terminated_queue: Queue = Queue("Terminated", sim)
+        self.running: Queue = Queue("Running", sim)
+        self.simulation: Simulation = sim
         self.progress = ""
 
     def all_processes_done(self):
@@ -15,6 +16,12 @@ class Scheduler:
         Returns True if all processes are done, False otherwise.
         """
         return self.running.head == None and self.new_queue.head == None and self.ready_queue.head == None and self.waiting_queue.head == None
+
+    def quantum_elapsed(self):
+        """
+        Returns True if quantum has elapsed, False otherwise.
+        """
+        return self.clock.get_time() % self.quantum == 0
 
     def move_to_ready(self):
         # while there are still pcbs on new queue, remove them from new queue and add them to ready queue
@@ -41,6 +48,9 @@ class Scheduler:
         process_to_run = self.ready_queue.remove_from_front()
         self.running.add_at_end(process_to_run)
 
+    def __repr__(self):
+        return "Scheduler({clock} )"
+
     def update_running_process(self):
         # if there is a running process, increment its time
         running = self.running.head
@@ -51,6 +61,16 @@ class Scheduler:
             running.start_time = self.clock.get_time()
         self.progress += f"{running.pid}|"
 
+    def update_running_process_with_preemption(self):
+        # if quantum has elapsed
+        if self.quantum_elapsed():
+            # if there is a running process, check if it is done
+            current_process = self.running.head
+            if current_process is not None:
+                self.ready_queue.add_at_end(
+                    self.running.remove(current_process))
+        update_running_process(self)
+
     def update_waiting_processes(self):
         for waiting in self.waiting_queue._list:
             waiting.wait_time += 1
@@ -58,17 +78,6 @@ class Scheduler:
             ready.wait_time += 1
             if ready.start_time is not None:
                 ready.start_time = self.clock.get_time()
-
-    def update(self, time):
-        self.clock = self.simulation.clock
-        self.move_to_ready()
-        self.handle_done()
-        self.schedule_next()
-        self.update_running_process()
-        self.update_waiting_processes()
-
-    def __repr__(self):
-        return "Scheduler({clock} )"
 
     def get_average_wait_time(self):
         """
@@ -95,3 +104,21 @@ class Scheduler:
             return float(total) / len(self.terminated_queue._list)
 
 
+class RRP(Scheduler):
+    def update(self, time):
+        self.clock = self.simulation.clock
+        self.move_to_ready()
+        self.handle_done()
+        self.schedule_next()
+        self.update_running_process()
+        self.update_waiting_processes()
+
+
+class RRNP(Scheduler):
+    def update(self, time):
+        self.clock = self.simulation.clock
+        self.move_to_ready()
+        self.handle_done()
+        self.schedule_next()
+        self.update_running_process()
+        self.update_waiting_processes()

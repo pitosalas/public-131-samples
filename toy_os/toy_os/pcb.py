@@ -4,6 +4,7 @@ class PCB:
     It contains information about the process such as its process ID (pid), arrival time,
     burst time, priority, and completion time.
     """
+
     def __init__(self, pid: str, arrival_time: int, burst_time: int, total_time: int):
         self.pid: str = pid
         self.arrival_time: int = arrival_time
@@ -21,5 +22,3 @@ class PCB:
 
     def __repr__(self):
         return f"PCB({self.pid}, {self.arrival_time}, {self.burst_time}, {self.total_time}, {self.wait_time})"
-
-

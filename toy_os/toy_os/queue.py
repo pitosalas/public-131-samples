@@ -1,5 +1,5 @@
 class Queue:
-    def __init__(self, name, simulation):
+    def __init__(self, name: str, simulation: Simulation):
         self.name = name
         self.simulation = simulation
         self._list = []
