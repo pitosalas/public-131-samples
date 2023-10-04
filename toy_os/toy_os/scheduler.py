@@ -11,6 +11,7 @@ class Scheduler(ABC):
         self.running: Queue = Queue("Running", sim)
         self.simulation = sim
         self.progress = ""
+        self.print_name = "None"
 
     def all_processes_done(self):
         """
@@ -110,10 +111,11 @@ class Scheduler(ABC):
         pass
 
 
-class RRP(Scheduler):
+class RR(Scheduler):
     def __init(self, sim):
         self.sim = sim
         Scheduler.__init__(self)
+        self.print_name = "Round Robin"
 
     def update(self, time):
         self.clock = self.simulation.clock
@@ -131,9 +133,10 @@ class RRP(Scheduler):
         self.update_waiting_processes()
 
 
-class RRNP(Scheduler):
+class FCFS(Scheduler):
     def __init(self, sim):
         self.sim = sim
+        self.print_name = "First Come First Serve"
         Scheduler.__init__(self)
 
     def update(self, time):

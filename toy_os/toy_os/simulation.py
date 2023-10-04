@@ -13,7 +13,7 @@ class Simulation:
     def __init__(self):
         self.clock = Clock()
         self.format = "full"
-        self.sched = scheduler.RRP(self)
+        self.construct_scheduler()
         self.clock.register_object(self.sched)
 
     def stepper(self, count):
@@ -41,6 +41,21 @@ class Simulation:
         self.print_status()
         self.print_summary()
 
+    def construct_scheduler(self):
+        """
+        Constructs the scheduler based on the algorithm specified in the JSON file.
+        """
+        if self.sched_algorithm == "FCFS":
+            self.sched = scheduler.FCFS(self.clock)
+        elif self.sched_algorithm == "SJF":
+            self.sched = scheduler.SJF(self.clock)
+        elif self.sched_algorithm == "RR":
+            self.sched = scheduler.RR(self.clock)
+        elif self.sched_algorithm == "Priority":
+            self.sched = scheduler.Priority(self.clock)
+        else:
+            print("Invalid algorithm. Try again.")
+
     def prompt_for_filename(self):
         files = [f.name for f in Path('.').glob('*.json')]
 
@@ -55,12 +70,12 @@ class Simulation:
         """
         Prints the current status of the operating system representing the terminated queue.
         """
-        print(self.clock.get_time())
-        print(self.sched.progress)
         console = Console()
         console.clear()
         console.print(f"Clock: {self.clock.get_time()}", style="bold red")
         console.print(f"Timeline: {self.sched.progress}", style="bold red")
+        console.print(f"Algorithm: {self.sched.print_name}", style="bold red")
+
 
         table = Table(show_header=True, header_style="bold magenta")
         table.add_column("Status!", style="red")
@@ -114,6 +129,7 @@ class Simulation:
                 exit()
             self.format = data["format"]
             self.quantum = data["time_slice"]
+            self.sched_algorithm = data["sched_algorithm"]
 
 # if there is a key "manual", then we generate each process separately.
             for process in data["manual"]:
