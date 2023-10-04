@@ -1,14 +1,15 @@
 from queue import Queue
+from abc import ABC, abstractmethod
 
 
-class Scheduler:
-    def __init__(self, sim: Simulation):
-        self.new_queue: Queue = Queue("New", sim)
+class Scheduler(ABC):
+    def __init__(self, sim):
+        self.new_queue = Queue("New", sim)
         self.ready_queue: Queue = Queue("Ready Queue", sim)
         self.waiting_queue: Queue = Queue("Waiting Queue", sim)
         self.terminated_queue: Queue = Queue("Terminated", sim)
         self.running: Queue = Queue("Running", sim)
-        self.simulation: Simulation = sim
+        self.simulation = sim
         self.progress = ""
 
     def all_processes_done(self):
@@ -21,7 +22,8 @@ class Scheduler:
         """
         Returns True if quantum has elapsed, False otherwise.
         """
-        return self.clock.get_time() % self.quantum == 0
+        time = self.simulation.clock.get_time()
+        return time != 0 and time % self.simulation.quantum == 0
 
     def move_to_ready(self):
         # while there are still pcbs on new queue, remove them from new queue and add them to ready queue
@@ -103,10 +105,25 @@ class Scheduler:
         else:
             return float(total) / len(self.terminated_queue._list)
 
+    @abstractmethod
+    def update(self, time):
+        pass
+
 
 class RRP(Scheduler):
+    def __init(self, sim):
+        self.sim = sim
+        Scheduler.__init__(self)
+
     def update(self, time):
         self.clock = self.simulation.clock
+        if (self.quantum_elapsed()):
+            self.progress += f"*"
+            # move running process to end of ready queue
+            current_process = self.running.head
+            if current_process is not None:
+                self.ready_queue.add_at_end(
+                    self.running.remove(current_process))
         self.move_to_ready()
         self.handle_done()
         self.schedule_next()
@@ -115,6 +132,10 @@ class RRP(Scheduler):
 
 
 class RRNP(Scheduler):
+    def __init(self, sim):
+        self.sim = sim
+        Scheduler.__init__(self)
+
     def update(self, time):
         self.clock = self.simulation.clock
         self.move_to_ready()

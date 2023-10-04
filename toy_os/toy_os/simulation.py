@@ -3,23 +3,26 @@ import json
 from pcb import PCB
 from rich.table import Table
 from rich.console import Console
+import scheduler
 
 
 class Simulation:
     def __init__(self):
         self.clock = Clock()
         self.format = "full"
-        self.sched = Scheduler(self)
+        self.sched = scheduler.RRNP(self)
         self.clock.register_object(self.sched)
 
     def stepper(self, count):
         for i in range(count):
             self.clock.increment()
+            if self.sched.all_processes_done():
+                break
         self.print_status()
 
     def run(self):
         # import the json file
-        self.import_json_file("rrp.json")
+        self.import_json_file("rrnp.json")
         while (not self.sched.all_processes_done()):
             response = input("[s(tep),q(uit), g(o): ")
             if response == 'q':
