@@ -3,14 +3,17 @@ import json
 from pcb import PCB
 from rich.table import Table
 from rich.console import Console
+from rich.prompt import Prompt
 import scheduler
+from rich import print
+from pathlib import Path
 
 
 class Simulation:
     def __init__(self):
         self.clock = Clock()
         self.format = "full"
-        self.sched = scheduler.RRNP(self)
+        self.sched = scheduler.RRP(self)
         self.clock.register_object(self.sched)
 
     def stepper(self, count):
@@ -21,8 +24,8 @@ class Simulation:
         self.print_status()
 
     def run(self):
-        # import the json file
-        self.import_json_file("rrnp.json")
+        filename = self.prompt_for_filename()
+        self.import_json_file(filename)
         while (not self.sched.all_processes_done()):
             response = input("[s(tep),q(uit), g(o): ")
             if response == 'q':
@@ -37,6 +40,16 @@ class Simulation:
         self.clock.increment()
         self.print_status()
         self.print_summary()
+
+    def prompt_for_filename(self):
+        files = [f.name for f in Path('.').glob('*.json')]
+
+        print("[bold]Select a file:[/bold]")
+        for i, f in enumerate(files, 1):
+            print(f"[{i}] {f}")
+        choice = input("Enter your choice: ")
+        choice = int(choice) if choice else 1
+        return files[choice-1]
 
     def print_status(self):
         """
