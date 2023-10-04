@@ -5,10 +5,11 @@ class PCB:
     burst time, priority, and completion time.
     """
 
-    def __init__(self, pid: str, arrival_time: int, burst_time: int, total_time: int):
+    def __init__(self, pid: str, arrival_time: int, burst_time: int, total_time: int, priority: int = 0):
         self.pid: str = pid
         self.arrival_time: int = arrival_time
         self.burst_time = burst_time
+        self.priority: int = priority
         self.total_time = total_time
         self.run_time = 0
         self.wall_time = None

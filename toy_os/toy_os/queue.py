@@ -34,8 +34,8 @@ class Queue:
         for pcb in self._list:
             format = self.simulation.format
             if format == "full":
-                table.add_row(pcb.status, str(pcb.pid), str(pcb.arrival_time), str(
-                    pcb.burst_time), str(pcb.total_time), str(pcb.run_time), str(pcb.wall_time), str(pcb.start_time), str(pcb.wait_time))
+                table.add_row(pcb.status, str(pcb.pid), str(
+                    pcb.run_time), str(pcb.wall_time), str(pcb.start_time), str(pcb.wait_time))
             elif format == "basic":
-                table.add_row(pcb.status, str(pcb.pid), str(pcb.arrival_time), str(
-                    pcb.burst_time), str(pcb.total_time), str(pcb.run_time), str(pcb.start_time))
+                table.add_row(pcb.status, str(pcb.pid), str(
+                    pcb.run_time), str(pcb.start_time))
