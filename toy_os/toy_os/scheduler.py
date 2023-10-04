@@ -116,6 +116,7 @@ class RR(Scheduler):
         self.sim = sim
         Scheduler.__init__(self)
         self.print_name = "Round Robin"
+        
 
     def update(self, time):
         self.clock = self.simulation.clock
@@ -136,8 +137,8 @@ class RR(Scheduler):
 class FCFS(Scheduler):
     def __init(self, sim):
         self.sim = sim
-        self.print_name = "First Come First Serve"
         Scheduler.__init__(self)
+        self.print_name = "First Come First Serve"
 
     def update(self, time):
         self.clock = self.simulation.clock

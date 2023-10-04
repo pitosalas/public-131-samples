@@ -13,8 +13,6 @@ class Simulation:
     def __init__(self):
         self.clock = Clock()
         self.format = "full"
-        self.construct_scheduler()
-        self.clock.register_object(self.sched)
 
     def stepper(self, count):
         for i in range(count):
@@ -26,6 +24,10 @@ class Simulation:
     def run(self):
         filename = self.prompt_for_filename()
         self.import_json_file(filename)
+        self.construct_scheduler()
+        self.clock.register_object(self.sched)
+        self.configure_scheduler(self.data)
+
         while (not self.sched.all_processes_done()):
             response = input("[s(tep),q(uit), g(o): ")
             if response == 'q':
@@ -45,14 +47,15 @@ class Simulation:
         """
         Constructs the scheduler based on the algorithm specified in the JSON file.
         """
-        if self.sched_algorithm == "FCFS":
-            self.sched = scheduler.FCFS(self.clock)
-        elif self.sched_algorithm == "SJF":
-            self.sched = scheduler.SJF(self.clock)
-        elif self.sched_algorithm == "RR":
-            self.sched = scheduler.RR(self.clock)
-        elif self.sched_algorithm == "Priority":
-            self.sched = scheduler.Priority(self.clock)
+        algo = self.data["sched_algorithm"]
+        if algo == "FCFS":
+            self.sched = scheduler.FCFS(self)
+        elif algo == "SJF":
+            self.sched = scheduler.SJF(self)
+        elif algo == "RR":
+            self.sched = scheduler.RR(self)
+        elif algo == "Priority":
+            self.sched = scheduler.Priority(self)
         else:
             print("Invalid algorithm. Try again.")
 
@@ -119,40 +122,43 @@ class Simulation:
 # Function to read the json file
     def import_json_file(self, filename):
         with open(filename, 'r') as f:
-            data = json.load(f)
+            self.data = json.load(f)
             allowed = {'sched_algorithm', 'time_slice', 'number_of_processes',
                        'arrival_time', 'burst_time', 'total_time', 'auto', 'manual',
                        "format", "basic"
                        }
-            if not all(key in allowed for key in data.keys()):
+            if not all(key in allowed for key in self.data.keys()):
                 print("Error: Invalid JSON file")
                 exit()
-            self.format = data["format"]
-            self.quantum = data["time_slice"]
-            self.sched_algorithm = data["sched_algorithm"]
+    
+    def configure_scheduler(self, data):
+        self.format = data["format"]
+        self.quantum = data["time_slice"]
+        self.sched_algorithm = data["sched_algorithm"]
 
 # if there is a key "manual", then we generate each process separately.
-            for process in data["manual"]:
-                pid = process['pid']
-                arrival_time = process['arrival_time']
-                burst_time = process['burst_time']
-                total_time = process['total_time']
+        for process in data["manual"]:
+            pid = process['pid']
+            arrival_time = process['arrival_time']
+            burst_time = process['burst_time']
+            total_time = process['total_time']
+            pcb = PCB(pid, arrival_time, burst_time, total_time)
+            self.sched.new_queue.add_at_end(pcb)
+            self.clock.register_object(pcb)
+
+# if there is a key "auto", then we generate the processes randomly.
+        pid = 0
+        auto = data["auto"]
+        if auto is not None:
+            for i in range(auto['number_of_processes']):
+                pid = i + 1
+                arrival_time = random.randint(
+                    auto['arrival_time']['from'], auto['arrival_time']['to'])
+                burst_time = random.randint(
+                    auto['burst_time']['from'], auto['burst_time']['to'])
+                total_time = random.randint(
+                    auto['total_time']['from'], auto['total_time']['to'])
                 pcb = PCB(pid, arrival_time, burst_time, total_time)
                 self.sched.new_queue.add_at_end(pcb)
                 self.clock.register_object(pcb)
 
-# if there is a key "auto", then we generate the processes randomly.
-            pid = 0
-            auto = data["auto"]
-            if auto is not None:
-                for i in range(auto['number_of_processes']):
-                    pid = i + 1
-                    arrival_time = random.randint(
-                        auto['arrival_time']['from'], auto['arrival_time']['to'])
-                    burst_time = random.randint(
-                        auto['burst_time']['from'], auto['burst_time']['to'])
-                    total_time = random.randint(
-                        auto['total_time']['from'], auto['total_time']['to'])
-                    pcb = PCB(pid, arrival_time, burst_time, total_time)
-                    self.sched.new_queue.add_at_end(pcb)
-                    self.clock.register_object(pcb)
