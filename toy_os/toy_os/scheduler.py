@@ -116,7 +116,6 @@ class RR(Scheduler):
         super().__init__(sim)
         self.sim = sim
         self.print_name = "Round Robin"
-        print("RR contstructor")
 
     def update(self, time):
         self.clock = self.simulation.clock
@@ -139,7 +138,6 @@ class FCFS(Scheduler):
         super().__init__(sim)
         self.sim = sim
         self.print_name = "First Come First Serve"
-        print("FCFS contstructor")
 
     def update(self, time):
         self.clock = self.simulation.clock
