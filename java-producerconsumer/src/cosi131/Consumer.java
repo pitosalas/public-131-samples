@@ -13,7 +13,7 @@ class Consumer implements Runnable {
 
 	public void run() {
 		String widgetName;
-		while (pipe.isOpen()) {
+		while (!pipe.empty()) {
 			try {
 				Thread.sleep(0);
 
@@ -29,6 +29,6 @@ class Consumer implements Runnable {
 				e.printStackTrace();
 			}
 		}
-		System.out.printf("Consumed a total of %d widgets\n", counter);
+//		System.out.printf("Consumed a total of %d widgets\n", counter);
 	}
 }
