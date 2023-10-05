@@ -10,11 +10,11 @@ public class Consumer implements Runnable {
 	@Override
 	public void run() {
 		System.out.println("Consumer ready.");
-		for (int i = 0; i < 10; i++) {
-			String s = buf.remove();
-			System.out.println("- Yummy: " + s);
+		for (int i = 0; i < 20; i++) {
 			try {
-				Thread.sleep(200);
+				String s = buf.remove();
+				System.out.println("... Consumed: " + s);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
