@@ -98,7 +98,7 @@ class Simulation:
             self.data = json.load(f)
             allowed = {'sched_algorithm', 'time_slice', 'number_of_processes',
                        'arrival_time', 'burst_time', 'total_time', 'auto', 'manual',
-                       "format", "basic"
+                       "format", "basic", "burst_pattern", "priority"
                        }
             if not all(key in allowed for key in self.data.keys()):
                 print("Error: Invalid JSON file")
@@ -115,7 +115,9 @@ class Simulation:
             burst_time = process['burst_time']
             total_time = process['total_time']
             priority = process['priority']
-            pcb = PCB(pid, arrival_time, burst_time, total_time, priority)
+            burst_pattern = process['burst_pattern']
+            pcb = PCB(pid, arrival_time=arrival_time, burst_time=burst_time,
+                      total_time=total_time, burst_pattern=burst_pattern, priority=priority)
             self.sched.new_queue.add_at_end(pcb)
             self.clock.register_object(pcb)
 # if there is a key "auto", then we generate the processes randomly.
