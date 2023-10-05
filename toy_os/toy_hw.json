@@ -4,7 +4,15 @@
   "manual": [
     {
       "pid": "p1",
-      "burst_pattern": [1, 1, 1, 1, 0, 0, 0, 1, 1, 1],
+      "burst_pattern": [
+        "new",
+        "new",
+        "ready",
+        "ready",
+        "ready",
+        "wait",
+        "wait"
+      ],
       "arrival_time": 0,
       "total_time": 24,
       "priority": 3

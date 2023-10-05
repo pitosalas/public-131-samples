@@ -64,6 +64,52 @@ class Scheduler(ABC):
             running.start_time = self.clock.get_time()
         self.progress += f"{running.pid}|"
 
+    def pcb_burst_update(self):
+        # for all pcbs, retrieve their burst pattern
+        # if the entry corresponding to the current sim time is "new" then move the pcb to the new queue
+        # if the entry corresponding to the current sim time is "run" then move the pcb to the ready queue
+        # if the entry corresponding to the current sim time is "wait" then move the pcb to the waiting queue
+        # if the current time is greater than the length of the burst pattern then move it to the terminated queue
+        for pcb in self.new_queue._list:
+            if pcb.burst_pattern[self.clock.get_time()] == "run":
+                self.ready_queue.add_at_end(self.new_queue.remove(pcb))
+            elif pcb.burst_pattern[self.clock.get_time()] == "wait":
+                self.waiting_queue.add_at_end(self.new_queue.remove(pcb))
+            elif pcb.burst_pattern[self.clock.get_time()] == "new":
+                self.new_queue.add_at_end(self.new_queue.remove(pcb))
+            elif pcb.burst_pattern[self.clock.get_time()] == "term":
+                self.terminated_queue.add_at_end(self.new_queue.remove(pcb))
+        for pcb in self.ready_queue._list:
+            if pcb.burst_pattern[self.clock.get_time()] == "run":
+                self.ready_queue.add_at_end(self.ready_queue.remove(pcb))
+            elif pcb.burst_pattern[self.clock.get_time()] == "wait":
+                self.waiting_queue.add_at_end(self.ready_queue.remove(pcb))
+            elif pcb.burst_pattern[self.clock.get_time()] == "new":
+                self.new_queue.add_at_end(self.ready_queue.remove(pcb))
+            elif pcb.burst_pattern[self.clock.get_time()] == "term":
+                self.terminated_queue.add_at_end(self.ready_queue.remove(pcb))
+        for pcb in self.waiting_queue._list:
+            if pcb.burst_pattern[self.clock.get_time()] == "run":
+                self.ready_queue.add_at_end(self.waiting_queue.remove(pcb))
+            elif pcb.burst_pattern[self.clock.get_time()] == "wait":
+                self.waiting_queue.add_at_end(self.waiting_queue.remove(pcb))
+            elif pcb.burst_pattern[self.clock.get_time()] == "new":
+                self.new_queue.add_at_end(self.waiting_queue.remove(pcb))
+            elif pcb.burst_pattern[self.clock.get_time()] == "term":
+                self.terminated_queue.add_at_end(
+                    self.waiting_queue.remove(pcb))
+        for pcb in self.terminated_queue._list:
+            if pcb.burst_pattern[self.clock.get_time()] == "run":
+                self.ready_queue.add_at_end(self.terminated_queue.remove(pcb))
+            elif pcb.burst_pattern[self.clock.get_time()] == "wait":
+                self.waiting_queue.add_at_end(
+                    self.terminated_queue.remove(pcb))
+            elif pcb.burst_pattern[self.clock.get_time()] == "new":
+                self.new_queue.add_at_end(self.terminated_queue.remove(pcb))
+            elif pcb.burst_pattern[self.clock.get_time()] == "term":
+                self.terminated_queue.add_at_end(
+                    self.terminated_queue.remove(pcb))
+
     def update_running_process_with_preemption(self):
         # if quantum has elapsed
         if self.quantum_elapsed():
@@ -109,6 +155,16 @@ class Scheduler(ABC):
     @abstractmethod
     def update(self, time):
         pass
+
+
+class SJF(scheduler):
+    super().__init__(sim)
+    self.sim = sim
+    self.print_name = "Shortest Job First"
+
+    def update(self, time):
+        self.clock = self.simulation.clock
+        self.pcb_burst_update()
 
 
 class RR(Scheduler):
