@@ -26,12 +26,8 @@ class Simulation:
         self.print_status()
 
     def run(self):
-        filename = self.prompt_for_filename()
-        self.import_json_file(filename)
-        self.construct_scheduler()
-        self.clock.register_object(self.sched)
-        self.configure_scheduler(self.data)
-
+        self.setup_run()
+        self.print_intro()
         while (not self.sched.all_processes_done()):
             response = input("[s(tep),q(uit), g(o): ")
             if response == 'q':
@@ -47,13 +43,16 @@ class Simulation:
         self.print_status()
         self.print_summary()
 
-    def run_animated(self):
+    def setup_run(self):
         filename = self.prompt_for_filename()
         self.import_json_file(filename)
         self.construct_scheduler()
         self.clock.register_object(self.sched)
         self.configure_scheduler(self.data)
-        self.intro_rg = self.generate_intro_render_group()
+
+    def run_animated(self):
+        self.setup_run()
+        self.intro_rg = self.generate_intro_rg()
         self.run_live()
 
     def group_rg(self):
@@ -69,29 +68,6 @@ class Simulation:
                 self.clock.increment()
                 live.update(self.group_rg())
 
-    def run_old(self):
-        filename = self.prompt_for_filename()
-        self.import_json_file(filename)
-        self.construct_scheduler()
-        self.clock.register_object(self.sched)
-        self.configure_scheduler(self.data)
-        intro_rg = self.generate_intro_render_group()
-
-        while (not self.sched.all_processes_done()):
-            response = input("[s(tep),q(uit), g(o): ")
-            if response == 'q':
-                break
-            elif response == 's':
-                self.stepper(1)
-            elif response == 'g':
-                self.stepper(100)
-                break
-            else:
-                print("Invalid response. Try again.")
-        self.clock.increment()
-        status_rg = generate_status_rg()
-        summary_rg = generate_summary_rg()
-        console.print(Group)
 
     def construct_scheduler(self):
         """
@@ -120,8 +96,7 @@ class Simulation:
         choice = int(choice) if choice else 1
         return files[choice-1]
 
-    def generate_intro_render_group(self):
-
+    def generate_intro_rg(self):
         line1 = Text(f"Algorithm: {self.sched.print_name}", style="bold red")
         table = Table(show_header=True, header_style="bold magenta")
         table.add_column("PID", style="cyan", width=4)
@@ -138,6 +113,10 @@ class Simulation:
                           str(pcb.burst_time), str(pcb.total_time), str(pcb.priority))
         return Group(line1, table)
 
+    def print_intro(self):
+        rg = self.generate_intro_rg()
+        print(rg)
+
     def gemerate_status_rg(self):
         """
         Prints the current status of the operating system representing the terminated queue.
@@ -148,12 +127,6 @@ class Simulation:
         table = Table(show_header=True, header_style="bold magenta")
         table.add_column("Status!", style="red")
         table.add_column("PID", style="cyan")
-        # table.add_column(
-        #    "Arrival Time\n(when process first arrives)", justify="right", style="green")
-        # table.add_column("Burst\n(average time of a CPU burst)",
-        #                  justify="right")
-        # table.add_column("Total CPU\n(Total CPU Time required)",
-        #                  justify="right", style="green")
         table.add_column("Run Time\n(CPU consumed so far)",
                          justify="right", style="green")
         if self.format == "full":
@@ -257,7 +230,6 @@ class Simulation:
         Prints the current status of the operating system representing the terminated queue.
         """
         console = Console()
-        console.clear()
         console.print(f"Clock: {self.clock.get_time()}", style="bold red")
         console.print(f"Timeline: {self.sched.progress}", style="bold red")
         console.print(f"Algorithm: {self.sched.print_name}", style="bold red")
@@ -265,13 +237,6 @@ class Simulation:
         table = Table(show_header=True, header_style="bold magenta")
         table.add_column("Status!", style="red")
         table.add_column("PID", style="cyan")
-        table.add_column(
-            "Arrival Time\n(when process first arrives)", justify="right", style="green")
-        table.add_column("Burst\n(average time of a CPU burst)",
-                            justify="right")
-
-        table.add_column("Total CPU\n(Total CPU Time required)",
-                            justify="right", style="green")
         table.add_column("Run Time\n(CPU consumed so far)",
                             justify="right", style="green")
         if self.format == "full":
@@ -303,8 +268,6 @@ class Simulation:
                 f"Average waiting before starting: {self.sched.get_average_start_time()}", style="bold red")
 
             # Function to read the json file
-
-
         def import_json_file(self, filename):
             with open(filename, 'r') as f:
                 self.data = json.load(f)
@@ -346,45 +309,6 @@ class Simulation:
                 pcb = PCB(pid, arrival_time, burst_time, total_time)
                 self.sched.new_queue.add_at_end(pcb)
                 self.clock.register_object(pcb)
-
-    def print_status(self):
-            """
-            Prints the current status of the operating system representing the terminated queue.
-            """
-            console = Console()
-            console.clear()
-            console.print(f"Clock: {self.clock.get_time()}", style="bold red")
-            console.print(f"Timeline: {self.sched.progress}", style="bold red")
-            console.print(f"Algorithm: {self.sched.print_name}", style="bold red")
-
-
-            table = Table(show_header=True, header_style="bold magenta")
-            table.add_column("Status!", style="red")
-            table.add_column("PID", style="cyan")
-            table.add_column(
-                "Arrival Time\n(when process first arrives)", justify="right", style="green")
-            table.add_column("Burst\n(average time of a CPU burst)",
-                                justify="right")
-
-            table.add_column("Total CPU\n(Total CPU Time required)",
-                                justify="right", style="green")
-            table.add_column("Run Time\n(CPU consumed so far)",
-                                justify="right", style="green")
-            if self.format == "full":
-                table.add_column(
-                    "Wall Time\n(Elapsed time since first starting)", justify="right", style="green")
-            table.add_column("Wait Time\n(Wating time until started)",
-                                justify="right", style="green")
-            if self.format == "full":
-                table.add_column(
-                    "Waiting Time\n(Time spent waiting overall)", justify="right", style="green")
-
-            self.sched.running.print(table)
-            self.sched.ready_queue.print(table)
-            self.sched.waiting_queue.print(table)
-            self.sched.terminated_queue.print(table)
-            self.sched.new_queue.print(table)
-            console.print(table)
 
     def print_summary(self):
         """

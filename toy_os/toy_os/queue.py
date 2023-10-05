@@ -31,8 +31,8 @@ class Queue:
         return f"Queue(\"{self.name}\")"
 
     def print(self, table):
+        format = self.simulation.format
         for pcb in self._list:
-            format = self.simulation.format
             if format == "full":
                 table.add_row(pcb.status, str(pcb.pid), str(
                     pcb.run_time), str(pcb.wall_time), str(pcb.start_time), str(pcb.wait_time))

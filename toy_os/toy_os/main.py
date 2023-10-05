@@ -27,4 +27,4 @@ DOC = """
 
 if __name__ == "__main__":
     s = Simulation()
-    s.run_animated()
+    s.run()
