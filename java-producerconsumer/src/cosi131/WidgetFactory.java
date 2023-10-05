@@ -3,16 +3,28 @@ package cosi131;
 public class WidgetFactory {
 	public WidgetFactory() {
 		// create message buffer
-		Channel mailBox = new Channel();
+		Pipe pipe = new Pipe();
 
 		// create producer, consumer threads
-		Thread producerThread = new Thread(new Producer(mailBox));
-		Thread consumerThread = new Thread(new Consumer(mailBox));
+		Thread producerThread1 = new Thread(new Producer(pipe));
+		Thread consumerThread = new Thread(new Consumer(pipe));
+		Thread producerThread2 = new Thread(new Producer(pipe));
 
-		producerThread.start();
+		producerThread1.start();
+		producerThread2.start();
 		consumerThread.start();
-		producerThread.start();
+		
+		try {
+			consumerThread.join();
+			producerThread1.join();
+			producerThread2.join();
 
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Exiting top level process!");
+		System.exit(0);
 	}
 
 	public static void main(String args[]) {

@@ -3,31 +3,33 @@ package cosi131;
 import java.util.Random;
 
 class Producer implements Runnable {
-	private Channel mbox;
+	private Pipe pipe;
 
-	public Producer(Channel m) {
-		mbox = m;
+	public Producer(Pipe m) {
+		pipe = m;
 	}
 
 	public void run() {
 		Integer widgetNumber = 0;
-		for (int i=0; i<100; i++) {
+		for (int i=0; i<500; i++) {
 			
-			// nap for a random time
-			Random r = new Random();
 			try {
-				Thread.sleep(r.nextInt(100, 200));
+				Thread.sleep(0);
 
 				// produce new item for buffer
 				String widget = "Widget " + widgetNumber++;
 				System.out.println("Produced: " + widget);
 
 				// enter into buffer
-				mbox.send(widget);
+				pipe.send(widget);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				System.out.println("Exception in Producer");
 				e.printStackTrace();
 			}
 		}
+		while (!pipe.empty())
+			//System.out.println("Busy waiting...");
+			Thread.yield();
+		pipe.close();
 	}
 }
