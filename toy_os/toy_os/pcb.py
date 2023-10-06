@@ -5,7 +5,7 @@ class PCB:
     burst time, priority, and completion time.
     """
 
-    def __init__(self, pid: str, arrival_time: int, burst_time: int, total_time: int, , burst_pattern, priority: int = 0):
+    def __init__(self, pid: str, arrival_time: int, burst_time: int, total_time: int,burst_pattern, priority: int = 0):
         self.pid: str = pid
         self.arrival_time: int = arrival_time
         self.burst_time = burst_time
@@ -13,12 +13,15 @@ class PCB:
         self.priority: int = priority
         self.total_time = total_time
         self.run_time = 0
-        self.wall_time = None
+        self.wall_time: int = None
         self.start_time = None
         self.wait_time = 0
         self.status = "New"
 
-    def update(self, time: int):
+    def update(self, time: int) -> None:
+        """
+        Updates the PCB's wall time to the given time if the PCB is not in the New or Terminated state.
+        """
         if self.status not in ("New", "Terminated"):
             self.wall_time = time
 

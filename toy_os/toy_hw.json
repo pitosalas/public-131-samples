@@ -8,10 +8,6 @@
         "new",
         "new",
         "ready",
-        "ready",
-        "ready",
-        "wait",
-        "wait",
         "terminated"
       ],
       "arrival_time": 0,

@@ -1,6 +1,4 @@
 # The toy operating system will demonstrate different scheduling algorithms.
-import random
-from typing import List, Dict
 from simulation import Simulation
 
 DOC = """
