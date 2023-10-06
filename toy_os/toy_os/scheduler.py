@@ -17,7 +17,7 @@ class Scheduler(ABC):
         """
         Returns True if all processes are done, False otherwise.
         """
-        return self.new_queue.empty() and self.
+        return self.new_queue.empty() and self.ready_queue.empty() and self.waiting_queue.empty() and self.running.empty()
 
     def quantum_elapsed(self):
         """
