@@ -11,7 +11,8 @@
         "ready",
         "ready",
         "wait",
-        "wait"
+        "wait",
+        "terminated"
       ],
       "arrival_time": 0,
       "total_time": 24,

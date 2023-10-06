@@ -64,52 +64,6 @@ class Scheduler(ABC):
             running.start_time = self.clock.get_time()
         self.progress += f"{running.pid}|"
 
-    def pcb_burst_update(self):
-        # for all pcbs, retrieve their burst pattern
-        # if the entry corresponding to the current sim time is "new" then move the pcb to the new queue
-        # if the entry corresponding to the current sim time is "run" then move the pcb to the ready queue
-        # if the entry corresponding to the current sim time is "wait" then move the pcb to the waiting queue
-        # if the current time is greater than the length of the burst pattern then move it to the terminated queue
-        for pcb in self.new_queue._list:
-            if pcb.burst_pattern[self.clock.get_time()] == "run":
-                self.ready_queue.add_at_end(self.new_queue.remove(pcb))
-            elif pcb.burst_pattern[self.clock.get_time()] == "wait":
-                self.waiting_queue.add_at_end(self.new_queue.remove(pcb))
-            elif pcb.burst_pattern[self.clock.get_time()] == "new":
-                self.new_queue.add_at_end(self.new_queue.remove(pcb))
-            elif pcb.burst_pattern[self.clock.get_time()] == "term":
-                self.terminated_queue.add_at_end(self.new_queue.remove(pcb))
-        for pcb in self.ready_queue._list:
-            if pcb.burst_pattern[self.clock.get_time()] == "run":
-                self.ready_queue.add_at_end(self.ready_queue.remove(pcb))
-            elif pcb.burst_pattern[self.clock.get_time()] == "wait":
-                self.waiting_queue.add_at_end(self.ready_queue.remove(pcb))
-            elif pcb.burst_pattern[self.clock.get_time()] == "new":
-                self.new_queue.add_at_end(self.ready_queue.remove(pcb))
-            elif pcb.burst_pattern[self.clock.get_time()] == "term":
-                self.terminated_queue.add_at_end(self.ready_queue.remove(pcb))
-        for pcb in self.waiting_queue._list:
-            if pcb.burst_pattern[self.clock.get_time()] == "run":
-                self.ready_queue.add_at_end(self.waiting_queue.remove(pcb))
-            elif pcb.burst_pattern[self.clock.get_time()] == "wait":
-                self.waiting_queue.add_at_end(self.waiting_queue.remove(pcb))
-            elif pcb.burst_pattern[self.clock.get_time()] == "new":
-                self.new_queue.add_at_end(self.waiting_queue.remove(pcb))
-            elif pcb.burst_pattern[self.clock.get_time()] == "term":
-                self.terminated_queue.add_at_end(
-                    self.waiting_queue.remove(pcb))
-        for pcb in self.terminated_queue._list:
-            if pcb.burst_pattern[self.clock.get_time()] == "run":
-                self.ready_queue.add_at_end(self.terminated_queue.remove(pcb))
-            elif pcb.burst_pattern[self.clock.get_time()] == "wait":
-                self.waiting_queue.add_at_end(
-                    self.terminated_queue.remove(pcb))
-            elif pcb.burst_pattern[self.clock.get_time()] == "new":
-                self.new_queue.add_at_end(self.terminated_queue.remove(pcb))
-            elif pcb.burst_pattern[self.clock.get_time()] == "term":
-                self.terminated_queue.add_at_end(
-                    self.terminated_queue.remove(pcb))
-
     def update_running_process_with_preemption(self):
         # if quantum has elapsed
         if self.quantum_elapsed():
@@ -164,7 +118,36 @@ class SJF(scheduler):
 
     def update(self, time):
         self.clock = self.simulation.clock
-        self.pcb_burst_update()
+        self.move_to_terminated()
+        self.move_to_ready()
+        self.move_to_waiting()
+
+    def move_based_on_pattern(self, source_queue, pattern, dest_queue):
+        to_move = []
+        for pcb in source_queue._list:
+            if pcb.burst_pattern[self.clock.get_time()] == patern:
+                to_move += [pcb]
+        for pcb in to_move:
+            dest_queue.add_at_end(source_queue.remove(pcb))
+
+    def move_to_ready(self):
+        # while there are still pcbs on new queue, remove them from new queue and add them to ready queue
+        self.move_based_on_pattern(self.new_queue, "ready", self.ready_queue)
+        self.move_based_on_pattern(
+            self.waiting_queue, "ready", self.ready_queue)
+
+    def move_to_waiting(self):
+        self.move_based_on_pattern(self.new_queue, "wait", self.waiting_queue)
+        self.move_based_on_pattern(
+            self.ready_queue, "wait", self.waiting_queue)
+
+    def move_to_terminated(self):
+        self.move_based_on_pattern(
+            self.new_queue, "terminated", self.terminated_queue)
+        self.move_based_on_pattern(
+            self.ready_queue, "terminated", self.terminated_queue)
+        self.move_based_on_pattern(
+            self.waiting_queue, "terminated", self.terminated_queue)
 
 
 class RR(Scheduler):
