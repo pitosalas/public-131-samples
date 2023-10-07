@@ -8,15 +8,22 @@ DOC = """
     * Time: Simulation time. Measured in 'tics'. Starts at zero.
 
 * Each process is configured initially with
-    * Arrival Time: When the process arrives to the scheduler for the first time
-    * Burst Time: Total number CPU tics the process will use before it has to wait (for I/O etc.)
-    * Total Time: Total number CPU tics the process will use until it exists
+    * A burst pattern shows the process's state at each tic ("burst_pattern"
+        * New: The process has not yet arrived to the scheduler
+        * Ready: The process is ready to run
+        * Wait: The process is waiting for I/O or other resources
+        * Terminated: The process has completed
+    * Alternatively a process can be configured with a burst time and total time ("burst" and "total")
+        * Total Time: Number of tics the process will run before it terminates
+        * Arrival Time: When the process arrives to the scheduler for the first time
+    * Alternatively we can probabilistically generate processes using:
+        * Burst time: Average number of tics a process will run ("burst")
 
 * Once the simulation starts, each process tracks the following
-    * Run Time: Number of CPU tics the process has used so far
-    * Wall Time: Number of tics since the process was first run
-    * Wait Time: Total tics a process spends waiting (on ready and wait queues)
-    * Start Time: Time(tics) when the process was first run
+    * Run Time: Number of CPU tics the process has used so far ("run")
+    * Wall Time: Number of tics since the process was first run until it terminates ("wall")
+    * Wait Time: Total tics a process spends waiting (on ready and wait queues) ("wait)
+    * Start Time: Time(tics) when the process was first run ("start")
 
 * When the simulation completes the following are calculated:
 * Throughput: Average number of processes completed per tic

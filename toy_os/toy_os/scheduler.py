@@ -1,5 +1,6 @@
 from queue import Queue
 from abc import ABC, abstractmethod
+from rich.live import Live
 
 
 class Scheduler(ABC):
@@ -12,6 +13,7 @@ class Scheduler(ABC):
         self.simulation = sim
         self.progress = ""
         self.print_name = ""
+    
 
     def all_processes_done(self):
         """
@@ -52,7 +54,7 @@ class Scheduler(ABC):
         self.running.add_at_end(process_to_run)
 
     def __repr__(self):
-        return "Scheduler({clock} )"
+        return "Scheduler({clock})"
 
     def update_running_process(self):
         # if there is a running process, increment its time
@@ -72,13 +74,15 @@ class Scheduler(ABC):
             if current_process is not None:
                 self.ready_queue.add_at_end(
                     self.running.remove(current_process))
-        update_running_process(self)
+        self.update_running_process(self)
 
     def update_waiting_processes(self):
         for waiting in self.waiting_queue._list:
             waiting.wait_time += 1
+            waiting.waiting_time += 1
         for ready in self.ready_queue._list:
             ready.wait_time += 1
+            ready.waiting_time += 1
             if ready.start_time is not None:
                 ready.start_time = self.clock.get_time()
 
@@ -100,9 +104,9 @@ class Scheduler(ABC):
         """
         total = 0
         for pcb in self.terminated_queue._list:
-            total += pcb.start_time
+            total += pcb.start_time if pcb.start_time else 0
         if len(self.terminated_queue._list) == 0:
-            0
+            return 0
         else:
             return float(total) / len(self.terminated_queue._list)
 
@@ -111,23 +115,31 @@ class Scheduler(ABC):
         pass
 
 
-class SJF(scheduler):
-    super().__init__(sim)
-    self.sim = sim
-    self.print_name = "Shortest Job First"
+class SJF(Scheduler):
+    def __init__(self, sim):
+        super().__init__(sim)
+        self.sim = sim
+        self.print_name = "Shortest Job First"
 
     def update(self, time):
+        print(f"c: {time}, r: {self.running.length()}, rd: {self.ready_queue.length()}, w: {self.waiting_queue.length()}, n: {self.new_queue.length()}, t: {self.terminated_queue.length()}")
         self.clock = self.simulation.clock
+        self.update_running_process()       
+        self.update_waiting_processes()
         self.move_to_terminated()
         self.move_to_ready()
         self.move_to_waiting()
+        self.schedule_next()
 
     def move_based_on_pattern(self, source_queue, pattern, dest_queue):
         to_move = []
         for pcb in source_queue._list:
-            if pcb.burst_pattern[self.clock.get_time()] == patern:
+            if pcb.burst_pattern[self.clock.get_time()] == pattern:
                 to_move += [pcb]
         for pcb in to_move:
+            if (dest_queue.name == "Ready Queue"):
+                if pcb.start_time is None:
+                    pcb.start_time = self.clock.get_time()
             dest_queue.add_at_end(source_queue.remove(pcb))
 
     def move_to_ready(self):
@@ -135,11 +147,13 @@ class SJF(scheduler):
         self.move_based_on_pattern(self.new_queue, "ready", self.ready_queue)
         self.move_based_on_pattern(
             self.waiting_queue, "ready", self.ready_queue)
+        self.move_based_on_pattern(self.running, "ready", self.ready_queue)
 
     def move_to_waiting(self):
         self.move_based_on_pattern(self.new_queue, "wait", self.waiting_queue)
         self.move_based_on_pattern(
             self.ready_queue, "wait", self.waiting_queue)
+        self.move_based_on_pattern(self.running, "wait", self.waiting_queue)
 
     def move_to_terminated(self):
         self.move_based_on_pattern(
@@ -147,8 +161,9 @@ class SJF(scheduler):
         self.move_based_on_pattern(
             self.ready_queue, "terminated", self.terminated_queue)
         self.move_based_on_pattern(
+            self.running, "terminated", self.terminated_queue)
+        self.move_based_on_pattern(
             self.waiting_queue, "terminated", self.terminated_queue)
-
 
 class RR(Scheduler):
     def __init__(self, sim):

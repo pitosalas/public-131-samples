@@ -38,6 +38,7 @@ def gemerate_status_rg(sim):
     table = Table(show_header=True, header_style="bold magenta")
     table.add_column("Status!", style="red")
     table.add_column("PID", style="cyan")
+    table.add_column("Start Time (Arrival Time)", style="cyan")
     table.add_column("Run Time\n(CPU consumed so far)",
                      justify="right", style="green")
     if sim.format == "full":

@@ -1,7 +1,8 @@
 {
   "sched_algorithm": "FCFS",
   "time_slice": 2,
-  "format": "basic",
+  "intro": ["pid", "total", "arrival", "burst", "priority"],
+  "status": ["pid", "start", "run", "wall", "wait"], 
   "auto": {
     "number_of_processes": 0,
     "arrival_time": {

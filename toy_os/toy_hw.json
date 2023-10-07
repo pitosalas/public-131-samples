@@ -1,6 +1,6 @@
 {
   "sched_algorithm": "SJF",
-  "format": "basic",
+  "format": "full",
   "manual": [
     {
       "pid": "p1",
@@ -8,6 +8,13 @@
         "new",
         "new",
         "ready",
+        "wait",
+        "wait",
+        "wait",
+        "wait",
+        "wait",
+        "wait",
+        "wait",
         "terminated"
       ],
       "arrival_time": 0,

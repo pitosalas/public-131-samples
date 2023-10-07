@@ -16,6 +16,9 @@ class Queue:
     def remove(self, pcb):
         self._list.remove(pcb)
         return pcb
+    
+    def length(self):
+        return len(self._list)
 
     def empty(self):
         return len(self._list) == 0
@@ -34,8 +37,8 @@ class Queue:
         format = self.simulation.format
         for pcb in self._list:
             if format == "full":
-                table.add_row(pcb.status, str(pcb.pid), str(
-                    pcb.run_time), str(pcb.wall_time), str(pcb.start_time), str(pcb.wait_time))
+                table.add_row(pcb.status, str(pcb.pid), str(pcb.start_time), str(
+                    pcb.run_time), str(pcb.wall_time), str(pcb.wait_time), str(pcb.waiting_time))
             elif format == "basic":
                 table.add_row(pcb.status, str(pcb.pid), str(
                     pcb.run_time), str(pcb.start_time))

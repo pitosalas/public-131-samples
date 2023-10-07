@@ -7,6 +7,8 @@ from pathlib import Path
 import tui
 from rich.console import Console
 from rich.table import Table
+import random
+from rich.live import Live
 
 
 class Simulation:
@@ -15,11 +17,11 @@ class Simulation:
         self.format = "full"
 
     def stepper(self, count):
-        for i in range(count):
+        self.print_status()
+        for i in range(count): 
             self.clock.increment()
             if self.sched.all_processes_done():
                 break
-        self.print_status()
 
     def run(self):
         self.setup_run()
@@ -35,7 +37,6 @@ class Simulation:
                 break
             else:
                 print("Invalid response. Try again.")
-        self.clock.increment()
         self.print_status()
         self.print_summary()
 
@@ -174,6 +175,7 @@ class Simulation:
         table = Table(show_header=True, header_style="bold magenta")
         table.add_column("Status!", style="red")
         table.add_column("PID", style="cyan")
+        table.add_column("Start Time\n(Arrival time)")
         table.add_column("Run Time\n(CPU consumed so far)",
                          justify="right", style="green")
         if self.format == "full":
@@ -216,33 +218,30 @@ class Simulation:
                     exit()
 
     def configure_scheduler(self, data):
-        self.format = data["format"]
-        self.quantum = data["time_slice"]
+        self.format = data.get("format", "basic")
+        self.quantum = data.get("time_slice", 1)
         self.sched_algorithm = data["sched_algorithm"]
 
         # if there is a key "manual", then we generate each process separately.
         for process in data["manual"]:
-            pid = process['pid']
-            arrival_time = process['arrival_time']
-            burst_time = process['burst_time']
-            total_time = process['total_time']
-            pcb = PCB(pid, arrival_time, burst_time, total_time)
+            pcb = PCB(process)
             self.sched.new_queue.add_at_end(pcb)
             self.clock.register_object(pcb)
 
         # if there is a key "auto", then we generate the processes randomly.
         pid = 0
-        auto = data["auto"]
+        auto = data.get("auto", None)
         if auto is not None:
             for i in range(auto['number_of_processes']):
                 pid = i + 1
-                arrival_time = random.randint(
+                process = { "pid": pid }
+                process["arrival_time"] = arrival_time = random.randint(
                     auto['arrival_time']['from'], auto['arrival_time']['to'])
-                burst_time = random.randint(
+                process["burst_time"] = random.randint(
                     auto['burst_time']['from'], auto['burst_time']['to'])
-                total_time = random.randint(
+                process["total_time"] = random.randint(
                     auto['total_time']['from'], auto['total_time']['to'])
-                pcb = PCB(pid, arrival_time, burst_time, total_time)
+                pcb = PCB(process)
                 self.sched.new_queue.add_at_end(pcb)
                 self.clock.register_object(pcb)
 

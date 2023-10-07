@@ -5,17 +5,18 @@ class PCB:
     burst time, priority, and completion time.
     """
 
-    def __init__(self, pid: str, arrival_time: int, burst_time: int, total_time: int,burst_pattern, priority: int = 0):
-        self.pid: str = pid
-        self.arrival_time: int = arrival_time
-        self.burst_time = burst_time
-        self.burst_pattern = burst_pattern
-        self.priority: int = priority
-        self.total_time = total_time
+    def __init__(self, args):
+        self.pid: str = args["pid"]
+        self.arrival_time: int = args.get("arrival_time", 0)
+        self.burst_time = args.get("burst_time", None)
+        self.burst_pattern = args.get("burst_pattern", None)
+        self.priority: int = args.get("priority", 0)
+        self.total_time = args.get("total_time", 0)
+        self.start_time = None
         self.run_time = 0
         self.wall_time: int = None
-        self.start_time = None
         self.wait_time = 0
+        self.waiting_time = 0
         self.status = "New"
 
     def update(self, time: int) -> None:
