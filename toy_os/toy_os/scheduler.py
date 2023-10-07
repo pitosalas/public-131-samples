@@ -122,14 +122,14 @@ class SJF(Scheduler):
         self.print_name = "Shortest Job First"
 
     def update(self, time):
-        print(f"c: {time}, r: {self.running.length()}, rd: {self.ready_queue.length()}, w: {self.waiting_queue.length()}, n: {self.new_queue.length()}, t: {self.terminated_queue.length()}")
         self.clock = self.simulation.clock
-        self.update_running_process()       
-        self.update_waiting_processes()
-        self.move_to_terminated()
         self.move_to_ready()
-        self.move_to_waiting()
         self.schedule_next()
+        self.move_to_terminated()
+        self.move_to_waiting()
+        self.update_running_process()       
+        print(f"c: {time}, r: {self.running.length()}, rd: {self.ready_queue.length()}, w: {self.waiting_queue.length()}, n: {self.new_queue.length()}, t: {self.terminated_queue.length()}")
+        self.update_waiting_processes()
 
     def move_based_on_pattern(self, source_queue, pattern, dest_queue):
         to_move = []

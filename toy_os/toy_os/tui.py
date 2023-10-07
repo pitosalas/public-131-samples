@@ -8,6 +8,20 @@ from rich.prompt import Prompt
 from rich.live import Live
 from rich import box
 
+# Mapping format strings to column headers
+
+COLUMN_HEADERS = {
+      "pid": "PID",
+      "total_ime": "Total Time",
+      "arrival_time": "Arrival Time",
+      "burst_time": "Burst Time",
+      "priority": "Priority",
+      "start_time": "Start Time",
+      "run_time": "Run Time",
+      "wall_time": "Wall Time",
+      "wait_time": "Wait Time",
+      "status": "Status"
+}
 
 def generate_intro_rg(sim):
     line1 = Text(f"Algorithm: {sim.sched.print_name}", style="bold red")
@@ -27,36 +41,43 @@ def generate_intro_rg(sim):
                       str(pcb.burst_time), str(pcb.total_time), str(pcb.priority))
     return Group(line1, table)
 
+def print_status(sim) -> None:
+    rg = generate_status_rg(sim)
+    console = Console()
+    console.print(rg)
 
-def gemerate_status_rg(sim):
+def generate_status_rg(sim) -> Group:
     """
     Prints the current status of the operating system representing the terminated queue.
     """
     line1 = Text(f"Clock: {sim.clock.get_time()}", style="bold red")
     line2 = Text(f"Timeline: {sim.sched.progress}", style="bold red")
-
     table = Table(show_header=True, header_style="bold magenta")
-    table.add_column("Status!", style="red")
-    table.add_column("PID", style="cyan")
-    table.add_column("Start Time (Arrival Time)", style="cyan")
-    table.add_column("Run Time\n(CPU consumed so far)",
-                     justify="right", style="green")
-    if sim.format == "full":
-        table.add_column(
-            "Wall Time\n(Elapsed time since first starting)", justify="right", style="green")
-    table.add_column("Wait Time\n(Wating time until started)",
-                     justify="right", style="green")
-    if sim.format == "full":
-        table.add_column(
-            "Waiting Time\n(Time spent waiting overall)", justify="right", style="green")
-
-    sim.sched.running.print(table)
-    sim.sched.ready_queue.print(table)
-    sim.sched.waiting_queue.print(table)
-    sim.sched.terminated_queue.print(table)
-    sim.sched.new_queue.print(table)
+    add_columns(table, sim.display["status"])
+    add_rows(table, sim.sched.running, sim.display["status"])
+    add_rows(table, sim.sched.ready_queue, sim.display["status"])
+    add_rows(table, sim.sched.waiting_queue, sim.display["status"])
+    add_rows(table, sim.sched.terminated_queue, sim.display["status"])
+    add_rows(table, sim.sched.new_queue, sim.display["status"])
     return Group(line1, line2, table)
 
+def add_rows(table, queue, columns):
+    for pcb in queue._list:
+        row = []
+        for column in columns:
+            value = getattr(pcb, column)
+            row.append(str(value))
+        table.add_row(*row)
+
+def add_columns(table, columns):
+    for column in columns:
+        table.add_column(COLUMN_HEADERS[column], justify="right")
+
+
+def print_summary(sim) -> None:
+    rg = generate_summary_rg(sim)
+    console = Console()
+    console.print(rg)
 
 def generate_summary_rg(sim):
     """
@@ -71,6 +92,6 @@ def generate_summary_rg(sim):
 
 
 def group_rg(sim):
-    status_rg = gemerate_status_rg(sim)
+    status_rg = generate_status_rg(sim)
     summary_rg = generate_summary_rg(sim)
     return Group(sim.intro_rg, status_rg, summary_rg)
