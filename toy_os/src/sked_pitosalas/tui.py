@@ -17,6 +17,7 @@ COLUMN_HEADERS = {
       "burst_time": "Burst Time",
       "priority": "Priority",
       "start_time": "Start Time",
+      "total_time": "Total Time",
       "run_time": "Run Time",
       "wall_time": "Wall Time",
       "wait_time": "Wait Time",
@@ -26,19 +27,9 @@ COLUMN_HEADERS = {
 def generate_intro_rg(sim):
     line1 = Text(f"Algorithm: {sim.sched.print_name}", style="bold red")
     table = Table(show_header=True,
-                  header_style="bold magenta", box=box.MINIMAL)
-    table.add_column("PID", style="cyan", width=4)
-    table.add_column(
-        "Total Time\n(required by process)", justify="right", style="green")
-    table.add_column(
-        "Arrival Time\n(when process first arrives)", justify="right", style="green")
-    table.add_column("Burst\n(average time of a CPU burst)",
-                     justify="right")
-    table.add_column("Priority\n(process priority",
-                     justify="right")
-    for pcb in sim.sched.new_queue._list:
-        table.add_row(str(pcb.pid), str(pcb.arrival_time),
-                      str(pcb.burst_time), str(pcb.total_time), str(pcb.priority))
+                  header_style="bold magenta")
+    add_columns(table, sim.display["intro"])
+    add_rows(table, sim.sched.new_queue, sim.display["intro"])
     return Group(line1, table)
 
 def print_status(sim) -> None:
@@ -93,5 +84,5 @@ def generate_summary_rg(sim):
 
 def group_rg(sim):
     status_rg = generate_status_rg(sim)
-    summary_rg = generate_summary_rg(sim)
-    return Group(sim.intro_rg, status_rg, summary_rg)
+    return Group(sim.intro_rg, status_rg)
+

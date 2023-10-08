@@ -1,5 +1,5 @@
-# The toy operating system will demonstrate different scheduling algorithms.
-from simulation import Simulation
+from sked_pitosalas.simulation import Simulation
+import argparse
 
 DOC = """
 # Important definitions:
@@ -30,7 +30,19 @@ DOC = """
 * Turnaround: Average number of tics used for a process (1/Througput)
 """
 
+HELP = """
+Use this little tool to experiment with and demonstrate different scheduling algorithms. It is open source and a work in progress so expect bugs and help us fix them!
+"""
+parser = argparse.ArgumentParser(description='Simple scheduler CLI')
+
+parser.add_argument('-d', '--doc', action='store_true', help='Print documentation')
+parser.add_argument('-l', '--live', action='store_true', help='Live mode')
+parser.add_argument('-p', '--prompt', action='store_true', help='Prompt mode')
+parser.add_argument('-f', '--file', type=str, help='File path')
+args = parser.parse_args() 
+
+live_mode = args.live
+file_name = args.file
+s = Simulation()
 if __name__ == "__main__":
-    s = Simulation()
-    //s.run()
-    s.run_animated()
+    s.run(live_mode, file_name)

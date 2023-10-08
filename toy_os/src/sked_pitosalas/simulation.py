@@ -1,12 +1,11 @@
-from clock import Clock
+from sked_pitosalas.clock import Clock
 import json
-from pcb import PCB
-import scheduler
+from sked_pitosalas.pcb import PCB
+from sked_pitosalas.scheduler import FCFS, SJF, RR
 import time
 from pathlib import Path
-import tui
+import sked_pitosalas.tui
 from rich.console import Console
-from rich.table import Table
 import random
 from rich.live import Live
 
@@ -28,10 +27,21 @@ class Simulation:
             self.clock.increment()
             if self.sched.all_processes_done():
                 break
-        tui.print_status(self)
+        sked_pitosalas.tui.print_status(self)
 
-    def run(self):
-        self.setup_run()
+    def run(self, live_mode, file_name):
+        self.setup_run(file_name)
+        if live_mode:
+            self.run_animated()
+        else:
+            self.run_step()
+
+    def run_animated(self):
+        self.intro_rg = sked_pitosalas.tui.generate_intro_rg(self)
+        self.run_live()
+        sked_pitosalas.tui.print_summary(self)
+    
+    def run_step(self):
         self.print_intro()
         while not self.sched.all_processes_done():
             response = input("[s(tep),q(uit), g(o): ")
@@ -44,27 +54,26 @@ class Simulation:
                 break
             else:
                 print("Invalid response. Try again.")
-        tui.print_summary(self)
+        sked_pitosalas.tui.print_summary(self)
 
-    def setup_run(self):
-        filename = self.prompt_for_filename()
+    def setup_run(self, given_filename):
+        if given_filename:
+            filename = given_filename
+        else:   
+            filename = self.prompt_for_filename()
+        print(f"Running simulation with {filename}")
         self.import_json_file(filename)
         self.construct_scheduler()
         self.clock.register_object(self.sched)
         self.configure_scheduler(self.data)
 
-    def run_animated(self):
-        self.setup_run()
-        self.intro_rg = tui.generate_intro_rg(self)
-        self.run_live()
-
     def run_live(self):
         Console().clear()
-        with Live(tui.group_rg(self)) as live:
+        with Live(sked_pitosalas.tui.group_rg(self)) as live:
             while not self.sched.all_processes_done():
                 time.sleep(1)  # arbitrary delay
                 self.clock.increment()
-                live.update(tui.group_rg(self))
+                live.update(sked_pitosalas.tui.group_rg(self))
 
     def construct_scheduler(self):
         """
@@ -72,14 +81,12 @@ class Simulation:
         """
         algo = self.data["sched_algorithm"]
         if algo == "FCFS":
-            self.sched = scheduler.FCFS(self)
+            self.sched = FCFS(self)
             print(self.sched.print_name)
         elif algo == "SJF":
-            self.sched = scheduler.SJF(self)
+            self.sched = SJF(self)
         elif algo == "RR":
-            self.sched = scheduler.RR(self)
-        elif algo == "Priority":
-            self.sched = scheduler.Priority(self)
+            self.sched = RR(self)
         else:
             print("Invalid algorithm. Try again.")
 
@@ -95,7 +102,7 @@ class Simulation:
 
     def print_intro(self):
         console = Console()
-        rg = tui.generate_intro_rg(self)
+        rg = sked_pitosalas.tui.generate_intro_rg(self)
         console.print(rg)
 
     # Function to read the json file
@@ -143,26 +150,11 @@ class Simulation:
                 self.sched.new_queue.add_at_end(pcb)
                 self.clock.register_object(pcb)
 
-    def construct_scheduler(self):
-        """
-        Constructs the scheduler based on the algorithm specified in the JSON file.
-        """
-        algo = self.data["sched_algorithm"]
-        if algo == "FCFS":
-            self.sched = scheduler.FCFS(self)
-        elif algo == "SJF":
-            self.sched = scheduler.SJF(self)
-        elif algo == "RR":
-            self.sched = scheduler.RR(self)
-        elif algo == "Priority":
-            self.sched = scheduler.Priority(self)
-        else:
-            print("Invalid algorithm. Try again.")
 
     def prompt_for_filename(self):
         files = [f.name for f in Path(".").glob("*.json")]
-
-        print("[bold]Select a file:[/bold]")
+        console = Console()
+        console.print("[bold]Select a file:[/bold]")
         for i, f in enumerate(files, 1):
             print(f"[{i}] {f}")
         choice = input("Enter your choice: ")

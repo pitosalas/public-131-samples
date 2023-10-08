@@ -3,10 +3,8 @@
   "display": {
     "intro":[
       "pid",
-      "total_time",
       "arrival_time",
-      "burst_time",
-      "priority"
+      "burst_time"
     ],
     "status":[
       "pid",
