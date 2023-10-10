@@ -9,12 +9,12 @@ public class PE implements Mutex {
 		flag0 = false;
 		flag1 = false;
 		turn = 0;
+		System.out.println("PETERSONS ALGO");
 	}
 
 	@Override
 	public void enterCS(int t) {
 		System.out.printf("Turn: %d, flag 0=%b 1=%b\n", turn, flag0, flag1);
-		// call with t = 0 if thread A, t = 1 if thread B
 		if (t == 0) {
 			flag0 = true;
 			turn = 1;
@@ -35,12 +35,15 @@ public class PE implements Mutex {
 
 	@Override
 	public void exitCS(int t) {
-		if (t == 0)
-			flag0 = false;
-		else if (t == 1) {
-			flag1 = false;
-		} else
-			System.out.println("Invalid t in enterCS");
+		flag0 = !(t == 0);
+		flag1 = !(t == 1);
+//		
+//		if (t == 0)
+//			flag0 = false;
+//		else if (t == 1) {
+//			flag1 = false;
+//		} else
+//			System.out.println("Invalid t in enterCS");
 	}
 
 }

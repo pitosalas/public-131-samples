@@ -7,6 +7,8 @@ public class SA implements Mutex {
 
 	public SA() {
 		this.turn = 0;
+		System.out.println("STRICT ALTERNATION ALGO");
+
 	}
 
 	 public void enterCS(int t) {
