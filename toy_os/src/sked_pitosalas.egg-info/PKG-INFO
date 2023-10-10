@@ -1,6 +1,0 @@
-Metadata-Version: 2.1
-Name: sked-pitosalas
-Version: 0.0.17
-Summary: Simulator of scheduling algorithms
-Author: Pito Salas
-Requires-Python: >=3.7

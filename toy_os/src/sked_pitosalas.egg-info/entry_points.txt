@@ -1,2 +1,0 @@
-[console_scripts]
-sched = sked_pitosalas.sked:cli
