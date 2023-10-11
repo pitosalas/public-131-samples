@@ -1,18 +1,18 @@
 package cosi131;
 
-public class Counter {
+public class Count2 {
 	Integer counter;
 	String turn;
 	
-	Counter(String t, int initial) {
+	Count2(String t, int initial) {
 		counter = initial;
 		turn = t;
 	}
 	
 	 void increment(String name) {
+		while (name != turn) 
+			Thread.yield();
 		System.out.printf("T: %s = %d\n", turn, counter);
-//		while (name != turn) 
-//			Thread.yield();
 		counter = counter + 1;
 		turn = turn.equals("A") ? "B" : "A";
 	}
