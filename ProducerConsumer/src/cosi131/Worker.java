@@ -13,8 +13,8 @@ public class Worker implements Runnable {
 	}
 
 	public void run() {
-		int limit = tread_id == 0 ? 20 : 40;
-		int sleepy = tread_id == 0 ? 200 : 50;
+		int limit = tread_id == 0 ? 40 : 40;
+		int sleepy = tread_id == 0 ? 5 : 5;
 		for (int cs_loop = 0; cs_loop < limit; cs_loop++) {
 			try {
 				Thread.sleep(sleepy);
