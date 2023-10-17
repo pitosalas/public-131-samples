@@ -3,8 +3,8 @@ package cosi131;
 public class RaceCondition {
 
 	public static void main(String[] args) {
-//		raceCondition1();
-		raceCondition2();
+		raceCondition1();
+//		raceCondition2();
 	}
 	
 	private static void raceCondition1() {

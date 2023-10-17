@@ -10,10 +10,16 @@ public class Count2 {
 	}
 	
 	 void increment(String name) {
-		while (name != turn) 
-			Thread.yield();
-		System.out.printf("T: %s = %d\n", turn, counter);
+		while (name != turn);
+		
+		//		System.out.printf("T: %s = %d\n", turn, counter);
 		counter = counter + 1;
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		turn = turn.equals("A") ? "B" : "A";
 	}
 	

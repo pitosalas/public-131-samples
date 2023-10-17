@@ -11,13 +11,7 @@ public class Runnable2 implements Runnable {
 
 	@Override
 	public void run() {
-		for (int i = 1; i <= 10000; i++) {
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		for (int i = 1; i <= 1000; i++) {
 			counter.increment(name);
 		}
 	}
