@@ -10,15 +10,13 @@ public class Consumer implements Runnable {
 	@Override
 	public void run() {
 		System.out.println("Consumer ready.");
-		for (int i = 0; i < 20; i++) {
-			try {
-				String s = buf.remove();
-				System.out.println("... Consumed: " + s);
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		for (int i = 0; i < BoundedBuffer.HOW_MANY; i++) {
+				try {
+					String s = buf.remove();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 		
 	}

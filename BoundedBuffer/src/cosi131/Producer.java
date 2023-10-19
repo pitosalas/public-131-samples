@@ -8,16 +8,14 @@ public class Producer implements Runnable {
 
 	public void run() {
 		System.out.println("Producer ready.");
-		for (int i = 0; i<20; i++) {
-			try {
-				Thread.sleep(0);
+		for (int i = 0; i< BoundedBuffer.HOW_MANY; i++) {
 				String bagel = "Bagel: " + i;
-				System.out.println("... produced: " + bagel);
-				buf.insert(bagel);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				try {
+					buf.insert(bagel);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 	}
 	

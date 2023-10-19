@@ -1,12 +1,19 @@
 package cosi131;
 
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class BoundedBuffer {
+	public static final int HOW_MANY = 2000;// maximum # items in buffer
 
 	private static final int SIZE = 10;// maximum # items in buffer
 	public int count; // # items in buffer
 	private int in; // index of next free position
 	private int out; // index of next full position
-	private String[] buffer; // buffer array
+	public String[] buffer; // buffer array
+	private ReentrantLock myLock;
+	private Condition cvNoLongerEmpty;
+	private Condition cvNoLongerFull;
 
 	public BoundedBuffer() {
 		// buffer is initially empty
@@ -14,43 +21,50 @@ public class BoundedBuffer {
 		in = 0;
 		out = 0;
 		buffer = new String[SIZE];
+		myLock = new ReentrantLock();
+		cvNoLongerEmpty = myLock.newCondition();
+		cvNoLongerFull = myLock.newCondition();
 	}
 
-	void insert(String item) {
-		while (count == SIZE) {
-			try {
-//				Thread.sleep(0);
-//				System.out.println("... buf full ... busy wait");
-//				Thread.yield();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		System.out.printf("... Adding to buffer. Current count: %d\n", count);
+	void insert(String item) throws InterruptedException {
+		myLock.lock();
+		checkValid();
+		try {
+			while (count == SIZE) cvNoLongerFull.await();
 
-		// add item to buffer
-		count++;
-		buffer[in] = item;
-		in = (in + 1) % SIZE;
+			// add item to buffer
+			count++;
+			buffer[in] = item;
+			in = (in + 1) % SIZE;
+			cvNoLongerEmpty.signalAll();
+		} finally {
+			myLock.unlock();
+		}
+
 	}
 
-	public String remove() {
-		String item;
-		while (count == 0) {
-			try {
-//				System.out.println("... buf empty ... busy wait");
-//				Thread.sleep(0);
-//				Thread.yield();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+	public String remove() throws InterruptedException {
+		String item = "";
+		myLock.lock();
+		checkValid();
+		try {
+
+			while (count == 0) cvNoLongerEmpty.await();
+			--count;
+			item = buffer[out];
+			out = (out + 1) % SIZE;
+			cvNoLongerFull.signalAll();
+			return item;
+		} finally {
+			myLock.unlock();
 		}
 
-		// remove item from buffer
-		--count;
-		item = buffer[out];
-		out = (out + 1) % SIZE;
-		return item;
+	}
+	public void checkValid() {
+		if (count == 0 && out == in) return;
+		if (count == SIZE && out == in) return;
+		if (count == (in - out + SIZE) % SIZE) return;
+		System.out.printf("!!! In(%d)  Out(%d) Count(%d)\n", in, out, count);
 	}
 
 	public static void main(String[] args) {
@@ -65,11 +79,10 @@ public class BoundedBuffer {
 		try {
 			consThread.join();
 			prodThread.join();
-
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.printf("At end buffer contains: %d entries\n", buf.count);
 		System.out.println("Exiting top level process!");
 		System.exit(0);
 	}
