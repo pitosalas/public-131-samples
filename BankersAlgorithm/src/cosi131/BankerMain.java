@@ -56,9 +56,7 @@ public class BankerMain {
 			
 			// All pairs of processes will be compared
 			for (int i = 0; i < n; i++) {
-				System.out.printf("Analyzing P%d vs P%d\n", count, i);
 				if (visited[i] == false) {
-					System.out.printf("...Looking closer at P%d\n", i);
 					int j;
 					for (j = 0; j < m; j++) {
 						if (need[i][j] > work[j])
@@ -99,17 +97,31 @@ public class BankerMain {
 			}
 		}
 	}
+	
+	void printStatus() {
+		System.out.println("---------------------------------------------");
+		System.out.printf("%-3s|%12s|%12s|%10s\n", "Proc", "Allocation", "Max", "Need");
+		System.out.printf("    |%4s%4s%4s|", "A", "B", "C");		
+		System.out.printf("%4s%4s%4s|", "A", "B", "C");		
+		System.out.printf("%4s%4s%4s|\n", "A", "B", "C");	
+		System.out.println("---------------------------------------------");
+		for (int i=0; i<5; i++) {
+			System.out.printf("%-4s|%4d%4d%4d|", "P"+i, alloc[i][0], alloc[i][1], alloc[i][2]);
+			System.out.printf("%4d%4d%4d|", max[i][0], max[i][1], max[i][2]);
+			System.out.printf("%4d%4d%4d|\n", max[i][0]-alloc[i][0], max[i][1]-alloc[i][1], max[i][2]-alloc[i][2]);
+		}
+		System.out.println("---------------------------------------------");
+	}
 
 	public static void main(String[] args) {
 		int i, j, k;
-		BankerMain gfg = new BankerMain();
+		BankerMain bnker = new BankerMain();
 
-		gfg.initializeValues();
-		
-		// Calculate the Need Matrix
-		gfg.calculateNeed();
+		bnker.initializeValues();
+		bnker.calculateNeed();
+		bnker.printStatus();
 
 		// Check whether system is in safe state or not
-		gfg.isSafe();
+		bnker.isSafe();
 	}
 }
