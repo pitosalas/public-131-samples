@@ -12,16 +12,16 @@ public class BadChefRunnable implements Runnable {
 
 	@Override
 	public void run() {
-		for (int i=0; i<100; i++) {
+		for (int i=0; i<1000; i++) {
 			try {
 				wok.acquire();
 				spat.acquire();
-				Thread.sleep(5);
+				Thread.sleep(0);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			wok.release();
 			spat.release();
+			wok.release();
 
 			System.out.printf("Bad Chef Serving platter: %d\n", i);
 		}
