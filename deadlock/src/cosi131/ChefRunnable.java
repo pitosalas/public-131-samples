@@ -15,8 +15,8 @@ public class ChefRunnable implements Runnable {
 		for (int i=0; i<1000; i++) {
 			try {
 				spat.acquire();
+				Thread.sleep(5);
 				wok.acquire();
-				Thread.sleep(0);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

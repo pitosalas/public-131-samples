@@ -2,7 +2,7 @@ package cosi131;
 
 
 public class Semaphore {
-	private int permits;
+	private volatile int permits;
 
 	Semaphore(int count) {
 		this.permits = count;
@@ -11,18 +11,22 @@ public class Semaphore {
 	public Semaphore() {
 		this(1);
 	}
+	
+	public String toString() {
+		return " "+this.permits;
+	}
 
 	
 	synchronized void  acquire() throws InterruptedException {
-		while(permits == 0) {
+		while(this.permits <= 0) {
 			wait();
 		}
-		permits--;
+		this.permits--;
 		
 	}
 	
 	synchronized void release() {
-		permits++;
+		this.permits++;
 		notify();
 	}
 }
