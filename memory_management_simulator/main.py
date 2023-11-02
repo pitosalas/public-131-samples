@@ -1,4 +1,3 @@
-
 """
 A simple memory magement simulation and demonstration app.
 """
@@ -30,11 +29,19 @@ class Simulator:
             if command == "exit":
                 break
             elif command == "allocate":
-                process = input("Enter process name: ")
-                size = int(input("Enter size in KB: "))
-                self.mmanager.allocate_k(process, size)
+                process = input(
+                    "Enter process name: "
+                )
+                size = int(
+                    input("Enter size in KB: ")
+                )
+                self.mmanager.allocate_k(
+                    process, size
+                )
             elif command == "deallocate":
-                process = input("Enter process name: ")
+                process = input(
+                    "Enter process name: "
+                )
                 self.mmanager.deallocate(process)
             elif command == "print":
                 print(self.mmanager)
@@ -44,6 +51,5 @@ class Simulator:
 
 if __name__ == "__main__":
     sim = Simulator()
-#   sim.run()
+    #   sim.run()
     sim.interactive()
-
