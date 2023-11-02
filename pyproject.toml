@@ -1,0 +1,8 @@
+[tool.ruff]
+line-length = 50
+
+[tool.ruff.lint]
+fixable = ["E501"]
+
+[tool.ruff.pycodestyle]
+max-line-length = 50

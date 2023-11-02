@@ -102,7 +102,7 @@ class MemoryManager:
         freeblocks = "\n      ".join(
             str(block) for block in self.physical_memory.freelist
         )
-        return f"MemoryManager:\n   Processes:\n         {allocations}\n   Free Blocks:\n         {freeblocks}\n         {phys_memory}"
+        return f"""MemoryManager:\n   Processes:\n         {allocations}\n   Free Blocks:\n         {freeblocks}\n         {phys_memory}"""
 
 
 class MemoryAllocation:
