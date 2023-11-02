@@ -1,7 +1,7 @@
 """
 A simple memory magement simulation and demonstration app.
 """
-
+import json
 from memorymanager import MemoryManager
 
 
@@ -21,6 +21,12 @@ class Simulator:
         self.mmanager.allocate_k("p2", 1024)
         self.mmanager.allocate_k("p3", 368)
         print(self.mmanager)
+
+    def import_json_file(self, filename):
+        with open(filename, "r") as f:
+            self.data = json.load(f)
+
+
 
     def interactive(self):
         self.mmanager = MemoryManager(2)
@@ -48,8 +54,14 @@ class Simulator:
             else:
                 print("Invalid command")
 
+    def batch(self):
+        self.import_json_file("mm1.json")
+        for step in self.data["script"]:
+            print(step)
+
 
 if __name__ == "__main__":
     sim = Simulator()
     #   sim.run()
-    sim.interactive()
+    # sim.interactive()
+    sim.batch()

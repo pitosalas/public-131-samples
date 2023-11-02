@@ -1,0 +1,16 @@
+{
+    "script": [
+        { "do": "allocate", "process": "p1", "k": 100},
+        { "do": "allocate", "process": "p2", "k": 100},
+        { "do": "allocate", "process": "p4", "k": 100},
+        { "do": "allocate", "process": "p5", "k": 400},
+        { "do": "allocate", "process": "p6", "k": 600},
+        { "do": "deallocate", "process": "p1", "k": 100},
+        { "do": "allocate", "process": "p3", "k": 100},
+        { "do": "allocate", "process": "p5", "k": 400},
+        { "do": "allocate", "process": "p6", "k": 600},
+        { "do": "deallocate", "process": "p1", "k": 100},
+        { "do": "allocate", "process": "p3", "k": 100},
+        { "do": "deallocate", "process": "p3", "k": 100}],
+    "physical_g": 2
+}

@@ -58,9 +58,7 @@ class PhysicalMemory:
 
         """
         self.freelist.append(block)
-        self.freelist.sort(
-            key=lambda block: block.start
-        )
+        self.freelist.sort(key=lambda block: block.start)
         self.coalesce()
 
     def coalesce(self):
@@ -71,27 +69,19 @@ class PhysicalMemory:
         """
         while True:
             found = False
-            for i in range(
-                len(self.freelist) - 1
-            ):
+            for i in range(len(self.freelist) - 1):
                 block1 = self.freelist[i]
                 block2 = self.freelist[i + 1]
-                if (
-                    block1.start + block1.size
-                    == block2.start
-                ):
+                if block1.start + block1.size == block2.start:
                     self.freelist.remove(block1)
                     self.freelist.remove(block2)
                     self.freelist.append(
                         Block(
                             block1.start,
-                            block1.size
-                            + block2.size,
+                            block1.size + block2.size,
                         )
                     )
-                    self.freelist.sort(
-                        key=lambda block: block.start
-                    )
+                    self.freelist.sort(key=lambda block: block.start)
                     found = True
                     break
             if not found:
