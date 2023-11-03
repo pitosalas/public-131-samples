@@ -1,6 +1,5 @@
 from utils import Block
 
-
 class PhysicalMemory:
     def __init__(self, size: int):
         self.size = size

@@ -1,6 +1,7 @@
 from physicalmemory import PhysicalMemory
 from utils import MemoryAllocation
 
+
 class VarSegMm:
     """Keeps track of each Job that it has given memory to in the dict allocations.
     The key is the name of the job and the value is a MemoryAllocation object.
