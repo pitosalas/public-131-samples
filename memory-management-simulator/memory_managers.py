@@ -59,29 +59,25 @@ class FixedSegMm(MemoryManager):
     The key is the name of the job and the value is a MemoryAllocation object.
     """
 
-    def __init__(self, size_gig) -> None:
-        self.physical_memory = FixedSegPhysMem(size_gig * 2**30)
-        self.allocations: dict(str, MemoryAllocation) = {}
+    def __init__(self, memory_param) -> None:
+        self.physical_memory = FixedSegPhysMem(memory_param)
+        self.allocations: dict[str, MemoryAllocation] = {}
 
+        
     def allocate_k(self, process, size):
         block = self.physical_memory.allocate(size * 2**10)
         if block is None:
             raise "memory cannot be allocated"
         self.allocations[process] = MemoryAllocation(process, block)
-
+  
     def deallocate(self, process):
-        allocation = self.allocations[process]
-        if allocation is None:
-            raise "process not found"
-        self.physical_memory.deallocate(allocation.block)
-        del self.allocations[process]
-
+        pass
+ 
     def __str__(self) -> str:
         phys_memory = str(self.physical_memory)
         allocations = "\n         ".join(
             str(alloc) for alloc in self.allocations.values()
         )
-        freeblocks = "\n         ".join(
-            str(block) for block in self.physical_memory.freelist
-        )
-        return f"MemoryManager:\n   Processes:\n         {allocations}\n   {phys_memory}\n   Free Blocks:\n         {freeblocks}"
+        return f"Fixed Segment Memory Manager:\n   Processes:\n         {allocations}\n   {phys_memory}"
+
+  

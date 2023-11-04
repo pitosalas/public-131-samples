@@ -12,5 +12,12 @@
         { "do": "deallocate", "process": "p1", "k": 100},
         { "do": "allocate", "process": "p3", "k": 100},
         { "do": "deallocate", "process": "p3", "k": 100}],
-    "physical_g": 2
-}
+        "algo": {
+            "name": "fixed_seg",
+            "memory": {
+                "size": 2,
+                "size_power_of_two": 30,
+                "seg_size": 512,
+                "seg_size_power_of_two": 10
+            }
+    }

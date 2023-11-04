@@ -29,7 +29,7 @@ class Simulator:
     def execute_command(self, command):
         if command["do"] == "allocate":
             self.mmanager.allocate_k(command["process"], command["k"])
-        elif command["do"] == "deallocate":
+        elif command["do"] == "deallocate": 
             self.mmanager.deallocate(command["process"])
         else:
             raise Exception(f"Invalid script file: {command['do']}")
@@ -54,7 +54,7 @@ class Simulator:
                 raise Exception("Invalid command")
 
     def batch(self):
-        self.import_json_file("scripts/mm_var_seg_1.json")
+        self.import_json_file("scripts/mm_fixed_seg_small.json")
         self.prepare_factory()
         algo = self.data["algo"]["name"]
         self.mmanager = self.factory.create(algo)(self.data["algo"]["memory"])

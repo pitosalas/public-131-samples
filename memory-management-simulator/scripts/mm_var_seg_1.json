@@ -19,8 +19,7 @@
     "algo": {
         "name": "var_seg",
         "memory": {
-            "size_gig": 2,
-            "seg_k": 512
+            "size_gig": 2
         }
     }
 }

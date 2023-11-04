@@ -1,4 +1,4 @@
-from utils import Block
+from utils import Block, find_and_remove
 from abc import ABC, abstractmethod
 
 class PhysMem(ABC):
@@ -7,24 +7,18 @@ class PhysMem(ABC):
         
     @abstractmethod
     def __str__(self):
-        pass
- 
-    @abstractmethod
-    def free_memory(self) -> int:
-        pass
+        return "Default memory manager string"
 
-    @abstractmethod
-    def find_free_block(self, size):
-        pass
+    def free_memory(self) -> int:
+        return 0
 
     @abstractmethod
     def allocate(self, size):
         pass
-    
+
     @abstractmethod
     def deallocate(self, block):
         pass
-
 class VarSegPhysMem(PhysMem):
     def __init__(self, args):
         self.freelist = [Block(0, args["size_gig"]*2**30)]
@@ -113,21 +107,33 @@ class VarSegPhysMem(PhysMem):
             if not found:
                 break
 
+
+ 
 class FixedSegPhysMem(PhysMem):
-    def __init__(self, args):
+    def __init__(self, args: dict):
         super().__init__(args)
-        memsize = args["size_gig"]*2**30
-        segsize = args["segsize_k"]*2**10
+        self.memsize = args["size"]*2**args["size_power_of_two"]
+        self.segsize = args["seg_size"]*2**args["seg_size_power_of_two"]
+        if self.memsize % self.segsize != 0:
+            raise Exception("Memory size must be a multiple of segment size")
+        self.free_segments = [i for i in range(self.memsize//self.segsize)]
 
     def __str__(self):
-        pass
+        return "Default fixed memory manager string"
 
-    def find_free_block(self, size) -> Block | None :
-        pass
 
     def allocate(self, size) -> Block | None:
-        pass
-
+        segments = self.find_contiguous_segments(size, self.free_segments)
+        if segments is None:
+            return None
+        else:
+            self.free_segments = segments[1]
+            return Block(segments[0][0]*self.segsize, size)
+        
+    def find_contiguous_segments(self, size, free_list) -> list[list[int]] | None:
+        segs_needed = size // self.segsize
+        return find_and_remove(free_list, segs_needed)
+        
     def deallocate(self, block) -> None:
         pass
 
