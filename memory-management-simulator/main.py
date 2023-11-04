@@ -3,10 +3,8 @@ A simple memory magement simulation and demonstration app.
 """
 import json
 from mm_factory import MmFactory
-from var_seg_mm import VarSegMm
-from fixed_seg_mm import FixedSegMm
-
-
+from memory_managers import VarSegMm
+from memory_managers import FixedSegMm
 
 class Simulator:
     def __init__(self):
@@ -36,8 +34,9 @@ class Simulator:
         else:
             raise Exception(f"Invalid script file: {command['do']}")
 
-    def interactive(self):
-        self.mmanager = MemoryManager(2)
+    def interactive(self) -> None:
+        self.prepare_factory()
+        self.mmanager = self.factory.create("var_seg")(self.data["physical_g"])
         while True:
             command = input("Enter command: ")
             if command == "exit":
@@ -55,16 +54,13 @@ class Simulator:
                 raise Exception("Invalid command")
 
     def batch(self):
-        self.import_json_file("mm_var_seg_1.json")
+        self.import_json_file("scripts/mm_var_seg_1.json")
         self.prepare_factory()
-        algo = self.data["algo"]
-        physical_g = self.data["physical_g"]
-        self.mmanager = self.factory.create(algo)(physical_g)
+        algo = self.data["algo"]["name"]
+        self.mmanager = self.factory.create(algo)(self.data["algo"]["memory"])
         for step in self.data["script"]:
-            print(step)
             self.execute_command(step)
         print(self.mmanager)
-
 
 if __name__ == "__main__":
     sim = Simulator()

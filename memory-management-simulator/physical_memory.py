@@ -1,28 +1,55 @@
 from utils import Block
+from abc import ABC, abstractmethod
 
-class PhysicalMemory:
-    def __init__(self, size: int):
-        self.size = size
-        self.freelist = [Block(0, size)]
+class PhysMem(ABC):
+    def __init__(self, args):
+        pass
+        
+    @abstractmethod
+    def __str__(self):
+        pass
+ 
+    @abstractmethod
+    def free_memory(self) -> int:
+        pass
+
+    @abstractmethod
+    def find_free_block(self, size):
+        pass
+
+    @abstractmethod
+    def allocate(self, size):
+        pass
+    
+    @abstractmethod
+    def deallocate(self, block):
+        pass
+
+class VarSegPhysMem(PhysMem):
+    def __init__(self, args):
+        self.freelist = [Block(0, args["size_gig"]*2**30)]
+        self.size = args["size_gig"]*2**30
+        super().__init__(args)
 
     def __str__(self):
         memory_in_meg = self.size / 2**20
         free_in_meg = self.free_memory() / 2**20
         return f"PhysicalMemory = {memory_in_meg} MB, Total Free = {free_in_meg} MB"
-
-    def free_memory(self):
-        total_free = 0
-        for block in self.freelist:
-            total_free += block.size
-        return total_free
-
-    def find_free_block(self, size):
+    
+    def find_free_block(self, size) -> Block | None :
         for block in self.freelist:
             if block.size >= size:
                 return block
         return None
 
-    def allocate(self, size):
+    def free_memory(self) -> int:
+        total_free = 0
+        for block in self.freelist:
+            total_free += block.size
+        return total_free
+
+    def allocate(self, size) -> Block | None:
+        pass
         """
         * Look for a free block of memory that is at least as big as the requested size.
         * If none found, then allocation fails
@@ -50,7 +77,7 @@ class PhysicalMemory:
             block.size = size
             return block
 
-    def deallocate(self, block):
+    def deallocate(self, block) -> None:
         """
         * Add the block to the free list
         * Sort the free list by starting address
@@ -60,7 +87,7 @@ class PhysicalMemory:
         self.freelist.sort(key=lambda block: block.start)
         self.coalesce()
 
-    def coalesce(self):
+    def coalesce(self) -> None:
         """
         * Look for adjacent free blocks and combine them into one block
         * Repeat until no more adjacent free blocks are found
@@ -85,3 +112,22 @@ class PhysicalMemory:
                     break
             if not found:
                 break
+
+class FixedSegPhysMem(PhysMem):
+    def __init__(self, args):
+        super().__init__(args)
+        memsize = args["size_gig"]*2**30
+        segsize = args["segsize_k"]*2**10
+
+    def __str__(self):
+        pass
+
+    def find_free_block(self, size) -> Block | None :
+        pass
+
+    def allocate(self, size) -> Block | None:
+        pass
+
+    def deallocate(self, block) -> None:
+        pass
+

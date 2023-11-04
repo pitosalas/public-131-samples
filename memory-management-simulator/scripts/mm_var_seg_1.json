@@ -1,8 +1,26 @@
 {
     "script": [
-        { "do": "allocate", "process": "p1", "k": 100},
-        { "do": "allocate", "process": "p2", "k": 100},
-        { "do": "deallocate", "process": "p2", "k": 100}],
-    "physical_g": 2,
-    "algo": "var_seg"
+        {
+            "do": "allocate",
+            "process": "p1",
+            "k": 100
+        },
+        {
+            "do": "allocate",
+            "process": "p2",
+            "k": 100
+        },
+        {
+            "do": "deallocate",
+            "process": "p2",
+            "k": 100
+        }
+    ],
+    "algo": {
+        "name": "var_seg",
+        "memory": {
+            "size_gig": 2,
+            "seg_k": 512
+        }
+    }
 }
