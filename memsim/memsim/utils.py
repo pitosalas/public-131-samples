@@ -1,20 +1,18 @@
-class MemoryAllocation:
-    def __init__(self, process, block):
-        self.block = block
-        self.process = process
-
-    def __str__(self):
-        return f"Proc: {self.process} has: {self.block.size/2**10} (@ phys_addr: {self.block.start/2**10}K)"
-
-
 class Block:
-    def __init__(self, start, size):
+    def __init__(self, start: int, size: int):
         self.start = start
         self.size = size
 
     def __str__(self):
-        return f"Block: start = {self.start/2**10}K, size = {self.size/2**20} M"
+        return f"Block: start = {pretty_mem_str(self.start)}, size = {pretty_mem_str(self.size)}"
 
+class MemoryAllocation:
+    def __init__(self, process: str, block: Block):
+        self.block = block
+        self.process = process
+
+    def __str__(self):
+        return f"Proc: {self.process} has: {pretty_mem_str(self.block.size)} (@: {pretty_mem_str(self.block.start)})"
 
 def find_and_remove(lst, n) -> list[list[int]] | None:
     """
@@ -46,6 +44,16 @@ def find_and_remove(lst, n) -> list[list[int]] | None:
         prev = num
     return None
 
+def pretty_mem_str(size: int) -> str:
+    if size < 2**10:
+        return f"{size}"
+    elif size < 2**20:
+        return f"{size/2**10} KB"
+    elif size < 2**30:
+        return f"{size/2**20} MB"
+    else:
+        return f"{size/2**30} GB"
+    
 
 # Pito Code
 # def flatten_free_segments(free_segments):

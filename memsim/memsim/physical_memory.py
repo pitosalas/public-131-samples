@@ -119,7 +119,7 @@ class FixedSegPhysMem(PhysMem):
     def __str__(self):
         return str(flatten_free_segments(self.free_segments))
 
-    def allocate(self, size) -> Block | None:
+    def allocate(self, size: int) -> Block | None:
         segments = self.find_contiguous_segments(size, self.free_segments)
         if segments is None:
             return None
@@ -131,6 +131,7 @@ class FixedSegPhysMem(PhysMem):
         segs_needed = size // self.segsize
         return find_and_remove(free_list, segs_needed)
         
-    def deallocate(self, block) -> None:
-        pass
-
+    def deallocate(self, block: Block) -> None:
+        for i in range(block.size):
+            self.free_segments.append(block.start + i)
+        self.free_segments.sort()

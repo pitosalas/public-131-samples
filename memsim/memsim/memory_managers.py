@@ -64,14 +64,21 @@ class FixedSegMm(MemoryManager):
         self.allocations: dict[str, MemoryAllocation] = {}
 
         
-    def allocate_k(self, process, size):
+    def allocate_k(self, process: str, size: int):
         block = self.physical_memory.allocate(size)
         if block is None:
             raise Exception("Allocation failed to find space")
         self.allocations[process] = MemoryAllocation(process, block)
   
-    def deallocate(self, process):
-        pass
+    def deallocate(self, process: str, size: int):
+        assert size == self.allocations[process].block.size, "Invalid deallocate"
+        allocation = self.allocations[process]
+        if allocation is None:
+            raise Exception("process not found")
+        self.physical_memory.deallocate(allocation.block)
+        del self.allocations[process]
+
+        
  
     def __str__(self) -> str:
         phys_memory = str(self.physical_memory)

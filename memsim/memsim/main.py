@@ -30,7 +30,7 @@ class Simulator:
             raise Exception(f"Invalid script file: {command['do']}")
 
     def batch(self):
-        self.import_json_file("memsim/scripts/mm_fixed_seg_small.json")
+        self.import_json_file("memsim/scripts/mm_fixed_seg_2.json")
         self.prepare_factory()
         algo = self.data["algo"]["name"]
         self.mmanager = self.factory.create(algo)(self.data["algo"]["memory"])
