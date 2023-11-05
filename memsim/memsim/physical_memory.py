@@ -1,4 +1,4 @@
-from utils import Block, find_and_remove
+from utils import Block, find_and_remove, flatten_free_segments
 from abc import ABC, abstractmethod
 
 class PhysMem(ABC):
@@ -107,8 +107,6 @@ class VarSegPhysMem(PhysMem):
             if not found:
                 break
 
-
- 
 class FixedSegPhysMem(PhysMem):
     def __init__(self, args: dict):
         super().__init__(args)
@@ -119,8 +117,7 @@ class FixedSegPhysMem(PhysMem):
         self.free_segments = [i for i in range(self.memsize//self.segsize)]
 
     def __str__(self):
-        return "Default fixed memory manager string"
-
+        return str(flatten_free_segments(self.free_segments))
 
     def allocate(self, size) -> Block | None:
         segments = self.find_contiguous_segments(size, self.free_segments)
