@@ -6,6 +6,7 @@ from mm_factory import MmFactory
 from memory_managers import VarSegMm
 from memory_managers import FixedSegMm
 from reporter import Reporter
+from utils import convert_size_with_multiplier
 
 class Simulator:
     def __init__(self, reporter: Reporter):
@@ -27,9 +28,9 @@ class Simulator:
 
     def execute_command(self, command):
         if command["do"] == "allocate":
-            self.mmanager.allocate_k(command["process"], command["size"]*2**command["power_of_two"])
+            self.mmanager.allocate_k(command["process"], convert_size_with_multiplier(command))
         elif command["do"] == "deallocate": 
-            self.mmanager.deallocate(command["process"], command["size"]*2**command["power_of_two"])
+            self.mmanager.deallocate(command["process"], convert_size_with_multiplier(command))
         else:
             raise Exception(f"Invalid script file: {command['do']}")
 

@@ -1,4 +1,4 @@
-from utils import Block, find_and_remove, flatten_free_segments
+from utils import Block, convert_size_with_multiplier, find_and_remove, flatten_free_segments
 from abc import ABC, abstractmethod
 
 class PhysMem(ABC):
@@ -110,8 +110,8 @@ class VarSegPhysMem(PhysMem):
 class FixedSegPhysMem(PhysMem):
     def __init__(self, args: dict):
         super().__init__(args)
-        self.memsize = args["size"]*2**args["size_power_of_two"]
-        self.segsize = args["seg_size"]*2**args["seg_size_power_of_two"]
+        self.memsize = convert_size_with_multiplier(args["size"])
+        self.segsize = convert_size_with_multiplier(args["seg"])
         if self.memsize % self.segsize != 0:
             raise Exception("Memory size must be a multiple of segment size")
         self.free_segments = [i for i in range(self.memsize//self.segsize)]

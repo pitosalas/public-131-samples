@@ -54,6 +54,19 @@ def pretty_mem_str(size: int) -> str:
     else:
         return f"{size/2**30:.1f} GB"
     
+def convert_size_with_multiplier(info: dict) -> int:
+    size = info["size"]
+    power_of_ten = info.get("power_of_ten")
+    power_of_two = info.get("power_of_two")
+    if power_of_ten is not None:
+        print("po10")
+        return size*10**power_of_ten
+    elif power_of_two is not None:
+        print("po2")
+        return size*2**power_of_two
+    else:
+        raise Exception("Invalid convert_size_with_multiplier call.")
+
 
 # Pito Code
 # def flatten_free_segments(free_segments):

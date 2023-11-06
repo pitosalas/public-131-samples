@@ -32,9 +32,9 @@ class VarSegMm(MemoryManager):
         super().__init__(size_gig)
 
     def allocate_k(self, process, size):
-        block = self.physical_memory.allocate(size * 2**10)
+        block = self.physical_memory.allocate(size)
         if block is None:
-            raise Exception("Allocation failed to find space")
+            raise Exception(f"Allocation failed to find space!")
         self.allocations[process] = MemoryAllocation(process, block)
 
     def deallocate(self, process):

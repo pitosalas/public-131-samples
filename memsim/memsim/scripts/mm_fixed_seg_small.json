@@ -1,31 +1,36 @@
 {
+    "scenario": "Tiny Example Fixed Segment Memory Manager",
     "script": [
         {
             "do": "allocate",
             "process": "p1",
             "size": 1,
-            "power_of_two": 0
+            "power_of_ten": 0
         },
         {
             "do": "allocate",
             "process": "p2",
             "size": 3,
-            "power_of_two": 0
+            "power_of_ten": 0
         },
         {
             "do": "deallocate",
             "process": "p1",
             "size": 1,
-            "power_of_two": 0
+            "power_of_ten": 0
         }
     ],
     "algo": {
         "name": "fixed_seg",
         "memory": {
-            "size": 20,
-            "size_power_of_two": 0,
-            "seg_size": 1,
-            "seg_size_power_of_two": 0
+            "size": {
+                "size": 10,
+                "power_of_ten": 0
+            },
+            "seg": {
+                "size": 1,
+                "power_of_ten": 0
+            }
         }
     }
 }
