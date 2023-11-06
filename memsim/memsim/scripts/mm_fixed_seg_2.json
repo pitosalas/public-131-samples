@@ -1,21 +1,22 @@
 {
+    "scenario": "Small Example Fixed Segment Memory Manager",
     "script": [
-        { "do": "allocate", "process": "p1", "size": 2, "power_of_two": 0},
-        { "do": "allocate", "process": "p2", "size": 1, "power_of_two": 0},
-        { "do": "deallocate", "process": "p1", "size": 2, "power_of_two": 0},
-        { "do": "allocate", "process": "p3", "size": 5, "power_of_two": 0},
-        { "do": "deallocate", "process": "p2", "size": 1, "power_of_two": 0},
-        { "do": "allocate", "process": "p4", "size": 2, "power_of_two": 0},
-        { "do": "allocate", "process": "p5", "size": 3, "power_of_two": 0},
-        { "do": "deallocate", "process": "p4", "size": 2, "power_of_two": 0},
-        { "do": "allocate", "process": "p4", "size": 2, "power_of_two": 0}],
+        { "do": "allocate", "process": "p1", "size": 128, "power_of_two": 10},
+        { "do": "allocate", "process": "p2", "size": 256, "power_of_two": 10},
+        { "do": "deallocate", "process": "p1", "size": 128, "power_of_two": 10},
+        { "do": "allocate", "process": "p3", "size": 512, "power_of_two": 10},
+        { "do": "deallocate", "process": "p2", "size": 256, "power_of_two": 10},
+        { "do": "allocate", "process": "p4", "size": 256, "power_of_two": 10},
+        { "do": "allocate", "process": "p5", "size": 1024, "power_of_two": 10},
+        { "do": "deallocate", "process": "p4", "size": 256, "power_of_two": 10},
+        { "do": "allocate", "process": "p6", "size": 128, "power_of_two": 10}],
         "algo": {
             "name": "fixed_seg",
             "memory": {
-                "size": 20,
-                "size_power_of_two": 0,
+                "size": 1,
+                "size_power_of_two": 20,
                 "seg_size": 1,
-                "seg_size_power_of_two": 0
+                "seg_size_power_of_two": 10
             }
         }
     }

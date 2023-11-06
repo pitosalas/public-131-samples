@@ -6,13 +6,13 @@ public class BankerMain {
 
 	// Key facts
 	int n = 5; // Number of processes
-	int m = 3; // Number of resources
+	// int m = 3; // Number of resources ORIGINAL
+	int m = 4; // Number of resources ORIGINAL
 
 	int need[][] = new int[n][m];
-	int[][] max, max1, max2;
-	int[][] alloc, alloc1;
-	int[] avail, avail1, avail2
-	;
+	int[][] max, max1, max2, max3, max4;
+	int[][] alloc, alloc1, alloc3, alloc4;
+	int[] avail, avail1, avail2, avail3, avail4;
 	int safeSequence[] = new int[n];
 	Scanner scanner = new Scanner(System.in);
 
@@ -21,16 +21,17 @@ public class BankerMain {
 			safeSequence[i] = -1;
 		// P0, P1, P2, P3, P4 are the Process names here
 		// ORIGINAL Allocation Matrix
-		alloc = new int[][] { { 0, 1, 0 }, // P0
+		alloc3 = new int[][] { { 0, 1, 0 }, // P0
 				{ 2, 0, 0 }, // P1
 				{ 3, 0, 2 }, // P2
 				{ 2, 1, 1 }, // P3
 				{ 0, 0, 2 } }; // P4
 
 		alloc1 = new int[][] { { 0, 1, 0 }, { 3, 0, 2 }, { 3, 0, 2 }, { 2, 1, 1 }, { 3, 3, 0 } };
+		alloc = new int[][] { { 3, 0, 1, 4 }, { 2, 2, 1, 0 }, { 3, 1, 2, 1 }, { 0, 5, 1, 0 }, { 5, 2, 1, 2 } };
 
 		// ORIGINAL MAX Matrix
-		max = new int[][] { { 7, 5, 3 }, // P0
+		max3 = new int[][] { { 7, 5, 3 }, // P0
 				{ 3, 2, 2 }, // P1
 				{ 3, 2, 2 }, // P2
 				{ 2, 2, 2 }, // P3
@@ -43,11 +44,14 @@ public class BankerMain {
 				{ 4, 3, 3 } }; // P4
 
 		max1 = new int[][] { { 7, 5, 3 }, { 3, 2, 2 }, { 9, 0, 2 }, { 2, 2, 2 }, { 4, 3, 3 } };
+		max = new int[][] { { 5, 1, 1, 7 }, { 3, 2, 1, 1 }, { 3, 3, 2, 1 }, { 4, 6, 1, 2 }, { 6, 3, 2, 5 } };
 
 		// Available Resources
 		avail2 = new int[] { 3, 3, 2 }; // Original
 		avail1 = new int[] { 2, 2, 2 };
-		avail = new int[] { 0, 0, 0 };
+		avail3 = new int[] { 0, 0, 0 };
+		avail4 = new int[] { 0, 3, 0, 1 };
+		avail = new int[] { 1, 0, 0, 2 };
 
 	}
 
@@ -140,9 +144,9 @@ public class BankerMain {
 
 	private void printAvailableResources(int[] work) {
 		System.out.println("\n--- Available --");
-		System.out.printf("|%4s|%4s|%4s|\n", "A ", "B ", "C ");
+		System.out.printf("|%4s|%4s|%4s|\n", "A ", "B ", "C ", "D ");
 		System.out.println("----------------");
-		System.out.printf("|%4d|%4d|%4d|\n", work[0], work[1], work[2]);
+		System.out.printf("|%4d|%4d|%4d|%4d|\n", work[0], work[1], work[2], work[3]);
 		System.out.println("----------------");
 
 	}
@@ -150,14 +154,15 @@ public class BankerMain {
 	void printStatus() {
 		System.out.println("--------------------------------------------");
 		System.out.printf("%-3s|%12s|%12s|%10s|\n", "Proc", " Allocation ", "Max     ", "   Need     ");
-		System.out.printf("    |%4s%4s%4s|", "A", "B", "C");
-		System.out.printf("%4s%4s%4s|", " A", " B", " C");
-		System.out.printf("%4s%4s%4s|\n", " A", " B", " C");
+		System.out.printf("    |%4s%4s%4s%4s|", "A", "B", "C", "D");
+		System.out.printf("%4s%4s%4s%4s|", " A", " B", " C", "D");
+		System.out.printf("%4s%4s%4s%4s|\n", " A", " B", " C", " D");
 		System.out.println("--------------------------------------------");
 		for (int i = 0; i < 5; i++) {
-			System.out.printf("%-4s|%4d%4d%4d|", "P" + i, alloc[i][0], alloc[i][1], alloc[i][2]);
-			System.out.printf("%4d%4d%4d|", max[i][0], max[i][1], max[i][2]);
-			System.out.printf("%4d%4d%4d|", max[i][0] - alloc[i][0], max[i][1] - alloc[i][1], max[i][2] - alloc[i][2]);
+			System.out.printf("%-4s|%4d%4d%4d%4d|", "P" + i, alloc[i][0], alloc[i][1], alloc[i][2],alloc[i][3]);
+			System.out.printf("%4d%4d%4d%4d|", max[i][0], max[i][1], max[i][2], max[i][3]);
+			System.out.printf("%4d%4d%4d%4d|", max[i][0] - alloc[i][0], max[i][1] - alloc[i][1], max[i][2] - alloc[i][2],
+					max[i][3] - alloc[i][3]);
 			System.out.printf("     %s\n", safeStatus(i));
 		}
 		System.out.println("--------------------------------------------");

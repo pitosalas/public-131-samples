@@ -46,13 +46,13 @@ def find_and_remove(lst, n) -> list[list[int]] | None:
 
 def pretty_mem_str(size: int) -> str:
     if size < 2**10:
-        return f"{size}"
+        return f"{size:2}"
     elif size < 2**20:
-        return f"{size/2**10} KB"
+        return f"{size/2**10:.1f} KB"
     elif size < 2**30:
-        return f"{size/2**20} MB"
+        return f"{size/2**20:.1f} MB"
     else:
-        return f"{size/2**30} GB"
+        return f"{size/2**30:.1f} GB"
     
 
 # Pito Code

@@ -5,10 +5,14 @@ import json
 from mm_factory import MmFactory
 from memory_managers import VarSegMm
 from memory_managers import FixedSegMm
+from reporter import Reporter
 
 class Simulator:
-    def __init__(self):
-        pass
+    def __init__(self, reporter: Reporter):
+        self.reporter = reporter
+        self.factory = None
+        self.mmanager = None
+        self.data = None
 
     def prepare_factory(self):
         self.factory = MmFactory()
@@ -30,14 +34,18 @@ class Simulator:
             raise Exception(f"Invalid script file: {command['do']}")
 
     def batch(self):
-        self.import_json_file("memsim/scripts/mm_fixed_seg_2.json")
+        file_name = "memsim/scripts/mm_fixed_seg_2.json"
+        self.import_json_file(file_name)
         self.prepare_factory()
         algo = self.data["algo"]["name"]
+        rep.info(self.data["scenario"], algo, file_name)
         self.mmanager = self.factory.create(algo)(self.data["algo"]["memory"])
         for step in self.data["script"]:
+            rep.add_trace(step)
             self.execute_command(step)
-        print(self.mmanager)
 
 if __name__ == "__main__":
-    sim = Simulator()
+    rep = Reporter()
+    sim = Simulator(rep)
     sim.batch()
+    rep.report()
