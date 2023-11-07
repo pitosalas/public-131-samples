@@ -10,9 +10,6 @@ class PhysMem(ABC):
     def __str__(self):
         return "Default memory manager string"
 
-    def free_memory(self) -> int:
-        return 0
-
     @abstractmethod
     def allocate(self, size):
         pass
@@ -20,6 +17,7 @@ class PhysMem(ABC):
     @abstractmethod
     def deallocate(self, block):
         pass
+
 class VarSegPhysMem(PhysMem):
     def __init__(self, args):
         self.freelist = [Block(0, args["size_gig"]*2**30)]
@@ -141,3 +139,18 @@ class FixedSegPhysMem(PhysMem):
         flattened = flatten_free_segments(self.free_segments)
         rep.add_free_segments(flattened)
         rep.add_memory_stats(self.memsize, self.segsize)
+
+class PagedPhysMem(PhysMem):
+    def __init__(self, memory_param: dict):
+        super().__init__(memory_param)
+        self.memsize = convert_size_with_multiplier(memory_param["size"])
+
+    def __str__(self):
+        return f"PhysicalMemory = {self.memsize} MB"
+    
+    def allocate(self, size: int) -> Block | None:
+        pass
+
+    def deallocate(self, block: Block) -> None:
+        pass
+

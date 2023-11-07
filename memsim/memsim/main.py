@@ -2,8 +2,8 @@
 A simple memory magement simulation and demonstration app.
 """
 import json
-from mm_factory import MmFactory
-from memory_managers import VarSegMm
+from utils import MmFactory
+from memory_managers import PagedMm, VarSegMm
 from memory_managers import FixedSegMm
 from reporter import Reporter
 from utils import convert_size_with_multiplier
@@ -19,10 +19,11 @@ class Simulator:
         self.factory = MmFactory()
         self.factory.register("var_seg", VarSegMm)
         self.factory.register("fixed_seg", FixedSegMm)
+        self.factory.register("paged", PagedMm)
 
     def import_json_file(self, filename):
         with open(filename, "r") as f:
-            self.data = json.load(f)
+            self.config_file = json.load(f)
 
     def execute_command(self, command):
         if command["do"] == "allocate":
@@ -33,13 +34,13 @@ class Simulator:
             raise Exception(f"Invalid script file: {command['do']}")
 
     def batch(self):
-        file_name = "memsim/scripts/mm_fixed_seg_2.json"
+        file_name = "memsim/scripts/mm_paged_small.json"
         self.import_json_file(file_name)
         self.prepare_factory()
-        algo = self.data["algo"]["name"]
-        rep.info(self.data["scenario"], algo, file_name)
-        self.mmanager = self.factory.create(algo)(self.data["algo"]["memory"])
-        for step in self.data["script"]:
+        algo = self.config_file["algo"]["name"]
+        rep.info(self.config_file["scenario"], algo, file_name)
+        self.mmanager = self.factory.create(algo)(self.config_file)
+        for step in self.config_file["script"]:
             rep.add_trace(step)
             self.execute_command(step)
         self.mmanager.report(rep)

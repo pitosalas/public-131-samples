@@ -56,14 +56,8 @@ def pretty_mem_str(size: int) -> str:
     
 def convert_size_with_multiplier(info: dict) -> int:
     size = info["size"]
-    power_of_ten = info.get("power_of_ten")
-    power_of_two = info.get("power_of_two")
-    if power_of_ten is not None:
-        return size*10**power_of_ten
-    elif power_of_two is not None:
-        return size*2**power_of_two
-    else:
-        raise Exception("Invalid convert_size_with_multiplier call.")
+    multiplier = eval(info.get("multiplier"))
+    return size * multiplier
 
 
 # Pito Code
@@ -107,3 +101,20 @@ def flatten_free_segments(free_segments):
 
     flattened_segments.append((open, free_segments[-1]))
     return flattened_segments
+
+"""
+A memory manager factory, to create instances of the right kind of memory manager based on the user input.
+"""
+class MmFactory:
+    def __init__(self) -> None:
+        self.memory_manager_classes = {}
+
+    def register(self, name, memory_manager_class):
+        self.memory_manager_classes[name] = memory_manager_class
+
+    def create(self, name):
+        clazz = self.memory_manager_classes.get(name)
+        if not clazz:
+            raise ValueError(name)
+        return clazz
+    

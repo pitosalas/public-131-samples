@@ -1,6 +1,6 @@
 
 from abc import ABC, abstractmethod
-from physical_memory import FixedSegPhysMem, VarSegPhysMem
+from physical_memory import FixedSegPhysMem, PagedPhysMem, VarSegPhysMem
 from reporter import Reporter
 from utils import MemoryAllocation
 
@@ -10,7 +10,7 @@ class MemoryManager(ABC):
     """
 
     @abstractmethod
-    def __init__(self, memory_param):
+    def __init__(self, config_file: dict):
         pass
 
     @abstractmethod
@@ -65,6 +65,7 @@ class FixedSegMm(MemoryManager):
     """
 
     def __init__(self, memory_param) -> None:
+        super().__init__(memory_param)
         self.physical_memory = FixedSegPhysMem(memory_param)
         self.allocations: dict[str, MemoryAllocation] = {}
 
@@ -94,4 +95,25 @@ class FixedSegMm(MemoryManager):
         )
         return f"Fixed Segment Memory Manager:\n   Processes:\n         .{allocations}\n   +{phys_memory}"
 
-  
+    # "memory": {
+    #     "memory_units": "hex",
+    #     "size": {
+    #         "size": 10,
+    #         "multiplier": "2**20"
+
+class PagedMm(MemoryManager):
+    def __init__(self, config_file: dict) -> None:
+        super().__init__(config_file)
+        self.physical_memory = PagedPhysMem(config_file["memory"])
+
+    def allocate_k(self, process, size):
+        pass
+
+    def deallocate(self, process):
+        pass
+
+    def __str__(self) -> str:
+        pass
+
+    def report(self, rep: Reporter):
+        pass

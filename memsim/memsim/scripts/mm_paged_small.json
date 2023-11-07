@@ -1,0 +1,31 @@
+{
+    "scenario": "Tiny Example Paged Memory Manager",
+    "script": [
+        {
+            "do": "allocate",
+            "process": "p1",
+            "size": 1
+        },
+        {
+            "do": "allocate",
+            "process": "p2",
+            "size": 3
+        },
+        {
+            "do": "allocate",
+            "process": "p3",
+            "size": 1
+        }
+    ],
+    "algo": {
+        "name": "paged",
+        "page_size": 512
+    },
+    "memory": {
+        "base_units": "hex",
+        "size": {
+            "size": 10,
+            "multiplier": "2**20"
+        }
+    }
+}
