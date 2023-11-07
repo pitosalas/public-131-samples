@@ -5,55 +5,55 @@
             "do": "allocate",
             "process": "p1",
             "size": 1,
-            "power_of_ten": 3
+            "power_of_two": 10
         },
         {
             "do": "allocate",
             "process": "p2",
             "size": 2,
-            "power_of_ten": 3
+            "power_of_two": 10
         },
         {
             "do": "deallocate",
             "process": "p1",
             "size": 1,
-            "power_of_ten": 3
+            "power_of_two": 10
         },
         {
             "do": "allocate",
             "process": "p3",
             "size": 5,
-            "power_of_ten": 3
+            "power_of_two": 10
         },
         {
             "do": "deallocate",
             "process": "p2",
             "size": 2,
-            "power_of_ten": 3
+            "power_of_two": 10
         },
         {
             "do": "allocate",
             "process": "p4",
             "size": 2,
-            "power_of_ten": 3
+            "power_of_two": 10
         },
         {
             "do": "allocate",
             "process": "p5",
             "size": 1,
-            "power_of_ten": 3
+            "power_of_two": 10
         },
         {
             "do": "deallocate",
             "process": "p4",
             "size": 2,
-            "power_of_ten": 3
+            "power_of_two": 10
         },
         {
             "do": "allocate",
             "process": "p6",
             "size": 2,
-            "power_of_ten": 3
+            "power_of_two": 10
         }
     ],
     "algo": {
@@ -61,11 +61,11 @@
         "memory": {
             "size": {
                 "size": 20,
-                "power_of_ten": 3
+                "power_of_two": 10
             },
             "seg": {
                 "size": 1,
-                "power_of_ten": 3
+                "power_of_two": 10
             }
         }
     }

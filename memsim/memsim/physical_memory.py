@@ -1,3 +1,4 @@
+from reporter import Reporter
 from utils import Block, convert_size_with_multiplier, find_and_remove, flatten_free_segments
 from abc import ABC, abstractmethod
 
@@ -132,6 +133,11 @@ class FixedSegPhysMem(PhysMem):
         return find_and_remove(free_list, segs_needed)
         
     def deallocate(self, block: Block) -> None:
-        for i in range(block.size):
-            self.free_segments.append(block.start + i)
+        for i in range(block.size// self.segsize):
+            self.free_segments.append(block.start//self.segsize + i)
         self.free_segments.sort()
+
+    def report(self, rep: Reporter):
+        flattened = flatten_free_segments(self.free_segments)
+        rep.add_free_segments(flattened)
+        rep.add_memory_stats(self.memsize, self.segsize)

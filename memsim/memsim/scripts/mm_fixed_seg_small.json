@@ -5,19 +5,19 @@
             "do": "allocate",
             "process": "p1",
             "size": 1,
-            "power_of_ten": 0
+            "power_of_two": 3
         },
         {
             "do": "allocate",
             "process": "p2",
             "size": 3,
-            "power_of_ten": 0
+            "power_of_two": 3
         },
         {
-            "do": "deallocate",
-            "process": "p1",
+            "do": "allocate",
+            "process": "p3",
             "size": 1,
-            "power_of_ten": 0
+            "power_of_two": 3
         }
     ],
     "algo": {
@@ -25,11 +25,11 @@
         "memory": {
             "size": {
                 "size": 10,
-                "power_of_ten": 0
+                "power_of_two": 3
             },
             "seg": {
                 "size": 1,
-                "power_of_ten": 0
+                "power_of_two": 3
             }
         }
     }

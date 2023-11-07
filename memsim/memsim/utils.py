@@ -12,7 +12,7 @@ class MemoryAllocation:
         self.process = process
 
     def __str__(self):
-        return f"Proc: {self.process} has: {pretty_mem_str(self.block.size)} (@: {pretty_mem_str(self.block.start)})"
+        return f"{self.process} is at {pretty_mem_str(self.block.start)} and uses {pretty_mem_str(self.block.size)}"
 
 def find_and_remove(lst, n) -> list[list[int]] | None:
     """
@@ -59,10 +59,8 @@ def convert_size_with_multiplier(info: dict) -> int:
     power_of_ten = info.get("power_of_ten")
     power_of_two = info.get("power_of_two")
     if power_of_ten is not None:
-        print("po10")
         return size*10**power_of_ten
     elif power_of_two is not None:
-        print("po2")
         return size*2**power_of_two
     else:
         raise Exception("Invalid convert_size_with_multiplier call.")

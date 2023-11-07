@@ -21,8 +21,6 @@ class Simulator:
         self.factory.register("fixed_seg", FixedSegMm)
 
     def import_json_file(self, filename):
-        from pathlib import Path
-        print(Path.cwd())
         with open(filename, "r") as f:
             self.data = json.load(f)
 
@@ -44,6 +42,7 @@ class Simulator:
         for step in self.data["script"]:
             rep.add_trace(step)
             self.execute_command(step)
+        self.mmanager.report(rep)
 
 if __name__ == "__main__":
     rep = Reporter()

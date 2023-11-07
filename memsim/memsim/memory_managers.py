@@ -1,6 +1,7 @@
 
 from abc import ABC, abstractmethod
 from physical_memory import FixedSegPhysMem, VarSegPhysMem
+from reporter import Reporter
 from utils import MemoryAllocation
 
 class MemoryManager(ABC):
@@ -22,6 +23,10 @@ class MemoryManager(ABC):
 
     @abstractmethod
     def __str__(self) -> str:
+        pass
+
+    @abstractmethod
+    def report(self, rep: Reporter):
         pass
 
 class VarSegMm(MemoryManager):
@@ -78,13 +83,15 @@ class FixedSegMm(MemoryManager):
         self.physical_memory.deallocate(allocation.block)
         del self.allocations[process]
 
-        
- 
+    def report(self, rep: Reporter):
+        rep.add_allocations(self.allocations)
+        self.physical_memory.report(rep)
+
     def __str__(self) -> str:
         phys_memory = str(self.physical_memory)
         allocations = "\n         ".join(
             str(alloc) for alloc in self.allocations.values()
         )
-        return f"Fixed Segment Memory Manager:\n   Processes:\n         {allocations}\n   {phys_memory}"
+        return f"Fixed Segment Memory Manager:\n   Processes:\n         .{allocations}\n   +{phys_memory}"
 
   
