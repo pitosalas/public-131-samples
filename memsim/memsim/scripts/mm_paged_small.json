@@ -1,24 +1,22 @@
 {
     "scenario": "Tiny Example Paged Memory Manager",
+    "default_multiplier": "2**12",
     "script": [
-        {
-            "do": "allocate",
-            "process": "p1",
-            "size": 1,
-            "multiplier": "2**12"
-        },
-        {
-            "do": "allocate",
-            "process": "p2",
-            "size": 3,
-            "multiplier": "2**12"
-        },
-        {
-            "do": "deallocate",
-            "process": "p1",
-            "size": 1,
-            "multiplier": "2**12"
-        }
+        [
+            "a",
+            "p1",
+            "1"
+        ],
+        [
+            "a",
+            "p2",
+            "3"
+        ],
+        [
+            "d",
+            "p1",
+            "1"
+        ]
     ],
     "algo": {
         "name": "paged",
@@ -27,8 +25,8 @@
     "memory": {
         "base_units": "hex",
         "size": {
-            "size": 10,
-            "multiplier": "2**20"
+            "size": 1,
+            "multiplier": "2**18"
         }
     }
 }

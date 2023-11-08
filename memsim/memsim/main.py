@@ -3,7 +3,7 @@ A simple memory magement simulation and demonstration app.
 """
 import json
 from utils import MmFactory
-from memory_managers import PagedMm, VarSegMm
+from memory_managers import MemoryManager, PagedMm, VarSegMm
 from memory_managers import FixedSegMm
 from reporter import Reporter
 
@@ -11,11 +11,11 @@ class Simulator:
     def __init__(self, reporter: Reporter):
         self.reporter = reporter
         self.factory = None
-        self.mmanager = None
+        self.mmanager: MemoryManager = None
         self.data = None
 
     def prepare_factory(self):
-        self.factory = MmFactory()
+        self.factory: MmFactory = MmFactory()
         self.factory.register("var_seg", VarSegMm)
         self.factory.register("fixed_seg", FixedSegMm)
         self.factory.register("paged", PagedMm)
@@ -40,7 +40,7 @@ class Simulator:
         else:
             raise Exception(f"Invalid script file: {command['do']}")
     def batch(self):
-        file_name = "memsim/scripts/mm_paged_5.json"
+        file_name = "memsim/scripts/mm_paged_small.json"
         self.import_json_file(file_name)
         self.prepare_factory()
         algo = self.config_file["algo"]["name"]

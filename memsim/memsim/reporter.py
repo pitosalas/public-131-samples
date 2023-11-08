@@ -1,8 +1,10 @@
+from dotgen import Dotgen
 from utils import PCB, pretty_mem_str
 
 class Reporter:
     def __init__(self):
         self.trace = ""
+        self.dg = Dotgen("memsim.gv")
         pass
 
     def info(self, scenario: str, algo: str, file_name: str, default_multiplier: int):
@@ -25,6 +27,8 @@ class Reporter:
         self.allocation_stats = "\n        ".join(
             str(alloc) for alloc in allocs.values()
         )
+        for procs in allocs.values():
+            self.dg.add_process(procs.process, procs.mapping)
 
     def add_segmented_memory_stats(self, memsize, segsize):
         self.phys_memory_stats = f"Physical Memory\n           {pretty_mem_str(memsize)}, segment size: {pretty_mem_str(segsize)}"
@@ -38,11 +42,11 @@ class Reporter:
             strings.append(f"{str(self.allocs[key])}\n")
         return "        ".join(strings)
 
-    def render_free_segments(self) -> str:
-        strings = []
-        for key in self.free_segments:
-            strings.append(f"from seg {key[0]} to seg {key[1]}\n")
-        return "        ".join(strings)
+    # def render_free_segments(self) -> str:
+    #     strings = []
+    #     for key in self.free_segments:
+    #         strings.append(f"from seg {key[0]} to seg {key[1]}\n")
+    #     return "        ".join(strings)
 
     def add_paged_memory_stats(self, memsize: int, pagesize: int, framecount: int, frame_table: list[bool]):
         self.phys_memory_stats = f"Physical Memory\n        {pretty_mem_str(memsize)}, pagesize: {pretty_mem_str(pagesize)}, framecount: {framecount}"
@@ -52,7 +56,9 @@ class Reporter:
             frame_table_str += f"{char} "
             if i % 32 == 31:
                 frame_table_str += "\n           "
+            self.dg.paged_mem_frame(i, char)
         self.phys_memory_stats += f"\n        Frames (X means in use)\n           {frame_table_str}"
+        self.dg.paged_mem_complete()
 
     def report(self):
         print("----------------------------------------")
@@ -64,3 +70,8 @@ class Reporter:
         print("   AT COMPLETION:\n      Process Allocations:")
         print(f"        {self.allocation_stats}")
         print(f"      {self.phys_memory_stats}")
+        self.dot_generate()
+
+    def dot_generate(self):
+        self.dg.generate()
+        print(self.dg.dot.source)
