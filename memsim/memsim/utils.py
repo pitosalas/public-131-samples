@@ -5,14 +5,27 @@ class Block:
 
     def __str__(self):
         return f"Block: start = {pretty_mem_str(self.start)}, size = {pretty_mem_str(self.size)}"
+    
+class PageTable:
+# A page table is an array, indexed by page number, that contains the frame number where that page is stored in memory.
+    def __init__(self, ):
+        self.table = []
+        self.frame_count = 0
+    
+    def add_frame(self, frame: int):
+        self.table.append(frame)
+        self.frame_count += 1
+    
+    def __str__(self):
+        return f"PageTable:  {flatten_free_segments(self.table)}"
 
-class MemoryAllocation:
-    def __init__(self, process: str, block: Block):
-        self.block = block
+class PCB:
+    def __init__(self, process: str, mapping: Block | PageTable):
+        self.mapping = mapping
         self.process = process
 
     def __str__(self):
-        return f"{self.process} is at {pretty_mem_str(self.block.start)} and uses {pretty_mem_str(self.block.size)}"
+        return f"{self.process} -> {self.mapping}"
 
 def find_and_remove(lst, n) -> list[list[int]] | None:
     """

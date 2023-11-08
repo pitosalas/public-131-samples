@@ -16,6 +16,24 @@
         {
             "do": "allocate",
             "process": "p3",
+            "size": 10,
+            "multiplier": "2**12"
+        },
+        {
+            "do": "allocate",
+            "process": "p4",
+            "size": 3,
+            "multiplier": "2**12"
+        },
+        {
+            "do": "allocate",
+            "process": "p5",
+            "size": 32,
+            "multiplier": "2**12"
+        },
+        {
+            "do": "allocate",
+            "process": "p6",
             "size": 1,
             "multiplier": "2**12"
         }

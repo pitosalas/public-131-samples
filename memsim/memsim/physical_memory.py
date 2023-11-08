@@ -1,7 +1,6 @@
 from reporter import Reporter
-from utils import Block, convert_size_with_multiplier, find_and_remove, flatten_free_segments
+from utils import Block, PageTable, convert_size_with_multiplier, find_and_remove, flatten_free_segments
 from abc import ABC, abstractmethod
-
 class PhysMem(ABC):
     def __init__(self, args):
         pass
@@ -141,16 +140,40 @@ class FixedSegPhysMem(PhysMem):
         rep.add_memory_stats(self.memsize, self.segsize)
 
 class PagedPhysMem(PhysMem):
-    def __init__(self, memory_param: dict):
+    def __init__(self, memory_param: dict, page_size: int):
         super().__init__(memory_param)
         self.memsize = convert_size_with_multiplier(memory_param["size"])
+        self.pagesize = page_size
+        if self.memsize % self.pagesize != 0:
+            raise Exception("Memory size must be a multiple of page size")
+        self.frame_count = self.memsize // self.pagesize
+        self.frame_table = [False] * self.frame_count
 
     def __str__(self):
         return f"PhysicalMemory = {self.memsize} MB"
     
-    def allocate(self, size: int) -> Block | None:
-        pass
-
+    def allocate(self, size: int) -> PageTable | None:
+        required_frames = size // self.pagesize
+        if size % self.pagesize != 0:
+            required_frames += 1
+        return self.build_page_table(required_frames)
+ 
     def deallocate(self, block: Block) -> None:
         pass
+
+    def build_page_table(self, n_frames: int) -> PageTable | None:
+        page_table =  PageTable()
+        for index, frame in enumerate(self.frame_table):
+            if frame:
+                continue
+            page_table.add_frame(index)
+            self.frame_table[index] = True
+            n_frames -= 1
+            if n_frames == 0:
+                return page_table
+        return None
+
+    def report(self, rep: Reporter):
+        rep.add_paged_memory_stats(self.memsize, self.pagesize, self.frame_count)
+
 

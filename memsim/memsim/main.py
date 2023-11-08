@@ -34,7 +34,7 @@ class Simulator:
             raise Exception(f"Invalid script file: {command['do']}")
 
     def batch(self):
-        file_name = "memsim/scripts/mm_paged_small.json"
+        file_name = "memsim/scripts/mm_paged_2.json"
         self.import_json_file(file_name)
         self.prepare_factory()
         algo = self.config_file["algo"]["name"]

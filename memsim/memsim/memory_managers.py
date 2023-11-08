@@ -2,7 +2,7 @@
 from abc import ABC, abstractmethod
 from physical_memory import FixedSegPhysMem, PagedPhysMem, VarSegPhysMem
 from reporter import Reporter
-from utils import MemoryAllocation
+from utils import PCB
 
 class MemoryManager(ABC):
     """Keeps track of each Job that it has given memory to in the dict allocations.
@@ -33,14 +33,14 @@ class VarSegMm(MemoryManager):
 
     def __init__(self, memory_param) -> None:
         self.physical_memory = VarSegPhysMem(memory_param)
-        self.allocations: dict[str, MemoryAllocation] = {}
+        self.allocations: dict[str, PCB] = {}
         super().__init__(memory_param)
 
     def allocate_k(self, process, size):
         block = self.physical_memory.allocate(size)
         if block is None:
             raise Exception("Allocation failed to find space")
-        self.allocations[process] = MemoryAllocation(process, block)
+        self.allocations[process] = PCB(process, block)
 
     def deallocate(self, process):
         allocation = self.allocations[process]
@@ -67,14 +67,14 @@ class FixedSegMm(MemoryManager):
     def __init__(self, memory_param) -> None:
         super().__init__(memory_param)
         self.physical_memory = FixedSegPhysMem(memory_param)
-        self.allocations: dict[str, MemoryAllocation] = {}
+        self.allocations: dict[str, PCB] = {}
 
         
     def allocate_k(self, process: str, size: int):
-        block = self.physical_memory.allocate(size)
-        if block is None:
+        mapping = self.physical_memory.allocate(size)
+        if mapping is None:
             raise Exception(f"Allocation request {size} for process {process} failed")
-        self.allocations[process] = MemoryAllocation(process, block)
+        self.allocations[process] = PCB(process, mapping)
   
     def deallocate(self, process: str, size: int):
         assert size == self.allocations[process].block.size, "Invalid deallocate"
@@ -95,19 +95,18 @@ class FixedSegMm(MemoryManager):
         )
         return f"Fixed Segment Memory Manager:\n   Processes:\n         .{allocations}\n   +{phys_memory}"
 
-    # "memory": {
-    #     "memory_units": "hex",
-    #     "size": {
-    #         "size": 10,
-    #         "multiplier": "2**20"
-
 class PagedMm(MemoryManager):
     def __init__(self, config_file: dict) -> None:
         super().__init__(config_file)
-        self.physical_memory = PagedPhysMem(config_file["memory"])
+        self.physical_memory = PagedPhysMem(config_file["memory"], config_file["algo"]["page_size"])
+        self.allocations: dict[str, PCB] = {}
+
 
     def allocate_k(self, process, size):
-        pass
+        mapping = self.physical_memory.allocate(size)
+        if mapping is None:
+            raise Exception(f"Allocation request {size} for process {process} failed")
+        self.allocations[process] = PCB(process, mapping)
 
     def deallocate(self, process):
         pass
@@ -116,4 +115,5 @@ class PagedMm(MemoryManager):
         pass
 
     def report(self, rep: Reporter):
-        pass
+        rep.add_allocations(self.allocations)
+        self.physical_memory.report(rep)
