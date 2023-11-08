@@ -1,20 +1,25 @@
-from utils import PCB, convert_size_with_multiplier, pretty_mem_str
-
+from utils import PCB, pretty_mem_str
 
 class Reporter:
     def __init__(self):
-        self.trace: list[str] = []
+        self.trace = ""
         pass
 
-    def info(self, scenario: str, algo: str, file_name: str):
+    def info(self, scenario: str, algo: str, file_name: str, default_multiplier: int):
         self.scenario = scenario
         self.algo = algo
         self.file_name = file_name
         self.phys_memory_stats = ""
         self.allocation_stats = ""
+        self.defailt_multiplier = default_multiplier
 
     def add_trace(self, step):
-        self.trace.append(step)
+        if step[0] == "a":
+            self.trace += f"       LOAD: {step[1]} (asks {pretty_mem_str(int(step[2])*self.defailt_multiplier)} bytes\n"
+        elif step[0] == "d":
+            self.trace += f"     UNLOAD: {step[1]}\n"
+        else:
+            raise Exception(f"Invalid script file: {step['do']}")
 
     def add_allocations(self, allocs: list[PCB]) -> None:
         self.allocation_stats = "\n        ".join(
@@ -39,8 +44,15 @@ class Reporter:
             strings.append(f"from seg {key[0]} to seg {key[1]}\n")
         return "        ".join(strings)
 
-    def add_paged_memory_stats(self, memsize: int, pagesize: int, framecount: int):
+    def add_paged_memory_stats(self, memsize: int, pagesize: int, framecount: int, frame_table: list[bool]):
         self.phys_memory_stats = f"Physical Memory\n        {pretty_mem_str(memsize)}, pagesize: {pretty_mem_str(pagesize)}, framecount: {framecount}"
+        frame_table_str = ""
+        for i, frame in enumerate(frame_table):
+            char = "X" if frame else "."
+            frame_table_str += f"{char} "
+            if i % 32 == 31:
+                frame_table_str += "\n           "
+        self.phys_memory_stats += f"\n        Frames (X means in use)\n           {frame_table_str}"
 
     def report(self):
         print("----------------------------------------")
@@ -48,11 +60,7 @@ class Reporter:
         print("   STARTING CONDITIONS")
         print(f"      Memory Manager: {self.algo}")
         print(f"      Script file: {self.file_name}")
-        print("   TRACE OF SIMULATION:")
-        for step in self.trace:
-            print(
-                f"       '{step['process']}' {step['do']}s  {pretty_mem_str(convert_size_with_multiplier(step))}"
-            )
+        print(f"\n   TRACE OF SIMULATION:\n{self.trace}")
         print("   AT COMPLETION:\n      Process Allocations:")
         print(f"        {self.allocation_stats}")
         print(f"      {self.phys_memory_stats}")

@@ -14,11 +14,11 @@ class MemoryManager(ABC):
         pass
 
     @abstractmethod
-    def allocate_k(self, process, size):
+    def allocate(self, process: str, size: str):
         pass
 
     @abstractmethod
-    def deallocate(self, process):
+    def deallocate(self, process: str):
         pass
 
     @abstractmethod
@@ -36,7 +36,7 @@ class VarSegMm(MemoryManager):
         self.allocations: dict[str, PCB] = {}
         super().__init__(memory_param)
 
-    def allocate_k(self, process, size):
+    def allocate(self, process, size):
         block = self.physical_memory.allocate(size)
         if block is None:
             raise Exception("Allocation failed to find space")
@@ -70,7 +70,7 @@ class FixedSegMm(MemoryManager):
         self.allocations: dict[str, PCB] = {}
 
         
-    def allocate_k(self, process: str, size: int):
+    def allocate(self, process: str, size: int):
         mapping = self.physical_memory.allocate(size)
         if mapping is None:
             raise Exception(f"Allocation request {size} for process {process} failed")
@@ -98,18 +98,23 @@ class FixedSegMm(MemoryManager):
 class PagedMm(MemoryManager):
     def __init__(self, config_file: dict) -> None:
         super().__init__(config_file)
+        self.default_multiplier = eval(config_file["default_multiplier"])
         self.physical_memory = PagedPhysMem(config_file["memory"], config_file["algo"]["page_size"])
         self.allocations: dict[str, PCB] = {}
 
 
-    def allocate_k(self, process, size):
-        mapping = self.physical_memory.allocate(size)
+    def allocate(self, process, size):
+        mapping = self.physical_memory.allocate(int(size) * self.default_multiplier)
         if mapping is None:
             raise Exception(f"Allocation request {size} for process {process} failed")
         self.allocations[process] = PCB(process, mapping)
 
-    def deallocate(self, process):
-        pass
+    def deallocate(self, process: str):
+        allocation = self.allocations[process]
+        if allocation is None:
+            raise Exception("process not found")
+        self.physical_memory.deallocate(allocation.mapping)
+        del self.allocations[process]
 
     def __str__(self) -> str:
         pass

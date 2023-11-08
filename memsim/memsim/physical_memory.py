@@ -14,7 +14,7 @@ class PhysMem(ABC):
         pass
 
     @abstractmethod
-    def deallocate(self, block):
+    def deallocate(self, mapping: Block | PageTable):
         pass
 
 class VarSegPhysMem(PhysMem):
@@ -69,13 +69,13 @@ class VarSegPhysMem(PhysMem):
             block.size = size
             return block
 
-    def deallocate(self, block) -> None:
+    def deallocate(self, mapping) -> None:
         """
         * Add the block to the free list
         * Sort the free list by starting address
 
         """
-        self.freelist.append(block)
+        self.freelist.append(mapping)
         self.freelist.sort(key=lambda block: block.start)
         self.coalesce()
 
@@ -158,7 +158,9 @@ class PagedPhysMem(PhysMem):
             required_frames += 1
         return self.build_page_table(required_frames)
  
-    def deallocate(self, block: Block) -> None:
+    def deallocate(self, mapping: PageTable) -> None:
+        for frame in mapping.table:
+            self.frame_table[frame] = False
         pass
 
     def build_page_table(self, n_frames: int) -> PageTable | None:
@@ -174,6 +176,6 @@ class PagedPhysMem(PhysMem):
         return None
 
     def report(self, rep: Reporter):
-        rep.add_paged_memory_stats(self.memsize, self.pagesize, self.frame_count)
+        rep.add_paged_memory_stats(self.memsize, self.pagesize, self.frame_count, self.frame_table)
 
 

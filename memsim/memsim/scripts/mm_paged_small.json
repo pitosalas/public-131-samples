@@ -14,8 +14,8 @@
             "multiplier": "2**12"
         },
         {
-            "do": "allocate",
-            "process": "p3",
+            "do": "deallocate",
+            "process": "p1",
             "size": 1,
             "multiplier": "2**12"
         }
