@@ -36,11 +36,11 @@ class Reporter:
     def add_free_segments(self, free_segments: list[int]) -> None:
         self.free_segments = free_segments
 
-    def render_allocs(self) -> str:
-        strings = []
-        for key in self.allocs:
-            strings.append(f"{str(self.allocs[key])}\n")
-        return "        ".join(strings)
+    # def render_allocs(self) -> str:
+    #     strings = []
+    #     for key in self.allocs:
+    #         strings.append(f"{str(self.allocs[key])}\n")
+    #     return "        ".join(strings)
 
     # def render_free_segments(self) -> str:
     #     strings = []
@@ -74,4 +74,3 @@ class Reporter:
 
     def dot_generate(self):
         self.dg.generate()
-        print(self.dg.dot.source)
