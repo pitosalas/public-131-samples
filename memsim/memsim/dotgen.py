@@ -1,4 +1,4 @@
-
+import random
 import graphviz
 
 class Dotgen:
@@ -7,8 +7,7 @@ class Dotgen:
         self.paged_mem_string = ""
         self.dot = graphviz.Digraph(comment='Memsim')
         self.dot.attr('graph', rankdir="RL")
-        self.dot.attr('graph', overlap="scalexy")
-        # self.dot.attr('graph', layout="osage")
+        self.dot.attr('graph', ranksep="1.5")
         self.dot.attr('node', shape="record")
         self.procces_string = ""
 
@@ -23,7 +22,8 @@ class Dotgen:
 
     def add_process(self, process, page_table):
         label_string = ""
+        color = random.choice(["red", "blue", "green", "yellow", "orange", "purple"])
         for frame in page_table.table:
             label_string += f"<{frame}>{frame}|"
-            self.dot.edge(f"{process}:{frame}", f"frame:{frame}")
+            self.dot.edge(f"{process}:{frame}", f"frame:{frame}", color=str(color))
         self.dot.node(process, label=label_string)
