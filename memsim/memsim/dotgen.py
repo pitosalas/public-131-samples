@@ -30,7 +30,8 @@ class Dotgen:
     def add_process(self, process, page_table):
         label_string = ""
         color = random.choice(["red", "blue", "green", "orange", "purple"])
-        subgraph = random.choice([self.left_ones, self.right_ones])
+        # subgraph = random.choice([self.left_ones, self.right_ones])
+        subgraph = self.dot
         for frame in page_table.table:
             label_string += f"<{frame}>{frame}|"
             subgraph.edge(f"{process}:{frame}", f"frame:{frame}", color=str(color))
