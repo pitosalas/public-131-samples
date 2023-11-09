@@ -10,8 +10,15 @@ class Dotgen:
         self.dot.attr('graph', ranksep="1.5")
         self.dot.attr('node', shape="record")
         self.procces_string = ""
+        self.left_ones = graphviz.Digraph(name="left_ones")
+        self.right_ones = graphviz.Digraph(name="right_ones")
+
 
     def generate(self):
+        self.left_ones.attr(rank="source")
+        self.right_ones.attr(rank="sink")
+        self.dot.subgraph(self.right_ones)
+        self.dot.subgraph(self.left_ones)
         self.dot.view()
 
     def paged_mem_complete(self):
@@ -22,8 +29,9 @@ class Dotgen:
 
     def add_process(self, process, page_table):
         label_string = ""
-        color = random.choice(["red", "blue", "green", "yellow", "orange", "purple"])
+        color = random.choice(["red", "blue", "green", "orange", "purple"])
+        subgraph = random.choice([self.left_ones, self.right_ones])
         for frame in page_table.table:
             label_string += f"<{frame}>{frame}|"
-            self.dot.edge(f"{process}:{frame}", f"frame:{frame}", color=str(color))
-        self.dot.node(process, label=label_string)
+            subgraph.edge(f"{process}:{frame}", f"frame:{frame}", color=str(color))
+        subgraph.node(process, label=label_string)
