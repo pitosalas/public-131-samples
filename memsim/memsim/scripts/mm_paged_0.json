@@ -16,7 +16,12 @@
             "d",
             "p1",
             "1"
+        ],        [
+            "a",
+            "p3",
+            "3"
         ]
+
     ],
     "algo": {
         "name": "paged",
@@ -26,7 +31,7 @@
         "base_units": "hex",
         "size": {
             "size": 1,
-            "multiplier": "2**18"
+            "multiplier": "2**16"
         }
     }
 }

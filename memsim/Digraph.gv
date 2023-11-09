@@ -1,0 +1,30 @@
+// Memsim
+digraph {
+	graph [rankdir=RL]
+	graph [ratio=1.0]
+	graph [overlap=scalexy]
+	node [shape=record]
+	graph [cluster_rank=global]
+	subgraph cluster_p2 {
+	p2:2:c -> frame:2:c;
+	p2:3 -> frame:3:nw
+	p2:4 -> frame:4
+	p2:5 -> frame:5
+	p2:6 -> frame:6
+	p2:7 -> frame:7
+	p2 [label="<2>2|<3>3|<4>4|<5>5|<6>6|<7>7|"]
+	}
+
+	subgraph cluster_p3 {
+	p3:0 -> frame:0
+	p3:1 -> frame:1
+	p3:8 -> frame:8
+	p3:9 -> frame:9
+	p3:10 -> frame:10
+	p3:11 -> frame:11
+	p3 [label="<0>0|<1>1|<8>8|<9>9|<10>10|<11>11|"]
+	}
+	subgraph cluster_main {
+	frame [label="<0>X|<1>X|<2>X|<3>X|<4>X|<5>X|<6>X|<7>X|<8>X|<9>X|<10>X|<11>X|<12>.|<13>.|<14>.|<15>.|<16>.|<17>.|<18>.|<19>.|<20>.|<21>.|<22>.|<23>.|<24>.|<25>.|<26>.|<27>.|<28>.|<29>.|<30>.|<31>.|"]
+	}
+}

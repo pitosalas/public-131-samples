@@ -24,14 +24,6 @@ class Simulator:
         with open(filename, "r") as f:
             self.config_file = json.load(f)
 
-    # def execute_command(self, command):
-    #     if command["do"] == "allocate":
-    #         self.mmanager.allocate_k(command["process"], convert_size_with_multiplier(command))
-    #     elif command["do"] == "deallocate": 
-    #         self.mmanager.deallocate(command["process"])
-    #     else:
-    #         raise Exception(f"Invalid script file: {command['do']}")
-
     def execute_command(self, command):
         if command[0] == "a":
             self.mmanager.allocate(command[1], command[2])
@@ -40,7 +32,7 @@ class Simulator:
         else:
             raise Exception(f"Invalid script file: {command['do']}")
     def batch(self):
-        file_name = "memsim/scripts/mm_paged_6.json"
+        file_name = "memsim/scripts/mm_paged_0.json"
         self.import_json_file(file_name)
         self.prepare_factory()
         algo = self.config_file["algo"]["name"]
