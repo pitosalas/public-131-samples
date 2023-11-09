@@ -6,9 +6,9 @@ class Dotgen:
         self.filename = filename
         self.paged_mem_string = ""
         self.dot = graphviz.Digraph(comment='Memsim')
-        self.dot.attr('graph', rankdir="RL")
-        self.dot.attr('graph', ranksep="1.5")
-        self.dot.attr('node', shape="record")
+        self.dot.attr('graph', rankdir="RL", ranksep="1.5")
+        self.dot.attr('node', shape="record", height="0.2", width="0.4", margin="0.02 0.02", fontsize="8")
+        self.dot.attr('edge', arrowsize="0.4")
         self.procces_string = ""
         self.left_ones = graphviz.Digraph(name="left_ones")
         self.right_ones = graphviz.Digraph(name="right_ones")
@@ -30,9 +30,9 @@ class Dotgen:
     def add_process(self, process, page_table):
         label_string = ""
         color = random.choice(["red", "blue", "green", "orange", "purple"])
-        # subgraph = random.choice([self.left_ones, self.right_ones])
-        subgraph = self.dot
+        subgraph = random.choice([self.left_ones, self.right_ones])
+        #subgraph = self.dot
         for frame in page_table.table:
             label_string += f"<{frame}>{frame}|"
-            subgraph.edge(f"{process}:{frame}", f"frame:{frame}", color=str(color))
+            self.dot.edge(f"{process}:{frame}", f"frame:{frame}", color=str(color))
         subgraph.node(process, label=label_string)
