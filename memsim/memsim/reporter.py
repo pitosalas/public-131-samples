@@ -52,11 +52,10 @@ class Reporter:
         self.phys_memory_stats = f"Physical Memory\n        {pretty_mem_str(memsize)}, pagesize: {pretty_mem_str(pagesize)}, framecount: {framecount}"
         frame_table_str = ""
         for i, frame in enumerate(frame_table):
-            char = "X" if frame else "."
-            frame_table_str += f"{char} "
+            frame_table_str += f"{frame} "
             if i % 32 == 31:
                 frame_table_str += "\n           "
-            self.dg.paged_mem_frame(i, char)
+            self.dg.paged_mem_frame(i, frame)
         self.phys_memory_stats += f"\n        Frames (X means in use)\n           {frame_table_str}"
         self.dg.paged_mem_complete()
 

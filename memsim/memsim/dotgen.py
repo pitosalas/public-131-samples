@@ -22,7 +22,8 @@ class Dotgen:
         self.dot.view()
 
     def paged_mem_complete(self):
-        self.dot.node("frame", label=self.paged_mem_string)
+        last_bar = self.paged_mem_string.rfind("|")
+        self.dot.node("frame", label=self.paged_mem_string[0:last_bar])
 
     def paged_mem_frame(self, frame_num: int, label: str):
         self.paged_mem_string += f"<{frame_num}>{label}|"
@@ -31,8 +32,8 @@ class Dotgen:
         label_string = ""
         color = random.choice(["red", "blue", "green", "orange", "purple"])
         subgraph = random.choice([self.left_ones, self.right_ones])
-        #subgraph = self.dot
         for frame in page_table.table:
             label_string += f"<{frame}>{frame}|"
             self.dot.edge(f"{process}:{frame}", f"frame:{frame}", color=str(color))
-        subgraph.node(process, label=label_string)
+        last_bar = label_string.rfind("|")
+        subgraph.node(process, label=label_string[0:last_bar])

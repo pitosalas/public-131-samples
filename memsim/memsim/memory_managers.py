@@ -104,7 +104,7 @@ class PagedMm(MemoryManager):
 
 
     def allocate(self, process, size):
-        mapping = self.physical_memory.allocate(int(size) * self.default_multiplier)
+        mapping = self.physical_memory.allocate(process, int(size) * self.default_multiplier)
         if mapping is None:
             raise Exception(f"Allocation request {size} for process {process} failed")
         self.allocations[process] = PCB(process, mapping)

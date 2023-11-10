@@ -147,29 +147,29 @@ class PagedPhysMem(PhysMem):
         if self.memsize % self.pagesize != 0:
             raise Exception("Memory size must be a multiple of page size")
         self.frame_count = self.memsize // self.pagesize
-        self.frame_table = [False] * self.frame_count
+        self.frame_table = [None] * self.frame_count
 
     def __str__(self):
         return f"PhysicalMemory = {self.memsize} MB"
     
-    def allocate(self, size: int) -> PageTable | None:
+    def allocate(self, process: str, size: int) -> PageTable | None:
         required_frames = size // self.pagesize
         if size % self.pagesize != 0:
             required_frames += 1
-        return self.build_page_table(required_frames)
+        return self.build_page_table(process, required_frames)
  
     def deallocate(self, mapping: PageTable) -> None:
         for frame in mapping.table:
-            self.frame_table[frame] = False
+            self.frame_table[frame] = None
         pass
 
-    def build_page_table(self, n_frames: int) -> PageTable | None:
+    def build_page_table(self, process: str, n_frames: int) -> PageTable | None:
         page_table =  PageTable()
         for index, frame in enumerate(self.frame_table):
-            if frame:
+            if frame is not None:
                 continue
             page_table.add_frame(index)
-            self.frame_table[index] = True
+            self.frame_table[index] = process
             n_frames -= 1
             if n_frames == 0:
                 return page_table
