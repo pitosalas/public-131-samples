@@ -19,8 +19,8 @@ class PhysMem(ABC):
 
 class VarSegPhysMem(PhysMem):
     def __init__(self, args):
-        self.freelist = [Block(0, args["size_gig"]*2**30)]
-        self.size = args["size_gig"]*2**30
+        self.size = convert_size_with_multiplier(args)
+        self.freelist = [Block(0, self.size)]
         super().__init__(args)
 
     def __str__(self):
@@ -40,8 +40,7 @@ class VarSegPhysMem(PhysMem):
             total_free += block.size
         return total_free
 
-    def allocate(self, size) -> Block | None:
-        pass
+    def allocate(self, size: int) -> Block | None:
         """
         * Look for a free block of memory that is at least as big as the requested size.
         * If none found, then allocation fails
@@ -108,8 +107,8 @@ class VarSegPhysMem(PhysMem):
 class FixedSegPhysMem(PhysMem):
     def __init__(self, args: dict):
         super().__init__(args)
-        self.memsize = convert_size_with_multiplier(args["size"])
-        self.segsize = convert_size_with_multiplier(args["seg"])
+        self.memsize = convert_size_with_multiplier(args["memory"]["size"])
+        self.segsize = convert_size_with_multiplier(args["memory"]["seg"])
         if self.memsize % self.segsize != 0:
             raise Exception("Memory size must be a multiple of segment size")
         self.free_segments = [i for i in range(self.memsize//self.segsize)]

@@ -1,6 +1,7 @@
 import unittest
 from utils import find_and_remove, flatten_free_segments
 
+
 class TestFindAndREmove(unittest.TestCase):
     def test1(self):
         lst = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -13,7 +14,7 @@ class TestFindAndREmove(unittest.TestCase):
         n = 5
         expected_output = [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]]
         self.assertEqual(find_and_remove(lst, n), expected_output)
- 
+
     def test3(self):
         lst = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         n = 10
@@ -39,8 +40,8 @@ class TestFindAndREmove(unittest.TestCase):
         n = 11
         self.assertEqual(find_and_remove(lst, n), None)
 
-class TestFlattenFree(unittest.TestCase):
 
+class TestFlattenFree(unittest.TestCase):
     def test7(self):
         free_segments = [1, 2, 3, 5, 6, 7, 8, 10, 11, 12]
         expected_output = [(1, 3), (5, 8), (10, 12)]

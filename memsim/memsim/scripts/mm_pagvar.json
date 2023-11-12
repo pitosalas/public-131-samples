@@ -1,0 +1,19 @@
+{
+    "scenario": "Example testing processes that dont allocate all their pages",
+    "default_multiplier": "2**12",
+    "proportion_allocated": 0.5,
+    "script": [
+        ["a", "p1", "4"]
+    ],
+    "algo": {
+        "name": "paged",
+        "page_size": 2048
+    },
+    "memory": {
+        "base_units": "hex",
+        "size": {
+            "size": 1,
+            "multiplier": "2**16"
+        }
+    }
+}

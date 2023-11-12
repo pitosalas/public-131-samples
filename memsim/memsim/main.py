@@ -24,6 +24,13 @@ class Simulator:
         with open(filename, "r") as f:
             self.config_file = json.load(f)
 
+# available commands: a, d
+# a: allocate (process, size)
+# d: deallocate (process)
+# l: load (process, maxsize)
+# t: touch (process, start, end)
+
+
     def execute_command(self, command):
         if command[0] == "a":
             self.mmanager.allocate(command[1], command[2])

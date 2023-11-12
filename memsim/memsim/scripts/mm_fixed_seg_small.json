@@ -1,35 +1,21 @@
 {
     "scenario": "Tiny Example Fixed Segment Memory Manager",
+    "default_multiplier": "2**12",
     "script": [
-        {
-            "do": "allocate",
-            "process": "p1",
-            "size": 1,
-            "power_of_two": 3
-        },
-        {
-            "do": "allocate",
-            "process": "p2",
-            "size": 3,
-            "power_of_two": 3
-        },
-        {
-            "do": "allocate",
-            "process": "p3",
-            "size": 1,
-            "power_of_two": 3
-        }
-    ],
+        ["a", "p1", "1"],
+        ["a", "p2", "3"],
+        ["a", "p3", "1"]],
     "algo": {
         "name": "fixed_seg",
         "memory": {
+            "base_units": "hex",
             "size": {
                 "size": 10,
-                "power_of_two": 3
+                "multiplier": "2**16"
             },
             "seg": {
                 "size": 1,
-                "power_of_two": 3
+                "multiplier": "2**16"
             }
         }
     }

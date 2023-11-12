@@ -1,25 +1,16 @@
 {
+    "scenario": "Variable Size Segments",
+    "default_multiplier": "2**12",
     "script": [
-        {
-            "do": "allocate",
-            "process": "p1",
-            "k": 100
-        },
-        {
-            "do": "allocate",
-            "process": "p2",
-            "k": 100
-        },
-        {
-            "do": "deallocate",
-            "process": "p2",
-            "k": 100
-        }
-    ],
+            ["a", "p1", "1"],
+            ["a", "p2", "3"],
+            ["a", "p3", "2"]
+        ],
     "algo": {
         "name": "var_seg",
         "memory": {
-            "size_gig": 2
+            "size": 2,
+            "multiplier": "2**12"
         }
     }
 }
