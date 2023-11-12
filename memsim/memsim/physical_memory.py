@@ -17,9 +17,13 @@ class PhysMem(ABC):
     def deallocate(self, mapping: Block | PageTable):
         pass
 
+    @abstractmethod
+    def touch(self, address: int) -> bool:
+        return True
+
 class VarSegPhysMem(PhysMem):
     def __init__(self, args):
-        self.size = convert_size_with_multiplier(args)
+        self.size = convert_size_with_multiplier(args["memory"]["size"])
         self.freelist = [Block(0, self.size)]
         super().__init__(args)
 
@@ -61,13 +65,16 @@ class VarSegPhysMem(PhysMem):
             self.freelist.remove(block)
             self.freelist.append(
                 Block(
-                    block.start + size,
+                    block.physical_address + size,
                     block.size - size,
                 )
             )
             block.size = size
             return block
 
+    def touch(self, address: int) -> bool:
+        return True
+    
     def deallocate(self, mapping) -> None:
         """
         * Add the block to the free list
@@ -75,7 +82,7 @@ class VarSegPhysMem(PhysMem):
 
         """
         self.freelist.append(mapping)
-        self.freelist.sort(key=lambda block: block.start)
+        self.freelist.sort(key=lambda block: block.physical_address)
         self.coalesce()
 
     def coalesce(self) -> None:
@@ -89,16 +96,16 @@ class VarSegPhysMem(PhysMem):
             for i in range(len(self.freelist) - 1):
                 block1 = self.freelist[i]
                 block2 = self.freelist[i + 1]
-                if block1.start + block1.size == block2.start:
+                if block1.physical_address + block1.size == block2.physical_address:
                     self.freelist.remove(block1)
                     self.freelist.remove(block2)
                     self.freelist.append(
                         Block(
-                            block1.start,
+                            block1.physical_address,
                             block1.size + block2.size,
                         )
                     )
-                    self.freelist.sort(key=lambda block: block.start)
+                    self.freelist.sort(key=lambda block: block.physical_address)
                     found = True
                     break
             if not found:
@@ -130,7 +137,7 @@ class FixedSegPhysMem(PhysMem):
         
     def deallocate(self, block: Block) -> None:
         for i in range(block.size// self.segsize):
-            self.free_segments.append(block.start//self.segsize + i)
+            self.free_segments.append(block.physical_address//self.segsize + i)
         self.free_segments.sort()
 
     def report(self, rep: Reporter):
@@ -138,10 +145,16 @@ class FixedSegPhysMem(PhysMem):
         rep.add_free_segments(flattened)
         rep.add_memory_stats(self.memsize, self.segsize)
 
+    def touch(self, alloc: Block, address: int) -> bool:
+        return True
+
+
+
 class PagedPhysMem(PhysMem):
     def __init__(self, memory_param: dict, page_size: int):
         super().__init__(memory_param)
-        self.memsize = convert_size_with_multiplier(memory_param["size"])
+        self.memparam = memory_param
+        self.memsize = convert_size_with_multiplier(memory_param["memory"]["size"])
         self.pagesize = page_size
         if self.memsize % self.pagesize != 0:
             raise Exception("Memory size must be a multiple of page size")
@@ -163,7 +176,7 @@ class PagedPhysMem(PhysMem):
         pass
 
     def build_page_table(self, process: str, n_frames: int) -> PageTable | None:
-        page_table =  PageTable()
+        page_table =  PageTable(self.pagesize)
         for index, frame in enumerate(self.frame_table):
             if frame is not None:
                 continue

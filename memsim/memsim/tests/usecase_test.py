@@ -15,11 +15,17 @@ class UseCaseTest(unittest.TestCase):
                 "seg": {"size": 1, "multiplier": "2**12"},
             },
         }
-        self.fixedseg = FixedSegMm(self.param)
+        self.fixedseg_mm = FixedSegMm(self.param)
 
     def test_created(self):
-        self.assertIsNotNone(self.fixedseg)
+        self.assertIsNotNone(self.fixedseg_mm)
         pass
 
     def test_alocation(self):
-        
+        self.fixedseg_mm.allocate("p1", 4096)
+        allocation = self.fixedseg_mm.allocations["p1"]
+        self.assertEqual(allocation.mapping.size, 4096)
+
+    def test_touch(self):
+        self.fixedseg_mm.allocate("p1", 4096)
+        self.assertEqual(self.fixedseg_mm.touch("p1", 200), True)

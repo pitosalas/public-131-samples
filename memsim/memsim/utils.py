@@ -1,20 +1,27 @@
 class Block:
     def __init__(self, start: int, size: int):
-        self.start = start
+        self.physical_address = start
         self.size = size
 
     def __str__(self):
-        return f"Block: start = {pretty_mem_str(self.start)}, size = {pretty_mem_str(self.size)}"
+        return f"Block: start = {pretty_mem_str(self.physical_address)}, size = {pretty_mem_str(self.size)}"
     
+    def contains(self, logical_address: int) -> bool:
+        return logical_address <= self.size
+
 class PageTable:
 # A page table is an array, indexed by page number, that contains the frame number where that page is stored in memory.
-    def __init__(self, ):
+    def __init__(self, pagesize: int):
         self.table = []
         self.frame_count = 0
+        self.pagesize = pagesize
+        self.size = None
     
     def add_frame(self, frame: int):
         self.table.append(frame)
         self.frame_count += 1
+        self.size = self.frame_count * self.pagesize
+
     
     def __str__(self):
         return f"PageTable:  {flatten_free_segments(self.table)}"

@@ -30,14 +30,18 @@ class Simulator:
 # l: load (process, maxsize)
 # t: touch (process, start, end)
 
-
     def execute_command(self, command):
         if command[0] == "a":
             self.mmanager.allocate(command[1], command[2])
         elif command[0] == "d": 
             self.mmanager.deallocate(command[1])
+        elif command[0] == "l":
+            self.mmanager.load(command[1], command[2])
+        elif command[0] == "t":
+            self.mmanager.touch(command[1], command[2], command[3])
         else:
             raise Exception(f"Invalid script file: {command['do']}")
+        
     def batch(self):
         file_name = "memsim/scripts/mm_paged_0.json"
         self.import_json_file(file_name)

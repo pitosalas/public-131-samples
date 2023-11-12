@@ -7,7 +7,7 @@ from utils import convert_size_with_multiplier
 class TestVarSegPhysMem(unittest.TestCase):
     def setUp(self):
         self.mem_size_gig = 1
-        self.param = {"size": 1, "multiplier": "2**30"}
+        self.param = {"memory": {"size": {"size": 1, "multiplier": "2**30"}}}
 
         self.mem = VarSegPhysMem(self.param)
 
@@ -41,8 +41,10 @@ class TestVarSegPhysMem(unittest.TestCase):
 class TestFixedSegPhysMem(unittest.TestCase):
     def setUp(self):
         self.fixed_param = {
-            "size": {"size": 10, "multiplier": "2**16"},
-            "seg": {"size": 1, "multiplier": "2**16"},
+            "memory": {
+                "size": {"size": 10, "multiplier": "2**16"},
+                "seg": {"size": 1, "multiplier": "2**16"},
+            }
         }
         self.mem_size = 10 * 2**16
         self.seg_size = 1 * 2**16
@@ -71,11 +73,11 @@ class TestPagedPhysMem(unittest.TestCase):
     def setUp(self):
         self.mem_size = 1 * 2**30
         self.page_size = 4096
-        self.paged = {"size": 10, "multiplier": "2**16"}
-        self.mem = PagedPhysMem({"size": self.paged}, self.page_size)
+        self.paged = {"memory": {"size": {"size": 10, "multiplier": "2**16"}}}
+        self.mem = PagedPhysMem(self.paged, self.page_size)
 
     def test_initialization(self):
-        mem_size_bytes = convert_size_with_multiplier(self.paged)
+        mem_size_bytes = convert_size_with_multiplier(self.paged["memory"]["size"])
         self.assertEqual(self.mem.memsize, mem_size_bytes)
         self.assertEqual(self.mem.pagesize, self.page_size)
         self.assertEqual(len(self.mem.frame_table), mem_size_bytes // self.page_size)
