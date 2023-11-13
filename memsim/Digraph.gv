@@ -5,11 +5,11 @@ digraph {
 	edge [arrowsize=0.4]
 	subgraph right_ones {
 		p1 [label=""]
+		p3 [label=""]
 		rank=sink
 	}
 	subgraph left_ones {
 		p2 [label=""]
-		p3 [label=""]
 		rank=source
 	}
 }

@@ -88,7 +88,7 @@ class FixedSegMm(MemoryManager):
         self.allocations: dict[str, PCB] = {}
 
     def allocate(self, process: str, size: int):
-        mapping = self.physical_memory.allocate(size)
+        mapping = self.physical_memory.allocate(process, size)
         if mapping is None:
             raise Exception(f"Allocation request {size} for process {process} failed")
         self.allocations[process] = PCB(process, mapping)
@@ -153,3 +153,7 @@ class PagedMm(MemoryManager):
     def report(self, rep: Reporter):
         rep.add_allocations(self.allocations)
         self.physical_memory.report(rep)
+
+    def load(self, process: str, size: int):
+        pass
+

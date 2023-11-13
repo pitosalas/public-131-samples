@@ -116,19 +116,22 @@ class FixedSegPhysMem(PhysMem):
         super().__init__(args)
         self.memsize = convert_size_with_multiplier(args["memory"]["size"])
         self.segsize = convert_size_with_multiplier(args["memory"]["seg"])
+        self.seg_count = self.memsize // self.segsize
         if self.memsize % self.segsize != 0:
             raise Exception("Memory size must be a multiple of segment size")
-        self.free_segments = [i for i in range(self.memsize//self.segsize)]
+        self.free_segments = [i for i in range(self.seg_count)]
+        self.seg_table = [None] * self.seg_count
 
     def __str__(self):
         return str(flatten_free_segments(self.free_segments))
 
-    def allocate(self, size: int) -> Block | None:
+    def allocate(self, process: str,  size: int) -> Block | None:
         segments = self.find_contiguous_segments(size, self.free_segments)
         if segments is None:
             return None
         else:
             self.free_segments = segments[1]
+            self.seg_table[segments[0][0]] = process
             return Block(segments[0][0]*self.segsize, size)
         
     def find_contiguous_segments(self, size, free_list) -> list[list[int]] | None:
@@ -143,11 +146,10 @@ class FixedSegPhysMem(PhysMem):
     def report(self, rep: Reporter):
         flattened = flatten_free_segments(self.free_segments)
         rep.add_free_segments(flattened)
-        #rep.add_memory_stats(self.memsize, self.segsize)
+        rep.add_seg_mem_stats(self.memsize, self.segsize)
 
     def touch(self, alloc: Block, address: int) -> bool:
         return alloc.contains(address)
-
 
 
 class PagedPhysMem(PhysMem):
@@ -190,4 +192,7 @@ class PagedPhysMem(PhysMem):
     def report(self, rep: Reporter):
         rep.add_paged_memory_stats(self.memsize, self.pagesize, self.frame_count, self.frame_table)
 
+    def touch(self, address: int) -> bool:
+        return True
+    
 

@@ -3,7 +3,7 @@
     "default_multiplier": "2**12",
     "script": [
         ["a", "p1", "1"],
-        ["a", "p2", "3"],
+        ["a", "p2", "64"],
         ["a", "p3", "1"]],
     "algo": {
         "name": "fixed_seg"

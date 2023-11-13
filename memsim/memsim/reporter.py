@@ -36,17 +36,17 @@ class Reporter:
     def add_free_segments(self, free_segments: list[int]) -> None:
         self.free_segments = free_segments
 
-    # def render_allocs(self) -> str:
-    #     strings = []
-    #     for key in self.allocs:
-    #         strings.append(f"{str(self.allocs[key])}\n")
-    #     return "        ".join(strings)
+    def render_allocs(self) -> str:
+        strings = []
+        for key in self.allocs:
+            strings.append(f"{str(self.allocs[key])}\n")
+        return "        ".join(strings)
 
-    # def render_free_segments(self) -> str:
-    #     strings = []
-    #     for key in self.free_segments:
-    #         strings.append(f"from seg {key[0]} to seg {key[1]}\n")
-    #     return "        ".join(strings)
+    def render_free_segments(self) -> str:
+        strings = []
+        for key in self.free_segments:
+            strings.append(f"[{key[0]}..{key[1]}]")
+        return ", ".join(strings)
 
     def add_paged_memory_stats(self, memsize: int, pagesize: int, framecount: int, frame_table: list[bool]):
         self.phys_memory_stats = f"Physical Memory\n        {pretty_mem_str(memsize)}, pagesize: {pretty_mem_str(pagesize)}, framecount: {framecount}"
@@ -58,6 +58,14 @@ class Reporter:
             self.dg.paged_mem_frame(i, frame)
         self.phys_memory_stats += f"\n        Frames (X means in use)\n           {frame_table_str}"
         self.dg.paged_mem_complete()
+
+    def add_seg_mem_stats(self, memsize: int, segsize: int):
+        self.phys_memory_stats = f"Physical Memory:\n           {pretty_mem_str(memsize)}, segment size: {pretty_mem_str(segsize)}"
+        self.phys_memory_stats += f"\n           Free segments: {self.render_free_segments()}"
+        # self.dg.seg_mem_complete()
+
+
+
 
     def report(self):
         print("----------------------------------------")
