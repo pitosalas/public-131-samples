@@ -12,15 +12,15 @@ class MemoryManager(ABC):
         pass
 
     @abstractmethod
-    def allocate(self, process: str, size: str):
+    def allocate(self, process: str, size: int):
         pass
 
     @abstractmethod
-    def deallocate(self, process: str):
+    def deallocate(self, process: int):
         pass
 
     @abstractmethod
-    def load(self, process: str, size: str):
+    def load(self, process: str, size: int):
         pass
 
     @abstractmethod
@@ -93,13 +93,13 @@ class FixedSegMm(MemoryManager):
             raise Exception(f"Allocation request {size} for process {process} failed")
         self.allocations[process] = PCB(process, mapping)
 
-    def touch(self, process: str, address: int):
+    def touch(self, process: str, address: int) -> bool:
         allocation = self.allocations[process]
         if allocation is None:
             raise Exception("process not found")
         if not allocation.mapping.contains(address):
             raise Exception("address not found")
-        self.physical_memory.touch(allocation.mapping, address)
+        return(self.physical_memory.touch(allocation.mapping, address))
 
     def load(self, process: str, size: int):
         self.allocate(process, size)

@@ -143,10 +143,10 @@ class FixedSegPhysMem(PhysMem):
     def report(self, rep: Reporter):
         flattened = flatten_free_segments(self.free_segments)
         rep.add_free_segments(flattened)
-        rep.add_memory_stats(self.memsize, self.segsize)
+        #rep.add_memory_stats(self.memsize, self.segsize)
 
     def touch(self, alloc: Block, address: int) -> bool:
-        return True
+        return alloc.contains(address)
 
 
 

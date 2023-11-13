@@ -1,6 +1,6 @@
 import unittest
 
-from memory_managers import FixedSegMm
+from memory_managers import FixedSegMm, VarSegMm
 
 
 class UseCaseTest(unittest.TestCase):
@@ -16,9 +16,11 @@ class UseCaseTest(unittest.TestCase):
             },
         }
         self.fixedseg_mm = FixedSegMm(self.param)
+        self.varseg_mm = VarSegMm(self.param)
 
     def test_created(self):
         self.assertIsNotNone(self.fixedseg_mm)
+        self.assertIsNotNone(self.varseg_mm)
         pass
 
     def test_alocation(self):
@@ -26,6 +28,12 @@ class UseCaseTest(unittest.TestCase):
         allocation = self.fixedseg_mm.allocations["p1"]
         self.assertEqual(allocation.mapping.size, 4096)
 
+        self.varseg_mm.allocate("p1", 4096)
+        self.assertEqual(allocation.mapping.size, 4096)
+
     def test_touch(self):
         self.fixedseg_mm.allocate("p1", 4096)
+        self.assertEqual(self.fixedseg_mm.touch("p1", 200), True)
+
+        self.varseg_mm.allocate("p1", 4096)
         self.assertEqual(self.fixedseg_mm.touch("p1", 200), True)

@@ -1,0 +1,15 @@
+// Memsim
+digraph {
+	graph [rankdir=RL ranksep=1.5]
+	node [fontsize=8 height=0.2 margin="0.02 0.02" shape=record width=0.4]
+	edge [arrowsize=0.4]
+	subgraph right_ones {
+		p1 [label=""]
+		rank=sink
+	}
+	subgraph left_ones {
+		p2 [label=""]
+		p3 [label=""]
+		rank=source
+	}
+}

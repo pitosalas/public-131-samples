@@ -6,17 +6,17 @@
         ["a", "p2", "3"],
         ["a", "p3", "1"]],
     "algo": {
-        "name": "fixed_seg",
-        "memory": {
-            "base_units": "hex",
-            "size": {
-                "size": 10,
-                "multiplier": "2**16"
-            },
-            "seg": {
-                "size": 1,
-                "multiplier": "2**16"
-            }
+        "name": "fixed_seg"
+    },
+    "memory": {
+        "base_units": "hex",
+        "size": {
+            "size": 10,
+            "multiplier": "2**16"
+        },
+        "seg": {
+            "size": 1,
+            "multiplier": "2**16"
         }
     }
 }

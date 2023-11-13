@@ -22,7 +22,6 @@ class PageTable:
         self.frame_count += 1
         self.size = self.frame_count * self.pagesize
 
-    
     def __str__(self):
         return f"PageTable:  {flatten_free_segments(self.table)}"
 
