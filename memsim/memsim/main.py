@@ -2,15 +2,16 @@
 A simple memory magement simulation and demonstration app.
 """
 import json
+from dotgen import Dotgen
 from utils import MmFactory
 from memory_managers import MemoryManager, PagedMm, VarSegMm
 from memory_managers import FixedSegMm
 from reporter import Reporter
 
-
 class Simulator:
-    def __init__(self, reporter: Reporter):
-        self.reporter = reporter
+    def __init__(self, reporter: Reporter, dotgen: Dotgen):
+        self.rep = reporter
+        self.dg = dotgen
         self.factory = None
         self.mmanager: MemoryManager = None
         self.data = None
@@ -32,7 +33,7 @@ class Simulator:
     # t: touch (process, start, end)
 
     def execute_command(self, command):
-        rep.add_trace(command)
+        self.rep.add_trace(command)
         if command[0] == "a":
             self.mmanager.allocate(command[1], int(command[2]) * self.def_mult)
         elif command[0] == "d":
@@ -45,7 +46,7 @@ class Simulator:
             raise Exception(f"Invalid script file: {command['do']}")
 
     def batch(self):
-        file_name = "memsim/scripts/fixed1.json"
+        file_name = "memsim/scripts/fixed2.json"
         self.import_json_file(file_name)
         self.def_mult = eval(self.config_file["default_multiplier"])
         self.prepare_factory()
@@ -54,11 +55,13 @@ class Simulator:
         self.mmanager = self.factory.create(algo)(self.config_file)
         for step in self.config_file["script"]:
             self.execute_command(step)
-        self.mmanager.report(rep)
-
+        self.mmanager.report(self.rep)
+        self.mmanager.graph(self.dg)
 
 if __name__ == "__main__":
     rep = Reporter()
-    sim = Simulator(rep)
+    dg = Dotgen("memsim/graphs/test")
+    sim = Simulator(rep, dg)
     sim.batch()
     rep.report()
+    dg.generate()

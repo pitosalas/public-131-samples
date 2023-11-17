@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from physical_memory import FixedSegPhysMem, PagedPhysMem, VarSegPhysMem
 from reporter import Reporter
 from utils import PCB
-
+from dotgen import Dotgen
 
 class MemoryManager(ABC):
     """Keeps track of each Job that it has given memory to in the dict allocations. The key is the name of the job and the value is a MemoryAllocation object."""
@@ -29,6 +29,10 @@ class MemoryManager(ABC):
 
     @abstractmethod
     def report(self, rep: Reporter):
+        pass
+
+    @abstractmethod
+    def graph(self, dg: Dotgen):
         pass
 
 class VarSegMm(MemoryManager):
@@ -114,6 +118,15 @@ class FixedSegMm(MemoryManager):
     def report(self, rep: Reporter):
         rep.add_allocations(self.allocations)
         self.physical_memory.report(rep)
+        pass
+
+    def graph(self, dg: Dotgen):
+        box = dg.add_box("physmem")
+        for seg in self.physical_memory.seg_table:
+            if seg is not None:
+                box.add_section_to_box(seg)
+            else:
+                box.add_section_to_box("Free")
 
     def __str__(self) -> str:
         phys_memory = str(self.physical_memory)

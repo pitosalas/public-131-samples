@@ -131,6 +131,8 @@ class FixedSegPhysMem(PhysMem):
             return None
         else:
             self.free_segments = segments[1]
+            for seg in segments[0]:
+                self.seg_table[seg] = process
             self.seg_table[segments[0][0]] = process
             return Block(segments[0][0]*self.segsize, size)
         
@@ -141,6 +143,7 @@ class FixedSegPhysMem(PhysMem):
     def deallocate(self, block: Block) -> None:
         for i in range(block.size// self.segsize):
             self.free_segments.append(block.physical_address//self.segsize + i)
+            self.seg_table[block.physical_address//self.segsize + i] = None
         self.free_segments.sort()
 
     def report(self, rep: Reporter):
