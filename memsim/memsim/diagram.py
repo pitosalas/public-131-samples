@@ -62,3 +62,8 @@ class Diagram:
             label += element_start+section["label"]+element_end
         label += label_end
         self.dot.node(box.handle, label=label)
+<<<<<<< HEAD:memsim/memsim/diagram.py
+=======
+
+	# graph [rankdir=RL ranksep=1.5, label="Physical Memory\nFixed Segment Memory Manager\n\n", labelloc="t", labeljust="c", fontsize=14, fontcolor="blue"]
+>>>>>>> 79a2716e73b720a47a8ffb8a69c0e06d750251ea:memsim/memsim/dotgen.py
