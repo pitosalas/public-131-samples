@@ -57,7 +57,7 @@ class TestFixedSegPhysMem(unittest.TestCase):
 
     def test_allocate_deallocate(self):
         size = 1
-        block = self.mem.allocate(size)
+        block = self.mem.allocate("Test1", size)
         self.assertIsNotNone(block)
         self.assertEqual(block.size, size)
 

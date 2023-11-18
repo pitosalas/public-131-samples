@@ -1,127 +1,38 @@
 {
     "scenario": "Tiny Example Paged Memory Manager",
-    "default_multiplier": "2**12",
+    "default_multiplier": "2**16",
     "script": [
-        [
-            "a",
-            "p1",
-            "1"
-        ],
-        [
-            "a",
-            "p2",
-            "3"
-        ],
-        [
-            "a",
-            "p3",
-            "3"
-        ],
-        [
-            "d",
-            "p3",
-            "3"
-        ],
-        [
-            "d",
-            "p1",
-            "1"
-        ],
-        [
-            "a",
-            "p5",
-            "1"
-        ],
-        [
-            "a",
-            "p6",
-            "3"
-        ],
-        [
-            "a",
-            "p7",
-            "1"
-        ],
-        [
-            "a",
-            "p8",
-            "2"
-        ],
-        [
-            "d",
-            "p6",
-            "3"
-        ],
-        [
-            "d",
-            "p8",
-            "1"
-        ],
-        [
-            "a",
-            "p1",
-            "1"
-        ],
-        [
-            "a",
-            "p2",
-            "3"
-        ],
-        [
-            "a",
-            "p3",
-            "3"
-        ],
-        [
-            "d",
-            "p3",
-            "3"
-        ],
-        [
-            "a",
-            "p9",
-            "4"
-        ],
-        [
-            "a",
-            "p5",
-            "6"
-        ],
-        [
-            "a",
-            "p6",
-            "3"
-        ],
-        [
-            "a",
-            "p7",
-            "5"
-        ],
-        [
-            "a",
-            "p8",
-            "2"
-        ],
-        [
-            "a",
-            "p10",
-            "3"
-        ],
-        [
-            "d",
-            "p8",
-            "1"
-        ]
+        ["a", "Process 1", 1],
+        ["a", "Process 2", 3],
+        ["a", "Process 3", 6],
+        ["d", "Process 2", 3],
+        ["d", "Process 1", 1],
+        ["a", "Process 5", 10],
+        ["a", "Process 6", 3],
+        ["a", "Process 7", 1],
+        ["a", "Process 8", 2],
+        ["d", "Process 6", 3],
+        ["d", "Process 8", 1],
+        ["a", "Process 1", 1],
+        ["a", "Process 2", 3],
+        ["a", "Process 9", 4],
+        ["a", "Process 6", 3],
+        ["a", "Process 7", 5],
+        ["a", "Process 8", 2],
+        ["a", "Process 10", 3],
+        ["d", "Process 8", 1]
     ],
     "algo": {
-        "name": "paged",
-        "page_size": 2048
+        "name": "fixed_seg"
     },
     "memory": {
-        "base_units": "hex",
         "size": {
-            "size": 2,
+            "size": 50,
+            "multiplier": "2**16"
+        },
+        "seg": {
+            "size": 1,
             "multiplier": "2**16"
         }
     }
-}
+    }

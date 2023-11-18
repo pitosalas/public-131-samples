@@ -2,23 +2,23 @@ import random
 import graphviz
 
 class Box:
-    def __init__(self, handle: str, dot: graphviz.Digraph):
+    def __init__(self, label: str, handle: str, dot: graphviz.Digraph):
         self.handle = handle
+        self.label = label
         self.dot = dot
         self.sections = []
 
-    def add_section_to_box(self, label: str):
-        self.sections.append(label)
+    def add_section_to_box(self, label: str, height: int = 1):
+        self.sections.append({"label": label, "height": height})
 
-class Dotgen:
+class Diagram:
     def __init__(self, filename):
         self.filename = filename
         self.paged_mem_string = ""
-        self.dot = graphviz.Digraph(comment='Memsim')
+        self.dot = graphviz.Digraph(name="memory")
         self.dot.attr('graph', rankdir="RL", ranksep="1.5")
-        self.dot.attr('node', shape="record", height="0.2", width="0.4", margin="0.02 0.02", fontsize="8")
+        self.dot.attr('node', shape="none", height="0.2", width="0.4", margin="0.02 0.02", fontsize="8")
         self.dot.attr('edge', arrowsize="0.4")
-        self.procces_string = ""
         self.left_ones = graphviz.Digraph(name="left_ones")
         self.right_ones = graphviz.Digraph(name="right_ones")
         self.boxes = {}
@@ -48,15 +48,17 @@ class Dotgen:
         last_bar = label_string.rfind("|")
         subgraph.node(process, label=label_string[0:last_bar])
 
-    def add_box(self, handle: str):
-        self.boxes[handle] = Box(handle, self.dot)
+    def add_box(self, label: str, handle: str):
+        self.boxes[handle] = Box(label, handle, self.dot)
         return self.boxes[handle]
     
     def render_box(self, box):
-        label = ""
+        label_start = f"""<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD sides="b"><B><font color="blue">{box.label}</font></B></TD></TR>"""
+        element_start = """<tr><td align="left" height="19" width="60">"""
+        element_end = """</td></tr>"""
+        label_end = """</table>>"""
+        label = label_start
         for section in box.sections:
-            label += f"{section}|"
-        last_bar = label.rfind("|")
-        label = label[0:last_bar]
+            label += element_start+section["label"]+element_end
+        label += label_end
         self.dot.node(box.handle, label=label)
-

@@ -1,7 +1,7 @@
 // Memsim
 digraph {
-	graph [rankdir=RL ranksep=1.5]
-	node [fontsize=8 height=0.2 margin="0.02 0.02" shape=record width=0.4]
+	graph [rankdir=RL ranksep=1.5 label="XXX"]
+	node [fontsize=8 height=0.2 margin="0.02 0.02" shape=record width=0.4 label="xxx"]
 	edge [arrowsize=0.4]
-	physmem [label="p1|p1|p1|p1|p1|p1|p1|p1|p1|p1|p4|Free|p3|p3|p3|p3|p3|p7|p7|p5"]
+	physmem [label=<<table border="0.1" cellborder="1" cellspacing="0"><tr><td align="left" height="19" width="60">p1</td></tr><tr><td align="left" height="19" width="60">p1</td></tr><tr><td align="left" height="19" width="60">p1</td></tr><tr><td align="left" height="19" width="60">p1</td></tr><tr><td align="left" height="19" width="60">p1</td></tr><tr><td align="left" height="19" width="60">p1</td></tr><tr><td align="left" height="19" width="60">p1</td></tr><tr><td align="left" height="19" width="60">p1</td></tr><tr><td align="left" height="19" width="60">p1</td></tr><tr><td align="left" height="19" width="60">p1</td></tr><tr><td align="left" height="19" width="60">p4</td></tr><tr><td align="left" height="19" width="60">Free</td></tr><tr><td align="left" height="19" width="60">p3</td></tr><tr><td align="left" height="19" width="60">p3</td></tr><tr><td align="left" height="19" width="60">p3</td></tr><tr><td align="left" height="19" width="60">p3</td></tr><tr><td align="left" height="19" width="60">p3</td></tr><tr><td align="left" height="19" width="60">p7</td></tr><tr><td align="left" height="19" width="60">p7</td></tr><tr><td align="left" height="19" width="60">p5</td></tr></table>>]
 }

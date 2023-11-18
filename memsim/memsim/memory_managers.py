@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from physical_memory import FixedSegPhysMem, PagedPhysMem, VarSegPhysMem
 from reporter import Reporter
 from utils import PCB
-from dotgen import Dotgen
+from diagram import Diagram
 
 class MemoryManager(ABC):
     """Keeps track of each Job that it has given memory to in the dict allocations. The key is the name of the job and the value is a MemoryAllocation object."""
@@ -32,7 +32,7 @@ class MemoryManager(ABC):
         pass
 
     @abstractmethod
-    def graph(self, dg: Dotgen):
+    def graph(self, dg: Diagram):
         pass
 
 class VarSegMm(MemoryManager):
@@ -81,6 +81,10 @@ class VarSegMm(MemoryManager):
         rep.add_allocations(self.allocations)
         self.physical_memory.report(rep)
 
+    def graph(self, dg: Diagram):
+        pass
+
+
 
 class FixedSegMm(MemoryManager):
     """Keeps track of each Job that it has given memory to in the dict allocations. The key is the name of the job and the value is a MemoryAllocation object.
@@ -120,8 +124,8 @@ class FixedSegMm(MemoryManager):
         self.physical_memory.report(rep)
         pass
 
-    def graph(self, dg: Dotgen):
-        box = dg.add_box("physmem")
+    def graph(self, dg: Diagram):
+        box = dg.add_box("Physical Memory","physmem")
         for seg in self.physical_memory.seg_table:
             if seg is not None:
                 box.add_section_to_box(seg)
@@ -169,4 +173,8 @@ class PagedMm(MemoryManager):
 
     def load(self, process: str, size: int):
         pass
+
+    def graph(self, dg: Diagram):
+        pass
+
 
