@@ -20,6 +20,10 @@ class PhysMem(ABC):
     @abstractmethod
     def touch(self, address: int) -> bool:
         return True
+    
+    @abstractmethod
+    def report(self, rep: Reporter):
+        pass
 
 class VarSegPhysMem(PhysMem):
     def __init__(self, args):
@@ -110,6 +114,10 @@ class VarSegPhysMem(PhysMem):
                     break
             if not found:
                 break
+
+    def report(self, rep: Reporter):
+        rep.add_free_segments(self.freelist)
+        return super().report(rep)
 
 class FixedSegPhysMem(PhysMem):
     def __init__(self, args: dict):

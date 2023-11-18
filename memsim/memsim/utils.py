@@ -4,7 +4,7 @@ class Block:
         self.size = size
 
     def __str__(self):
-        return f"Block: start = {pretty_mem_str(self.physical_address)}, size = {pretty_mem_str(self.size)}"
+        return f"start: {pretty_mem_str(self.physical_address)}, size; {pretty_mem_str(self.size)}"
     
     def contains(self, logical_address: int) -> bool:
         return logical_address <= self.size

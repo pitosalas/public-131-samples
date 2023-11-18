@@ -2,11 +2,7 @@
     "scenario": "Tiny Example Paged Memory Manager",
     "default_multiplier": "2**12",
     "script": [
-        [
-            "a",
-            "p1",
-            "1"
-        ],
+        ["a", "p1", "1"],
         [
             "a",
             "p2",

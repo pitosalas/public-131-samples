@@ -31,18 +31,11 @@ class Reporter:
 
     def add_free_segments(self, free_segments: list[int]) -> None:
         self.free_segments = free_segments
-
-    def render_allocs(self) -> str:
         strings = []
-        for key in self.allocs:
-            strings.append(f"{str(self.allocs[key])}\n")
-        return "        ".join(strings)
-
-    def render_free_segments(self) -> str:
-        strings = []
-        for key in self.free_segments:
-            strings.append(f"[{key[0]}..{key[1]}]")
-        return ", ".join(strings)
+        for block in self.free_segments:
+            strings.append(f"{str(block)}")
+        print_string = f"Free Segments:\n        {strings}"
+        self.phys_memory_stats = print_string
 
     def add_paged_memory_stats(self, memsize: int, pagesize: int, framecount: int, frame_table: list[bool]):
         self.phys_memory_stats = f"Physical Memory\n        {pretty_mem_str(memsize)}, pagesize: {pretty_mem_str(pagesize)}, framecount: {framecount}"

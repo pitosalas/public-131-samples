@@ -46,7 +46,7 @@ class Simulator:
             raise Exception(f"Invalid script file: {command['do']}")
 
     def batch(self):
-        file_name = "memsim/scripts/fixed4.json"
+        file_name = "memsim/scripts/segvar2.json"
         self.import_json_file(file_name)
         self.def_mult = eval(self.config_file["default_multiplier"])
         self.prepare_factory()

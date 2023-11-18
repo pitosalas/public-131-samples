@@ -54,11 +54,11 @@ class Diagram:
     
     def render_box(self, box):
         label_start = f"""<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD sides="b"><B><font color="blue">{box.label}</font></B></TD></TR>"""
-        element_start = """<tr><td align="left" height="19" width="60">"""
         element_end = """</td></tr>"""
         label_end = """</table>>"""
         label = label_start
         for section in box.sections:
-            label += element_start+section["label"]+element_end
+            label += f"""<tr><td align="left" height="{section["height"]}" width="60">"""
+            label += section["label"]+element_end
         label += label_end
         self.dot.node(box.handle, label=label)

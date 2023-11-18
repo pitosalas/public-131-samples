@@ -4,6 +4,7 @@ from reporter import Reporter
 from utils import PCB
 from diagram import Diagram
 
+
 class MemoryManager(ABC):
     """Keeps track of each Job that it has given memory to in the dict allocations. The key is the name of the job and the value is a MemoryAllocation object."""
 
@@ -35,6 +36,7 @@ class MemoryManager(ABC):
     def graph(self, dg: Diagram):
         pass
 
+
 class VarSegMm(MemoryManager):
     def __init__(self, memory_param) -> None:
         super().__init__(memory_param)
@@ -58,7 +60,6 @@ class VarSegMm(MemoryManager):
         if not allocation.mapping.contains(address):
             raise Exception("address not found")
         self.physical_memory.touch(allocation.mapping, address)
-        
 
     def deallocate(self, process):
         allocation = self.allocations[process]
@@ -76,19 +77,24 @@ class VarSegMm(MemoryManager):
             str(block) for block in self.physical_memory.freelist
         )
         return f"Variable Segment Memory Manager:\n   Processes:\n         {allocations}\n   {phys_memory}\n   Free Blocks:\n         {freeblocks}"
-    
+
     def report(self, rep: Reporter):
         rep.add_allocations(self.allocations)
         self.physical_memory.report(rep)
 
     def graph(self, dg: Diagram):
-        pass
+        box = dg.add_box("Physical Memory", "physmem")
+        for block in self.allocations.values():
+            if block is not None:
+                box.add_section_to_box(block.process, block.mapping.size/500)
+            else:
+                raise Exception("block not found")
+
 
 
 
 class FixedSegMm(MemoryManager):
-    """Keeps track of each Job that it has given memory to in the dict allocations. The key is the name of the job and the value is a MemoryAllocation object.
-    """
+    """Keeps track of each Job that it has given memory to in the dict allocations. The key is the name of the job and the value is a MemoryAllocation object."""
 
     def __init__(self, memory_param) -> None:
         super().__init__(memory_param)
@@ -107,7 +113,7 @@ class FixedSegMm(MemoryManager):
             raise Exception("process not found")
         if not allocation.mapping.contains(address):
             raise Exception("address not found")
-        return(self.physical_memory.touch(allocation.mapping, address))
+        return self.physical_memory.touch(allocation.mapping, address)
 
     def load(self, process: str, size: int):
         self.allocate(process, size)
@@ -125,7 +131,7 @@ class FixedSegMm(MemoryManager):
         pass
 
     def graph(self, dg: Diagram):
-        box = dg.add_box("Physical Memory","physmem")
+        box = dg.add_box("Physical Memory", "physmem")
         for seg in self.physical_memory.seg_table:
             if seg is not None:
                 box.add_section_to_box(seg)
@@ -150,9 +156,7 @@ class PagedMm(MemoryManager):
         self.allocations: dict[str, PCB] = {}
 
     def allocate(self, process, size):
-        mapping = self.physical_memory.allocate(
-            process, int(size)
-        )
+        mapping = self.physical_memory.allocate(process, int(size))
         if mapping is None:
             raise Exception(f"Allocation request {size} for process {process} failed")
         self.allocations[process] = PCB(process, mapping)
@@ -176,5 +180,3 @@ class PagedMm(MemoryManager):
 
     def graph(self, dg: Diagram):
         pass
-
-
