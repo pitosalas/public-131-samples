@@ -60,3 +60,4 @@ class Dotgen:
         label = label[0:last_bar]
         self.dot.node(box.handle, label=label)
 
+	# graph [rankdir=RL ranksep=1.5, label="Physical Memory\nFixed Segment Memory Manager\n\n", labelloc="t", labeljust="c", fontsize=14, fontcolor="blue"]
