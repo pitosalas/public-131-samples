@@ -48,7 +48,7 @@ class Reporter:
 
     def add_seg_mem_stats(self, memsize: int, segsize: int):
         self.phys_memory_stats = f"Physical Memory:\n           {pretty_mem_str(memsize)}, segment size: {pretty_mem_str(segsize)}"
-        self.phys_memory_stats += f"\n           Free segments: {self.render_free_segments()}"
+        self.phys_memory_stats += f"\n           Free segments: {self.add_free_segments(self.free_segments)}"
 
     def report(self):
         print("----------------------------------------")

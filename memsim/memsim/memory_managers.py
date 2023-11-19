@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from physical_memory import FixedSegPhysMem, PagedPhysMem, VarSegPhysMem
 from reporter import Reporter
-from utils import PCB
+from utils import PCB, pretty_mem_str
 from diagram import Diagram
 
 
@@ -82,16 +82,21 @@ class VarSegMm(MemoryManager):
         rep.add_allocations(self.allocations)
         self.physical_memory.report(rep)
 
+    def merge_all_blocks(self):
+        blocks = []
+        for block in self.physical_memory.freelist:
+            blocks.append({'label': "FREE", 'start': block.physical_address, 'size': block.size})
+        for allocation in self.allocations.values():
+            blocks.append({'label': allocation.process, 'start': allocation.mapping.physical_address, 'size': allocation.mapping.size})
+        return sorted(blocks,key=lambda x: x["start"])
+
+
     def graph(self, dg: Diagram):
         box = dg.add_box("Physical Memory", "physmem")
-        for block in self.allocations.values():
-            if block is not None:
-                box.add_section_to_box(block.process, block.mapping.size/500)
-            else:
-                raise Exception("block not found")
-
-
-
+        blocks = self.merge_all_blocks()
+        for entry in blocks:
+            sublabel = f"""start: {pretty_mem_str(entry["start"])}, size: {pretty_mem_str(entry["size"])}"""
+            box.add_section_to_box(entry["label"],sublabel, entry["size"]/2000)
 
 class FixedSegMm(MemoryManager):
     """Keeps track of each Job that it has given memory to in the dict allocations. The key is the name of the job and the value is a MemoryAllocation object."""
@@ -130,13 +135,23 @@ class FixedSegMm(MemoryManager):
         self.physical_memory.report(rep)
         pass
 
+    def merge_all_blocks(self):
+        blocks = []
+        for segnum, seg in enumerate(self.physical_memory.seg_table):
+            if seg is None:
+                blocks.append({'label': "FREE", 'start': self.physical_memory.segsize * segnum, 'size': self.physical_memory.segsize})
+            else:
+                blocks.append({'label': seg,'start': self.physical_memory.segsize * segnum, 'size': self.physical_memory.segsize})
+        return sorted(blocks,key=lambda x: x["start"])
+
+
     def graph(self, dg: Diagram):
         box = dg.add_box("Physical Memory", "physmem")
-        for seg in self.physical_memory.seg_table:
-            if seg is not None:
-                box.add_section_to_box(seg)
-            else:
-                box.add_section_to_box("Free")
+        blocks = self.merge_all_blocks()
+        for entry in blocks:
+            sublabel = f"""start: {pretty_mem_str(entry["start"])}, size: {pretty_mem_str(entry["size"])}"""
+            box.add_section_to_box(entry["label"],sublabel, entry["size"]/2000)
+
 
     def __str__(self) -> str:
         phys_memory = str(self.physical_memory)

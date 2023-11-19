@@ -8,6 +8,8 @@ from memory_managers import MemoryManager, PagedMm, VarSegMm
 from memory_managers import FixedSegMm
 from reporter import Reporter
 
+SCRIPT_FILE="memsim/scripts/segfixed4.json"
+
 class Simulator:
     def __init__(self, reporter: Reporter, diag: Diagram):
         self.rep = reporter
@@ -46,7 +48,7 @@ class Simulator:
             raise Exception(f"Invalid script file: {command['do']}")
 
     def batch(self):
-        file_name = "memsim/scripts/segvar2.json"
+        file_name = SCRIPT_FILE
         self.import_json_file(file_name)
         self.def_mult = eval(self.config_file["default_multiplier"])
         self.prepare_factory()

@@ -1,6 +1,11 @@
 import random
 import graphviz
 
+BOX_FONTSIZE = "12"
+LABEL_FONTSIZE = "11"
+SUB_LABEL_FONTSIZE = "8"
+
+
 class Box:
     def __init__(self, label: str, handle: str, dot: graphviz.Digraph):
         self.handle = handle
@@ -8,8 +13,8 @@ class Box:
         self.dot = dot
         self.sections = []
 
-    def add_section_to_box(self, label: str, height: int = 1):
-        self.sections.append({"label": label, "height": height})
+    def add_section_to_box(self, label: str, sub: str, height: int = 10):
+        self.sections.append({"label": label, "sublabel": sub, "height": height})
 
 class Diagram:
     def __init__(self, filename):
@@ -17,7 +22,7 @@ class Diagram:
         self.paged_mem_string = ""
         self.dot = graphviz.Digraph(name="memory")
         self.dot.attr('graph', rankdir="RL", ranksep="1.5")
-        self.dot.attr('node', shape="none", height="0.2", width="0.4", margin="0.02 0.02", fontsize="8")
+        self.dot.attr('node', shape="none", height="0.2", width="0.4", margin="0.02 0.02", fontsize="12")
         self.dot.attr('edge', arrowsize="0.4")
         self.left_ones = graphviz.Digraph(name="left_ones")
         self.right_ones = graphviz.Digraph(name="right_ones")
@@ -54,11 +59,10 @@ class Diagram:
     
     def render_box(self, box):
         label_start = f"""<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD sides="b"><B><font color="blue">{box.label}</font></B></TD></TR>"""
-        element_end = """</td></tr>"""
         label_end = """</table>>"""
         label = label_start
         for section in box.sections:
-            label += f"""<tr><td align="left" height="{section["height"]}" width="60">"""
-            label += section["label"]+element_end
+            label += f"""<tr><td align="text" height="{section["height"]}" width="60">"""
+            label += f"""<font point-size="{BOX_FONTSIZE}">{section["label"]}</font><br></br><font point-size="{SUB_LABEL_FONTSIZE}">{section["sublabel"]}</font></td></tr>"""
         label += label_end
         self.dot.node(box.handle, label=label)

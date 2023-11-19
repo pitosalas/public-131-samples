@@ -23,15 +23,11 @@
         ["d", "Process 8", 1]
     ],
     "algo": {
-        "name": "fixed_seg"
+        "name": "var_seg"
     },
     "memory": {
         "size": {
             "size": 32,
-            "multiplier": "2**16"
-        },
-        "seg": {
-            "size": 1,
             "multiplier": "2**16"
         }
     }

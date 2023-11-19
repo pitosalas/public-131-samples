@@ -4,7 +4,7 @@ class Block:
         self.size = size
 
     def __str__(self):
-        return f"start: {pretty_mem_str(self.physical_address)}, size; {pretty_mem_str(self.size)}"
+        return f"start {pretty_mem_str(self.physical_address)}, size {pretty_mem_str(self.size)}"
     
     def contains(self, logical_address: int) -> bool:
         return logical_address <= self.size
@@ -31,7 +31,7 @@ class PCB:
         self.process = process
 
     def __str__(self):
-        return f"{self.process} -> {self.mapping}"
+        return f"{self.process}  {self.mapping}"
 
 def find_and_remove(lst, n) -> list[list[int]] | None:
     """
@@ -77,23 +77,6 @@ def convert_size_with_multiplier(info: dict) -> int:
     size = info["size"]
     multiplier = eval(info.get("multiplier"))
     return size * multiplier
-
-
-# Pito Code
-# def flatten_free_segments(free_segments):
-#     flatten_segments = []
-#     start = True
-#     previous = None
-#     for segment in free_segments:
-#         if start:
-#             open = segment
-#             start = False
-#         elif previous is not None and segment != (previous + 1):
-#             flatten_segments.append((open, previous))
-#             open = segment
-#         previous = segment
-#     flatten_segments.append((open, free_segments[-1]))
-#     return flatten_segments
 
 
 def flatten_free_segments(free_segments):
