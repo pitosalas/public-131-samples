@@ -35,46 +35,21 @@ class Diagram:
         self.dot.attr('graph', rankdir="RL", ranksep="1.5")
         self.dot.attr('node', shape="none", height="0.2", width="0.4", margin="0.02 0.02", fontsize="12")
         self.dot.attr('edge', arrowsize="0.4")
-        self.left_ones = graphviz.Digraph(name="left_ones")
-        self.right_ones = graphviz.Digraph(name="right_ones")
         self.boxes = {}
         self.tiers = {}
 
-    def generate(self):
-        # self.left_ones.attr(rank="source")
-        # self.right_ones.attr(rank="sink")
-        # self.dot.subgraph(self.right_ones)
-        # self.dot.subgraph(self.left_ones)
-        self.dot.view()
+    def add_edge(self, src: str, dest: str, color: str ="black"):
+        self.dot.edge(src, dest, color=color)
+
+    def add_tier(self, name: str, rank: str = "same"):
+        self.tiers[name] = Tier(name, self.dot, rank)
+        return self.tiers[name]    
 
     def generate_diagram(self):
         for tier in self.tiers.values():
             tier.digraph.attr(rank=tier.rank)
             self.dot.subgraph(tier.digraph)
-
-        # self.left_ones.attr(rank="source")
-        # self.right_ones.attr(rank="sink")
-        # self.dot.subgraph(self.right_ones)
-        # self.dot.subgraph(self.left_ones)
         self.dot.view()
-
-
-    def paged_mem_complete(self):
-        last_bar = self.paged_mem_string.rfind("|")
-        self.dot.node("frame", label=self.paged_mem_string[0:last_bar])
-
-    def paged_mem_frame(self, frame_num: int, label: str):
-        self.paged_mem_string += f"<{frame_num}>{label}|"
-
-    def add_process(self, process, page_table):
-        label_string = ""
-        color = random.choice(["red", "blue", "green", "orange", "purple"])
-        subgraph = random.choice([self.left_ones, self.right_ones])
-        for frame in page_table.table:
-            label_string += f"<{frame}>{frame}|"
-            self.dot.edge(f"{process}:{frame}", f"frame:{frame}", color=str(color))
-        last_bar = label_string.rfind("|")
-        subgraph.node(process, label=label_string[0:last_bar])
 
     def add_box(self, label: str, handle: str):
         self.boxes[handle] = Box(label, handle, self.dot)
@@ -96,11 +71,3 @@ class Diagram:
             subgraph = tier.digraph
         subgraph.node(box.handle, label=label, rank=rank)
 
-    def add_edge(self, src: str, dest: str, color: str ="black"):
-        self.dot.edge(src, dest, color=color)
-
-    def add_tier(self, name: str, rank: str = "same"):
-        self.tiers[name] = Tier(name, self.dot, rank)
-        return self.tiers[name]
-
-    
