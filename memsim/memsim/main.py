@@ -8,7 +8,7 @@ from memory_managers import MemoryManager, PagedMm, VarSegMm
 from memory_managers import FixedSegMm
 from reporter import Reporter
 
-SCRIPT_FILE="paged1.json"
+SCRIPT_FILE="paged0.json"
 
 class Simulator:
     def __init__(self, reporter: Reporter, diag: Diagram):

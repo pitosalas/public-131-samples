@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import random
 from physical_memory import FixedSegPhysMem, PagedPhysMem, VarSegPhysMem
 from reporter import Reporter
 from utils import PCB, pretty_mem_str
@@ -205,7 +206,17 @@ class PagedMm(MemoryManager):
             color = "bisque2" if (id % 2) == 0 else "gainsboro"
             phys.add_section_to_box(entry,entry,entry, color, 30)
         t1 = dg.add_tier("left", rank="sink")
-        dg.render_box(phys, t1) 
+        dg.render_box(phys, t1)
+        # Now create boxes for each process' page table
+        t2 = dg.add_tier("right", rank="source")
+        for process, allocation in self.allocations.items():
+            color = random.choice(["antiquewhite", "antiquewhite2", "bisque2", "burlywood2", "cornsilk"])
+            box = dg.add_box(process, process)
+            for id, frame in enumerate(allocation.mapping.table):
+                box.add_section_to_box(f"{frame}{frame}", frame, entry, color, 30)
+                dg.add_edge(f"{process}:{id}",f"physmem:{frame}", "grey")
+            dg.render_box(box, t2)
+    
 
 
 
