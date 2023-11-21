@@ -206,4 +206,8 @@ class PagedPhysMem(PhysMem):
     def touch(self, address: int) -> bool:
         return True
     
+    def graph(self):
+        print("Graph called in physmem")
+
+    
 

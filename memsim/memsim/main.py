@@ -2,13 +2,13 @@
 A simple memory magement simulation and demonstration app.
 """
 import json
-from diagram import Diagram
+from diag.diag import Diagram
 from utils import MmFactory
 from memory_managers import MemoryManager, PagedMm, VarSegMm
 from memory_managers import FixedSegMm
 from reporter import Reporter
 
-SCRIPT_FILE="memsim/scripts/segfixed4.json"
+SCRIPT_FILE="paged1.json"
 
 class Simulator:
     def __init__(self, reporter: Reporter, diag: Diagram):
@@ -48,7 +48,7 @@ class Simulator:
             raise Exception(f"Invalid script file: {command['do']}")
 
     def batch(self):
-        file_name = SCRIPT_FILE
+        file_name = f"memsim/scripts/{SCRIPT_FILE}"
         self.import_json_file(file_name)
         self.def_mult = eval(self.config_file["default_multiplier"])
         self.prepare_factory()
@@ -62,8 +62,8 @@ class Simulator:
 
 if __name__ == "__main__":
     rep = Reporter()
-    dg = Diagram("memsim/graphs/test")
+    dg = Diagram(f"memsim/graphs/{SCRIPT_FILE}", "LR")
     sim = Simulator(rep, dg)
     sim.batch()
     rep.report()
-    dg.generate()
+    dg.generate_diagram()

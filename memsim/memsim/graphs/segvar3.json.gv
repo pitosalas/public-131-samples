@@ -1,0 +1,9 @@
+digraph "memsim/graphs/segvar3.json" {
+	graph [fontname=x rankdir=RL ranksep=1.0]
+	node [fontname=Helvetica fontsize=10 height=0.2 margin="0.04 0.04" shape=none width=0.4]
+	edge [arrowsize=0.4]
+	subgraph left {
+		physmem [label=<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD sides="b"><font face="helvetica" color="grey15" point-size="12">Physical Memory</font></TD></TR><tr><td align="text" color="grey" bgcolor="gainsboro" height="4.096" width="60" port="cxx"><font point-size="12">cxx</font><br></br><font point-size="8">start:  0, size: 8.0 KB</font></td></tr><tr><td align="text" color="grey" bgcolor="bisque2" height="61.44" width="60" port="FREE"><font point-size="12">FREE</font><br></br><font point-size="8">start: 8.0 KB, size: 120.0 KB</font></td></tr><tr><td align="text" color="grey" bgcolor="gainsboro" height="24.576" width="60" port="python"><font point-size="12">python</font><br></br><font point-size="8">start: 128.0 KB, size: 48.0 KB</font></td></tr><tr><td align="text" color="grey" bgcolor="bisque2" height="40.96" width="60" port="FREE"><font point-size="12">FREE</font><br></br><font point-size="8">start: 176.0 KB, size: 80.0 KB</font></td></tr></table>>]
+		rank=sink
+	}
+}

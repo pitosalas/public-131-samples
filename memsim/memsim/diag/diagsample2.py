@@ -1,7 +1,7 @@
 from diag import Diagram
 
 
-d =  Diagram("test", "RL")
+d =  Diagram("diag/diagsample2", "RL")
 
 box1 = d.add_box("file system root", "box1")
 box2 = d.add_box("Pointer Block Level 1", "box2")

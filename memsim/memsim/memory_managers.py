@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from physical_memory import FixedSegPhysMem, PagedPhysMem, VarSegPhysMem
 from reporter import Reporter
 from utils import PCB, pretty_mem_str
-from diagram import Diagram
+from diag.diag import Diagram
 
 
 class MemoryManager(ABC):
@@ -96,7 +96,10 @@ class VarSegMm(MemoryManager):
         blocks = self.merge_all_blocks()
         for entry in blocks:
             sublabel = f"""start: {pretty_mem_str(entry["start"])}, size: {pretty_mem_str(entry["size"])}"""
-            box.add_section_to_box(entry["label"],sublabel, entry["size"]/2000)
+            color = "bisque2" if entry["label"]=="FREE" else "gainsboro"
+            box.add_section_to_box(entry["label"], entry["label"],sublabel, color, entry["size"]/2000)
+        t1 = dg.add_tier("left", rank="sink")
+        dg.render_box(box, t1)
 
 class FixedSegMm(MemoryManager):
     """Keeps track of each Job that it has given memory to in the dict allocations. The key is the name of the job and the value is a MemoryAllocation object."""
@@ -150,8 +153,10 @@ class FixedSegMm(MemoryManager):
         blocks = self.merge_all_blocks()
         for entry in blocks:
             sublabel = f"""start: {pretty_mem_str(entry["start"])}, size: {pretty_mem_str(entry["size"])}"""
-            box.add_section_to_box(entry["label"],sublabel, entry["size"]/2000)
-
+            color = "bisque2" if entry["label"]=="FREE" else "gainsboro"
+            box.add_section_to_box(entry["label"],entry["label"],sublabel, color, entry["size"]/2000)
+        t1 = dg.add_tier("left", rank="sink")
+        dg.render_box(box, t1)
 
     def __str__(self) -> str:
         phys_memory = str(self.physical_memory)
@@ -171,7 +176,7 @@ class PagedMm(MemoryManager):
         self.allocations: dict[str, PCB] = {}
 
     def allocate(self, process, size):
-        mapping = self.physical_memory.allocate(process, int(size))
+        mapping = self.physical_memory.allocate(process, size)
         if mapping is None:
             raise Exception(f"Allocation request {size} for process {process} failed")
         self.allocations[process] = PCB(process, mapping)
@@ -194,4 +199,30 @@ class PagedMm(MemoryManager):
         pass
 
     def graph(self, dg: Diagram):
-        pass
+        # Create the box which will be Physical Memory. 
+        phys = dg.add_box("Physical Memory", "physmem")
+        for id, entry in enumerate(self.physical_memory.frame_table):
+            color = "bisque2" if (id % 2) == 0 else "gainsboro"
+            phys.add_section_to_box(entry,entry,entry, color, 30)
+        t1 = dg.add_tier("left", rank="sink")
+        dg.render_box(phys, t1) 
+
+
+
+    # def graph(self, dg: Diagram):
+    #     blocks = self.merge_all_blocks()
+    #     for entry in blocks:
+    #         sublabel = f"""start: {pretty_mem_str(entry["start"])}, size: {pretty_mem_str(entry["size"])}"""
+    #         color = "bisque2" if entry["label"]=="FREE" else "gainsboro"
+    #         box.add_section_to_box(entry["label"],entry["label"],sublabel, color, entry["size"]/2000)
+    #     t1 = dg.add_tier("left", rank="sink")
+    #     dg.render_box(box, t1)
+    # def add_process(self, process, page_table):
+    #     label_string = ""
+    #     color = random.choice(["red", "blue", "green", "orange", "purple"])
+    #     subgraph = random.choice([self.left_ones, self.right_ones])
+    #     for frame in page_table.table:
+    #         label_string += f"<{frame}>{frame}|"
+    #         self.dot.edge(f"{process}:{frame}", f"frame:{frame}", color=str(color))
+    #     last_bar = label_string.rfind("|")
+    #     subgraph.node(process, label=label_string[0:last_bar])
