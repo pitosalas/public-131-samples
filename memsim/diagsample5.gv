@@ -1,5 +1,5 @@
-digraph "memsim/diag/diagsample5" {
-	graph [fontname=x rankdir=LR ranksep=1.0]
+digraph diagsample5 {
+	graph [fontname=x rankdir=RL ranksep=1.0]
 	node [fontname=Helvetica fontsize=10 height=0.2 margin="0.04 0.04" shape=none width=0.4]
 	edge [arrowsize=0.4]
 	box1:d10 -> indir0 [color=grey]

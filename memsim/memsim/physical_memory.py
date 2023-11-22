@@ -1,6 +1,7 @@
 from reporter import Reporter
 from utils import Block, PageTable, convert_size_with_multiplier, find_and_remove, flatten_free_segments
 from abc import ABC, abstractmethod
+
 class PhysMem(ABC):
     def __init__(self, args):
         pass
@@ -57,7 +58,6 @@ class VarSegPhysMem(PhysMem):
         * If one found that is bigger than the requested size, then the free block is split into
         two blocks, the first of which is returned as the allocated block and the second of which
         is added to the free list.
-
         """
         block = self.find_free_block(size)
         if block is None:

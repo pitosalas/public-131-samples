@@ -1,6 +1,6 @@
 from diag import Diagram
 
-d =  Diagram("memsim/diag/diagsample5", "LR")
+d =  Diagram("diagsample5", "RL")
 
 t1 = d.add_tier("left", rank="sink")
 t2 = d.add_tier("second", rank="source")
@@ -28,7 +28,6 @@ for i in range(0,6):
     box = d.add_box(f"block", f"tiny{i}")
     box.add_section_to_box("only", "data", "data", "grey")
     d.render_box(box, t3)
-
 
 d.add_edge("box1:d10","indir0", "grey")
 d.add_edge("box1:d11","indir1", "grey")

@@ -1,0 +1,20 @@
+digraph diag3 {
+	graph [fontname=x rankdir=LR ranksep=1.0]
+	node [fontname=Helvetica fontsize=10 height=0.2 margin="0.04 0.04" shape=none width=0.4]
+	edge [arrowsize=0.4]
+	box1:pointer1 -> box2:data1 [color=grey]
+	box1:pointer2 -> box3:data1 [color=grey]
+	box1:pointer3 -> box4:data1 [color=grey]
+	box1:pointer4 -> box5:data1 [color=grey]
+	subgraph left {
+		box1 [label=<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD sides="b"><font face="helvetica" color="grey15" point-size="12">File header</font></TD></TR><tr><td align="text" color="grey" bgcolor="cornsilk" height="10" width="60" port="pointer1"><font point-size="12">pointer</font><br></br><font point-size="8">to block 1</font></td></tr><tr><td align="text" color="grey" bgcolor="cornsilk2" height="10" width="60" port="pointer2"><font point-size="12">pointer</font><br></br><font point-size="8">to block 2</font></td></tr><tr><td align="text" color="grey" bgcolor="cornsilk" height="10" width="60" port="pointer3"><font point-size="12">pointer</font><br></br><font point-size="8">to block 3</font></td></tr><tr><td align="text" color="grey" bgcolor="cornsilk2" height="10" width="60" port="pointer4"><font point-size="12">pointer</font><br></br><font point-size="8">to block 4</font></td></tr><tr><td align="text" color="grey" bgcolor="cornsilk" height="10" width="60" port="null1"><font point-size="12">NULL</font><br></br><font point-size="8">null</font></td></tr><tr><td align="text" color="grey" bgcolor="cornsilk2" height="10" width="60" port="null2"><font point-size="12">NULL</font><br></br><font point-size="8">null</font></td></tr><tr><td align="text" color="grey" bgcolor="cornsilk" height="10" width="60" port="null3"><font point-size="12">NULL</font><br></br><font point-size="8">null</font></td></tr><tr><td align="text" color="grey" bgcolor="cornsilk2" height="10" width="60" port="null4"><font point-size="12">NULL</font><br></br><font point-size="8">null</font></td></tr><tr><td align="text" color="grey" bgcolor="cornsilk" height="10" width="60" port="null5"><font point-size="12">NULL</font><br></br><font point-size="8">null</font></td></tr></table>>]
+		rank=sink
+	}
+	subgraph right {
+		box2 [label=<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD sides="b"><font face="helvetica" color="grey15" point-size="12">Disk block</font></TD></TR><tr><td align="text" color="grey" bgcolor="cornsilk2" height="10" width="60" port="data1"><font point-size="12">data block 1</font><br></br><font point-size="8">for file</font></td></tr></table>>]
+		box3 [label=<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD sides="b"><font face="helvetica" color="grey15" point-size="12">Disk block</font></TD></TR><tr><td align="text" color="grey" bgcolor="cornsilk2" height="10" width="60" port="data1"><font point-size="12">data block 2</font><br></br><font point-size="8">for file</font></td></tr></table>>]
+		box4 [label=<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD sides="b"><font face="helvetica" color="grey15" point-size="12">Disk block</font></TD></TR><tr><td align="text" color="grey" bgcolor="cornsilk2" height="10" width="60" port="data1"><font point-size="12">data block 3</font><br></br><font point-size="8">for file</font></td></tr></table>>]
+		box5 [label=<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD sides="b"><font face="helvetica" color="grey15" point-size="12">Disk block</font></TD></TR><tr><td align="text" color="grey" bgcolor="cornsilk2" height="10" width="60" port="data1"><font point-size="12">data block 4</font><br></br><font point-size="8">for file</font></td></tr></table>>]
+		rank=source
+	}
+}

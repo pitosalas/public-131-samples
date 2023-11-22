@@ -30,14 +30,14 @@ class Diagram:
     def __init__(self, name: str, rankdir: str = "RL"):
         self.name = name
         self.dot = graphviz.Digraph(name=name)
-        self.dot.attr('graph', rankdir="RL", ranksep="1.0", fontname="x")
+        self.dot.attr('graph', rankdir=rankdir, ranksep="1.0", fontname="x")
         self.dot.attr('node', shape="none", height="0.2", width="0.4", margin="0.04 0.04", fontsize="10", fontname="Helvetica")
         self.dot.attr('edge', arrowsize="0.4")
         self.boxes = {}
         self.tiers = {}
 
-    def add_edge(self, src: str, dest: str, color: str ="black"):
-        self.dot.edge(src, dest, color=color)
+    def add_edge(self, src: str, dest: str, col: str ="black"):
+        self.dot.edge(src, dest, color=col)
 
     def add_tier(self, name: str, rank: str = "same"):
         self.tiers[name] = Tier(name, self.dot, rank)
