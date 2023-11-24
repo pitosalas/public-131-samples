@@ -15,6 +15,9 @@ class Box:
     def add_section_to_box(self, ident: str, label: str, sub: str, color: str, height: int = 10):
         self.sections.append({"ident": ident, "label": label, "sublabel": sub, "height": height, "color": color})
 
+    def __str__(self):
+        return f"Box: {self.label}  {self.handle}  {self.sections}"
+
 class Tier:
     def __init__(self, label: str, dot: graphviz.Digraph, rank: str):
         self.label = label

@@ -1,5 +1,0 @@
-digraph "memsim/graphs/test" {
-	graph [fontname=x rankdir=RL ranksep=1.0]
-	node [fontname=Helvetica fontsize=10 height=0.2 margin="0.04 0.04" shape=none width=0.4]
-	edge [arrowsize=0.4]
-}

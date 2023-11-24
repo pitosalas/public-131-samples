@@ -1,37 +1,61 @@
 from diag import Diagram
 
-d =  Diagram("memsim/diag/diagsample5", "LR")
+palette = ["antiquewhite", "antiquewhite2", "bisque2", "burlywood2", "cornsilk"]
+d =  Diagram("memsim/diag/diagsample5", "TB")
 
-t1 = d.add_tier("left", rank="sink")
-t2 = d.add_tier("second", rank="source")
-t3 = d.add_tier("thrd", rank="min")
+left = d.add_tier("left", rank="source")
+middle = d.add_tier("second", rank="same")
+right = d.add_tier("third", rank="sink")
 
-
-box1 = d.add_box("File header", "box1")
+# Top level pointers
+top = d.add_box("File header", "top")
 colors = ["bisque2", "bisque2"]
-for i in range(1, 10):
-    box1.add_section_to_box(f"d{i}", "direct", "(pointer)", colors[i % 2])
-
-colors = ["cadetblue1", "cadetblue1"]
+for i in range(0, 9):
+    top.add_section_to_box(f"{i}", "direct", "(pointer)", colors[i % 2])
 for i in range(10, 13):
-    box1.add_section_to_box(f"d{i}", "indirect", "(pointer)", colors[i % 2])
+    top.add_section_to_box(f"{i}", "indirect", "(pointer)", "antiquewhite")
+d.render_box(top, left)
 
-label = ["ind ptr index", "dbl ind ptrs", "trip ind ptrs"]
-colors = ["deepskyblue", "cornsilk1", "cornsilk2"]
+# Indirect pointer table (3x)
 for i in range(0,3):
-    box = d.add_box(label[i], f"indir{i}")
+    ibox = d.add_box(f"indirect ptrs {i}" , f"ibox{i}")
+    for j in range(0,6):
+        ibox.add_section_to_box(f"{j}", "indirect", "(pointer)", "bisque2")
+        if i == 0:
+            d.render_box(ibox, middle)
+        else:
+            d.render_box(ibox, right)
+
+d.add_edge("top:10","ibox0", "red")
+d.add_edge("ibox0:4","tiny0", "red")
+d.add_edge("ibox1:3","tiny1", "red")
+
+# Double indirect pointer table
+for i in range(0,3):
+    dbox = d.add_box("dbl indirect ptrs", f"dbox{i}")
     for j in range(0,5):
-        box.add_section_to_box(f"{i}{j}", "indirect", "(pointer)", colors[i])
-    d.render_box(box, t2)
+        dbox.add_section_to_box(f"{j}", "indirect", "(pointer)", "cornsilk")
+    if i == 0:
+        d.render_box(dbox, middle)
+    else:
+        d.render_box(dbox, right)
 
+d.add_edge("top:11","dbox0:0","blue")
+d.add_edge("dbox1:3", "ibox1:0", "purple")
+
+# Triple indirect pointer table
+tbox = d.add_box("trip indirect ptrs", "tbox0")
+for i in range(0,5):
+    tbox.add_section_to_box(f"{i}", "indirect", "(pointer)", "burlywood2")
+d.render_box(tbox, middle)
+d.add_edge("top:12","tbox0", "green")
+d.add_edge("tbox0:2","dbox2", "orange")
+d.add_edge("dbox1:4","ibox2", "red")
+
+# Actual Data Blocks
 for i in range(0,6):
-    box = d.add_box(f"block", f"tiny{i}")
-    box.add_section_to_box("only", "data", "data", "grey")
-    d.render_box(box, t3)
+    box = d.add_box("block", f"tiny{i}")
+    box.add_section_to_box("only", "data", "data", "cornsilk")
+    d.render_box(box, right)
 
-
-d.add_edge("box1:d10","indir0", "grey")
-d.add_edge("box1:d11","indir1", "grey")
-d.add_edge("box1:d12","indir2", "grey")
-d.render_box(box1, t1)
 d.generate_diagram()

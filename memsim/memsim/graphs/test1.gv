@@ -1,9 +1,0 @@
-digraph "memsim/graphs/test1" {
-	graph [fontname=x rankdir=RL ranksep=1.0]
-	node [fontname=Helvetica fontsize=10 height=0.2 margin="0.04 0.04" shape=none width=0.4]
-	edge [arrowsize=0.4]
-	subgraph left {
-		physmem [label=<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD sides="b"><font face="helvetica" color="grey15" point-size="12">Physical Memory</font></TD></TR><tr><td align="text" color="grey" bgcolor="bisque2" height="10" width="60" port="FREE"><font point-size="12">start:  0, size: 20.0 KB</font><br></br><font point-size="8">10.24</font></td></tr><tr><td align="text" color="grey" bgcolor="bisque2" height="10" width="60" port="python"><font point-size="12">start: 20.0 KB, size: 24.0 KB</font><br></br><font point-size="8">12.288</font></td></tr><tr><td align="text" color="grey" bgcolor="bisque2" height="10" width="60" port="print_process"><font point-size="12">start: 44.0 KB, size: 8.0 KB</font><br></br><font point-size="8">4.096</font></td></tr><tr><td align="text" color="grey" bgcolor="bisque2" height="10" width="60" port="FREE"><font point-size="12">start: 52.0 KB, size: 588.0 KB</font><br></br><font point-size="8">301.056</font></td></tr></table>>]
-		rank=sink
-	}
-}
