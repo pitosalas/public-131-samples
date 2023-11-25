@@ -1,10 +1,6 @@
 digraph "memsim/diag/diagsample5" {
 	graph [fontname=x rankdir=LR ranksep=1.0]
-<<<<<<< HEAD
 	node [fontname=Helvetica fontsize=8 margin="0.04 0.04" shape=none width=0.4]
-=======
-	node [fontname=Helvetica fontsize=10 height=0.2 margin="0.04 0.04" shape=none width=0.4]
->>>>>>> 97098b9d68d47fb14056dcf304931756274c0453
 	edge [arrowsize=0.4]
 	top:14 -> dbox0:4 [color=blue]
 	top:15 -> tbox0 [color=green]

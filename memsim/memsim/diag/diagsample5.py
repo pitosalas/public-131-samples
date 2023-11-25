@@ -1,11 +1,7 @@
 from diag import Diagram
 
-<<<<<<< HEAD
 palette = ["antiquewhite", "antiquewhite2", "bisque2", "burlywood2", "cornsilk"]
 d =  Diagram("memsim/diag/diagsample5", "LR")
-=======
-d =  Diagram("diagsample5", "RL")
->>>>>>> 97098b9d68d47fb14056dcf304931756274c0453
 
 first = d.add_tier("cluster_first", rank="sink")
 second = d.add_tier("cluster_second", rank="same")
@@ -68,13 +64,4 @@ d.add_edge("ibox1:2","tiny3", "red")
 d.add_edge("ibox2:3","tiny4", "red")
 d.add_edge("top:0","tiny0", "blue")
 d.add_edge("dbox0:3","ibox0", "orange")
-
-<<<<<<< HEAD
-
-=======
-d.add_edge("box1:d10","indir0", "grey")
-d.add_edge("box1:d11","indir1", "grey")
-d.add_edge("box1:d12","indir2", "grey")
-d.render_box(box1, t1)
->>>>>>> 97098b9d68d47fb14056dcf304931756274c0453
 d.generate_diagram()
