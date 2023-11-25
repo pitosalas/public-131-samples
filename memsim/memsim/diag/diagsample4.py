@@ -1,6 +1,7 @@
+import os
 from diag import Diagram
 
-d =  Diagram("diag3", "LR")
+d =  Diagram("memsim/graphs/diagsample4", "RL")
 
 box1 = d.add_box("File header", "box1")
 box2 = d.add_box("Disk block", "box2")
@@ -32,7 +33,6 @@ d.render_box(box2, t3)
 d.render_box(box3, t3)
 d.render_box(box4, t3)
 d.render_box(box5, t3)
-
 
 d.add_edge("box1:pointer1", "box2:data1", "grey")
 d.add_edge("box1:pointer2", "box3:data1", "grey")

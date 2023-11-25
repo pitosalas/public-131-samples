@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
-import random
 from physical_memory import FixedSegPhysMem, PagedPhysMem, VarSegPhysMem
 from reporter import Reporter
-from utils import PCB, pretty_mem_str
+from utils import PCB, pretty_mem_str, random_color
 from diag.diag import Diagram
 
 
@@ -204,36 +203,19 @@ class PagedMm(MemoryManager):
         phys = dg.add_box("Physical Memory", "physmem")
         for id, entry in enumerate(self.physical_memory.frame_table):
             color = "bisque2" if (id % 2) == 0 else "gainsboro"
-            phys.add_section_to_box(entry,entry,entry, color, 30)
+            entrylabel = f"""frame {id}""" if entry is not None else "FREE"
+            phys.add_section_to_box(f"""{id}""", entry, entrylabel, color, 30)
         t1 = dg.add_tier("left", rank="sink")
         dg.render_box(phys, t1)
+
         # Now create boxes for each process' page table
         t2 = dg.add_tier("right", rank="source")
         for process, allocation in self.allocations.items():
-            color = random.choice(["antiquewhite", "antiquewhite2", "bisque2", "burlywood2", "cornsilk"])
             box = dg.add_box(process, process)
+            color = random_color("p1")
+            edgecolor = random_color("p2")
             for id, frame in enumerate(allocation.mapping.table):
-                box.add_section_to_box(f"{frame}{frame}", frame, entry, color, 30)
-                dg.add_edge(f"{process}:{id}",f"physmem:{frame}", "grey")
+                box.add_section_to_box(f"{id}", f"frame: {frame}", f"page: {id}", color, 30)
+                dg.add_edge(f"{process}:{id}",f"physmem:{frame}",  edgecolor)
             dg.render_box(box, t2)
     
-
-
-
-    # def graph(self, dg: Diagram):
-    #     blocks = self.merge_all_blocks()
-    #     for entry in blocks:
-    #         sublabel = f"""start: {pretty_mem_str(entry["start"])}, size: {pretty_mem_str(entry["size"])}"""
-    #         color = "bisque2" if entry["label"]=="FREE" else "gainsboro"
-    #         box.add_section_to_box(entry["label"],entry["label"],sublabel, color, entry["size"]/2000)
-    #     t1 = dg.add_tier("left", rank="sink")
-    #     dg.render_box(box, t1)
-    # def add_process(self, process, page_table):
-    #     label_string = ""
-    #     color = random.choice(["red", "blue", "green", "orange", "purple"])
-    #     subgraph = random.choice([self.left_ones, self.right_ones])
-    #     for frame in page_table.table:
-    #         label_string += f"<{frame}>{frame}|"
-    #         self.dot.edge(f"{process}:{frame}", f"frame:{frame}", color=str(color))
-    #     last_bar = label_string.rfind("|")
-    #     subgraph.node(process, label=label_string[0:last_bar])
