@@ -1,7 +1,7 @@
 import graphviz
 
-BOX_FONTSIZE = "12"
-LABEL_FONTSIZE = "11"
+BOX_FONTSIZE = "10"
+LABEL_FONTSIZE = "9"
 SUB_LABEL_FONTSIZE = "8"
 
 
@@ -12,7 +12,7 @@ class Box:
         self.dot = dot
         self.sections = []
 
-    def add_section_to_box(self, ident: str, label: str, sub: str, color: str, height: int = 10):
+    def add_section_to_box(self, ident: str, label: str, sub: str, color: str, height: int = 7):
         self.sections.append({"ident": ident, "label": label, "sublabel": sub, "height": height, "color": color})
 
     def __str__(self):
@@ -33,8 +33,8 @@ class Diagram:
     def __init__(self, name: str, rankdir: str = "RL"):
         self.name = name
         self.dot = graphviz.Digraph(name=name)
-        self.dot.attr('graph', rankdir="RL", ranksep="1.0", fontname="x")
-        self.dot.attr('node', shape="none", height="0.2", width="0.4", margin="0.04 0.04", fontsize="10", fontname="Helvetica")
+        self.dot.attr('graph', rankdir="LR", ranksep="1.0", fontname="x")
+        self.dot.attr('node', shape="none", width="0.4", margin="0.04 0.04", fontsize="8", fontname="Helvetica")
         self.dot.attr('edge', arrowsize="0.4")
         self.boxes = {}
         self.tiers = {}
@@ -56,6 +56,13 @@ class Diagram:
         self.boxes[handle] = Box(label, handle, self.dot)
         return self.boxes[handle]
     
+    def render_boxname_in_tier(self, tier: Tier, box_name: str):
+        box = self.boxes[box_name]
+        self.render_box(box, tier)
+
+    def render_box_in_tier(self, tier: Tier, box: Box):
+        self.render_box(box, tier)
+        
     def render_box(self, box, tier: Tier =None):
         label_start = f"""<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD sides="b"><font face="helvetica" color="grey15" point-size="12">{box.label}</font></TD></TR>"""
         label_end = """</table>>"""
