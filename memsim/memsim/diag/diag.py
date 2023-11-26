@@ -33,7 +33,7 @@ class Diagram:
     def __init__(self, name: str, rankdir: str = "RL"):
         self.name = name
         self.dot = graphviz.Digraph(name=name)
-        self.dot.attr('graph', rankdir="LR", ranksep="1.0", fontname="x")
+        self.dot.attr('graph', rankdir=rankdir, ranksep="1.0", fontname="Helvetica")
         self.dot.attr('node', shape="none", width="0.4", margin="0.04 0.04", fontsize="8", fontname="Helvetica")
         self.dot.attr('edge', arrowsize="0.4")
         self.boxes = {}
@@ -68,8 +68,9 @@ class Diagram:
         label_end = """</table>>"""
         label = label_start
         for section in box.sections:
+            sublabel = f"""<br></br><font point-size="{SUB_LABEL_FONTSIZE}">{section["sublabel"]}</font>""" if section["sublabel"] is not None else ""
             label += f"""<tr><td align="text" color="grey" bgcolor="{section["color"]}" height="{section["height"]}" fixedsize="true" width="80" port="{section["ident"]}">"""
-            label += f"""<font point-size="{BOX_FONTSIZE}">{section["label"]}</font><br></br><font point-size="{SUB_LABEL_FONTSIZE}">{section["sublabel"]}</font></td></tr>"""
+            label += f"""<font point-size="{BOX_FONTSIZE}">{section["label"]}</font>{sublabel}</td></tr>"""
         label += label_end
         subgraph = tier.digraph
         subgraph.node(box.handle, label=label)
