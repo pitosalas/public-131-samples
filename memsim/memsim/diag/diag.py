@@ -12,7 +12,7 @@ class Box:
         self.dot = dot
         self.sections = []
 
-    def add_section_to_box(self, ident: str, label: str, sub: str, color: str, height: int = 7):
+    def add_section_to_box(self, ident: str, label: str, sub: str, color: str, height: int = 15):
         self.sections.append({"ident": ident, "label": label, "sublabel": sub, "height": height, "color": color})
 
     def __str__(self):
@@ -63,12 +63,12 @@ class Diagram:
     def render_box_in_tier(self, tier: Tier, box: Box):
         self.render_box(box, tier)
         
-    def render_box(self, box, tier: Tier =None):
-        label_start = f"""<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD sides="b"><font face="helvetica" color="grey15" point-size="12">{box.label}</font></TD></TR>"""
+    def render_box(self, box, tier: Tier = None):
+        label_start = f"""<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD border="0.0" ><font face="helvetica" color="grey15" point-size="12">{box.label}</font></TD></TR>"""
         label_end = """</table>>"""
         label = label_start
         for section in box.sections:
-            label += f"""<tr><td align="text" color="grey" bgcolor="{section["color"]}" height="{section["height"]}" width="60" port="{section["ident"]}">"""
+            label += f"""<tr><td align="text" color="grey" bgcolor="{section["color"]}" height="{section["height"]}" fixedsize="true" width="80" port="{section["ident"]}">"""
             label += f"""<font point-size="{BOX_FONTSIZE}">{section["label"]}</font><br></br><font point-size="{SUB_LABEL_FONTSIZE}">{section["sublabel"]}</font></td></tr>"""
         label += label_end
         subgraph = tier.digraph
