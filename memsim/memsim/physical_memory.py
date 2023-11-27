@@ -162,7 +162,6 @@ class FixedSegPhysMem(PhysMem):
     def touch(self, alloc: Block, address: int) -> bool:
         return alloc.contains(address)
 
-
 class PagedPhysMem(PhysMem):
     def __init__(self, memory_param: dict, page_size: int):
         super().__init__(memory_param)

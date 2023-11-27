@@ -13,7 +13,8 @@ class Block:
         return logical_address <= self.size
 
 class PageTable:
-# A page table is an array, indexed by page number, that contains the frame number where that page is stored in memory.
+# A page table is an array, indexed by page number, that contains
+# the frame number where that page is stored in memory.
     def __init__(self, pagesize: int):
         self.table = []
         self.frame_count = 0

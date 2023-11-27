@@ -39,7 +39,7 @@ for i in range(0,2):
 d.render_boxname_in_tier(second, "dbox0")
 d.render_boxname_in_tier(third, "dbox1")
 
-d.add_edge("top:9","dbox0:4","green")
+d.add_edge("top:9:c","dbox0","green")
 
 # Triple indirect pointer table
 tbox = d.add_box("Tripl Ind Ptrs", "tbox0")

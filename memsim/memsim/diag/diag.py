@@ -35,7 +35,7 @@ class Diagram:
         self.dot = graphviz.Digraph(name=name)
         self.dot.attr('graph', rankdir=rankdir, ranksep="1.0", fontname="Helvetica")
         self.dot.attr('node', shape="none", width="0.4", margin="0.04 0.04", fontsize="8", fontname="Helvetica")
-        self.dot.attr('edge', arrowsize="0.4")
+        self.dot.attr('edge', arrowsize="0.4", headclip="false", tailclip="false", headport="center", tailport="center")
         self.boxes = {}
         self.tiers = {}
 
