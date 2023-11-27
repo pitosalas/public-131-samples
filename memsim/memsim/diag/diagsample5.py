@@ -41,7 +41,7 @@ for i in range(0, 2):
 d.render_boxname_in_tier(second, "dbox0")
 d.render_boxname_in_tier(third, "dbox1")
 
-d.add_edge("top:9:c", "dbox0", "green", tailclip="false")
+d.add_edge("top:9", "dbox0", "green", tailclip="false")
 
 # Triple indirect pointer table
 tbox = d.add_box("Tripl Ind Ptrs", "tbox0")
@@ -49,9 +49,9 @@ for i in range(0, 8):
     tbox.add_section_to_box(f"{i}", "-", None, colors.alternate(colors.color(5), -10), 18)
 d.render_box_in_tier(second, tbox)
 
-d.add_edge("top:10:c", "tbox0", "orange", tailclip="false")
-d.add_edge("dbox1:1:c", "ibox2", "red", tailclip="false")
-d.add_edge("tbox0:3:c", "dbox1", "green", tailclip="false")
+d.add_edge("top:10", "tbox0", "orange", tailclip="false")
+d.add_edge("dbox1:1", "ibox2", "red", tailclip="false")
+d.add_edge("tbox0:3", "dbox1", "green", tailclip="false")
 
 # Actual Data Blocks
 for i in range(0, 9):
@@ -60,11 +60,11 @@ for i in range(0, 9):
     d.render_box_in_tier(fourth, box)
 d.render_boxname_in_tier(second, "tiny0")
 
-d.add_edge("top:8:c", "ibox1", "red", tailclip="false")
-d.add_edge("ibox0:4:c", "tiny2", "blue", tailclip="false")
-d.add_edge("ibox1:3:c", "tiny1", "blue", tailclip="false")
-d.add_edge("ibox1:2:c", "tiny3", "blue", tailclip="false")
-d.add_edge("ibox2:3:c", "tiny4", "blue", tailclip="false")
-d.add_edge("top:1:c", "tiny0", "blue", tailclip="false")
-d.add_edge("dbox0:3:c", "ibox0", "red", tailclip="false")
+d.add_edge("top:8", "ibox1", "red", tailclip="false")
+d.add_edge("ibox0:4", "tiny2", "blue", tailclip="false")
+d.add_edge("ibox1:3", "tiny1", "blue", tailclip="false")
+d.add_edge("ibox1:2", "tiny3", "blue", tailclip="false")
+d.add_edge("ibox2:3", "tiny4", "blue", tailclip="false")
+d.add_edge("top:1", "tiny0", "blue", tailclip="false")
+d.add_edge("dbox0:3", "ibox0", "red", tailclip="false")
 d.generate_diagram()
