@@ -1,6 +1,3 @@
-import random
-
-
 class Block:
     def __init__(self, start: int, size: int):
         self.physical_address = start
@@ -81,12 +78,6 @@ def convert_size_with_multiplier(info: dict) -> int:
     multiplier = eval(info.get("multiplier"))
     return size * multiplier
 
-pallettes = {"p1": ["slategray1", "lightgrey", "cornsilk", "ivory2"],
-             "p2": ["red", "green", "blue", "orange", "purple", "pink", "brown", "black", "white"]}             
-
-def random_color(pallettename: str) -> str:
-    color = random.choice(pallettes[pallettename])
-    return color
 
 def flatten_free_segments(free_segments):
     """
