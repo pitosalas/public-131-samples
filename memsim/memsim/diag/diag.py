@@ -1,9 +1,9 @@
 import graphviz
 import random
 
-BOX_FONTSIZE = "10"
-LABEL_FONTSIZE = "9"
-SUB_LABEL_FONTSIZE = "8"
+BOX_FONTSIZE = "11"
+LABEL_FONTSIZE = "10"
+SUB_LABEL_FONTSIZE = "9"
 
 
 class Box:
@@ -14,7 +14,7 @@ class Box:
         self.sections = []
 
     def add_section_to_box(
-        self, ident: str, label: str, sub: str, color: str, height: int = 15
+        self, ident: str, label: str, sub: str, color: str, height: int = 18
     ):
         self.sections.append(
             {
@@ -46,11 +46,6 @@ class Diagram:
     def __init__(self, name: str, rankdir: str = "RL"):
         self.name = name
         self.dot = graphviz.Digraph(name=name)
-<<<<<<< HEAD
-        self.dot.attr('graph', rankdir=rankdir, ranksep="1.0", fontname="Helvetica")
-        self.dot.attr('node', shape="none", width="0.4", margin="0.04 0.04", fontsize="8", fontname="Helvetica")
-        self.dot.attr('edge', arrowsize="0.4", headclip="false", tailclip="false", headport="center", tailport="center")
-=======
         self.dot.attr("graph", rankdir=rankdir, ranksep="1.0", fontname="Helvetica")
         self.dot.attr(
             "node",
@@ -61,12 +56,11 @@ class Diagram:
             fontname="Helvetica",
         )
         self.dot.attr("edge", arrowsize="0.4")
->>>>>>> bb3813e34ebdb57ecb8752f29c0f6307e9b879c8
         self.boxes = {}
         self.tiers = {}
 
-    def add_edge(self, src: str, dest: str, col: str = "black", headlcip: str = "true", tailclip: str = "true"):
-        self.dot.edge(src, dest, color=col, headclip=headlcip, tailclip=tailclip)
+    def add_edge(self, src: str, dest: str, col: str = "black", headclip: str = "true", tailclip: str = "true"):
+        self.dot.edge(src, dest, color=col, headclip=headclip, tailclip=tailclip)
 
     def add_tier(self, name: str, rank: str = "same"):
         self.tiers[name] = Tier(name, self.dot, rank)
@@ -76,7 +70,7 @@ class Diagram:
         for tier in self.tiers.values():
             tier.digraph.attr(rank=tier.rank)
             self.dot.subgraph(tier.digraph)
-        self.dot.render(outfile=f"{self.name}.pdf")
+        self.dot.render(outfile=f"{self.name}.svg")
 
     def add_box(self, label: str, handle: str):
         self.boxes[handle] = Box(label, handle, self.dot)
@@ -120,10 +114,10 @@ pallettes = {
         "white",
     ],
     "p3": ["#a6998c", "#f1e0c5", "#9c95dc", "#e84a65", "#cc66c0"],
-    "p4": ["#6B240C" "#994D1C", "#E48F45", "#F5CCA0"],
+    "p4": ["#6B240C", "#994D1C", "#E48F45", "#F5CCA0"],
     "p5": ["#c1b8ae", "#c2adbc", "#bd92dd", "#a48cae", "#8b867e", "#6e85af"],
+    "p6": ["#FDF7E4", "#FAEED1", "#DED0B6", "#BBAB8C"]
 }
-
 
 class Colors:
     def __init__(self, pallette: str):
