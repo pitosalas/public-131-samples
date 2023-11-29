@@ -24,7 +24,22 @@ class PageTable:
         self.size = self.frame_count * self.pagesize
 
     def __str__(self):
-        return f"PageTable:  {flatten_free_segments(self.table)}"
+        return f"PageTable:  {collapse_contiguous_ranges(self.table)}"
+    
+class SparsePageTable:
+    def __init__(self, pagesize: int, frame_count: int):
+        self.table = [None] * frame_count
+        self.pagesize = pagesize
+        self.size = None
+
+    def get_frame(self, page_number: int) -> int | None:
+        return self.table[page_number]
+    
+    def set_frame(self, page_number: int, frame_number: int):
+        self.table[page_number] = frame_number
+    
+    def __str__(self):
+        return f"SparsePageTable:  {collapse_contiguous_ranges(self.table)}"
 
 class PCB:
     def __init__(self, process: str, mapping: Block | PageTable):
@@ -80,7 +95,7 @@ def convert_size_with_multiplier(info: dict) -> int:
     return size * multiplier
 
 
-def flatten_free_segments(free_segments):
+def collapse_contiguous_ranges(a_list: list):
     """
         Given a list of free memory segments, returns a flattened list of contiguous segments.
         chatgpt-4 improvement over my code.
@@ -89,21 +104,28 @@ def flatten_free_segments(free_segments):
         Returns:
             list: A list of tuples representing contiguous memory segments.
     """
-    if not free_segments:
+    if not a_list:
         return []
 
-    flattened_segments = []
-    open = free_segments[0]
+    ranges = []
+    open = a_list[0]
     previous = None
 
-    for segment in free_segments:
-        if previous is not None and segment != previous + 1:
-            flattened_segments.append((open, previous))
-            open = segment
-        previous = segment
+    for entry in a_list:
+        if previous is not None and entry != previous + 1:
+            ranges.append((open, previous))
+            open = entry
+        previous = entry
 
-    flattened_segments.append((open, free_segments[-1]))
-    return flattened_segments
+    ranges.append((open, a_list[-1]))
+    return ranges
+
+def check_number_in_range(number: int, range: list(set(int))) -> bool:
+    for  pair in range:
+        if number >= pair[0] and number <= pair[1]:
+            return True
+    return False
+
 
 """
 A memory manager factory, to create instances of the right kind of memory manager based on the user input.

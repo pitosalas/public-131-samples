@@ -1,5 +1,5 @@
 import unittest
-from utils import find_and_remove, flatten_free_segments
+from utils import find_and_remove, collapse_contiguous_ranges
 
 
 class TestFindAndREmove(unittest.TestCase):
@@ -45,32 +45,32 @@ class TestFlattenFree(unittest.TestCase):
     def test7(self):
         free_segments = [1, 2, 3, 5, 6, 7, 8, 10, 11, 12]
         expected_output = [(1, 3), (5, 8), (10, 12)]
-        self.assertEqual(flatten_free_segments(free_segments), expected_output)
+        self.assertEqual(collapse_contiguous_ranges(free_segments), expected_output)
 
     def test8(self):
         free_segments = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         expected_output = [(1, 10)]
-        self.assertEqual(flatten_free_segments(free_segments), expected_output)
+        self.assertEqual(collapse_contiguous_ranges(free_segments), expected_output)
 
     def test9(self):
         free_segments = [1, 3, 5, 7, 9]
         expected_output = [(1, 1), (3, 3), (5, 5), (7, 7), (9, 9)]
-        self.assertEqual(flatten_free_segments(free_segments), expected_output)
+        self.assertEqual(collapse_contiguous_ranges(free_segments), expected_output)
 
     def test10(self):
         free_segments = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
         expected_output = [(1, 12)]
-        self.assertEqual(flatten_free_segments(free_segments), expected_output)
+        self.assertEqual(collapse_contiguous_ranges(free_segments), expected_output)
 
     def test11(self):
         free_segments = [1, 3, 5, 7, 9, 11]
         expected_output = [(1, 1), (3, 3), (5, 5), (7, 7), (9, 9), (11, 11)]
-        self.assertEqual(flatten_free_segments(free_segments), expected_output)
+        self.assertEqual(collapse_contiguous_ranges(free_segments), expected_output)
 
     def test12(self):
         free_segments = [1, 3]
         expected_output = [(1, 1), (3, 3)]
-        self.assertEqual(flatten_free_segments(free_segments), expected_output)
+        self.assertEqual(collapse_contiguous_ranges(free_segments), expected_output)
 
 
 def check_lists(list1, list2, list3):

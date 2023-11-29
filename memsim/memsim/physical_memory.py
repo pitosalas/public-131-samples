@@ -1,5 +1,5 @@
 from reporter import Reporter
-from utils import Block, PageTable, convert_size_with_multiplier, find_and_remove, flatten_free_segments
+from utils import Block, PageTable, convert_size_with_multiplier, find_and_remove, collapse_contiguous_ranges
 from abc import ABC, abstractmethod
 
 class PhysMem(ABC):
@@ -131,7 +131,7 @@ class FixedSegPhysMem(PhysMem):
         self.seg_table = [None] * self.seg_count
 
     def __str__(self):
-        return str(flatten_free_segments(self.free_segments))
+        return str(collapse_contiguous_ranges(self.free_segments))
 
     def allocate(self, process: str,  size: int) -> Block | None:
         segments = self.find_contiguous_segments(size, self.free_segments)
@@ -155,7 +155,7 @@ class FixedSegPhysMem(PhysMem):
         self.free_segments.sort()
 
     def report(self, rep: Reporter):
-        flattened = flatten_free_segments(self.free_segments)
+        flattened = collapse_contiguous_ranges(self.free_segments)
         rep.add_free_segments(flattened)
         rep.add_seg_mem_stats(self.memsize, self.segsize)
 
