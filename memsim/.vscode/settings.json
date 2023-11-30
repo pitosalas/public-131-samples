@@ -2,13 +2,14 @@
     "python.testing.unittestArgs": [
         "-v",
         "-s",
-        "./memsim",
+        "./src",
         "-p",
-        "*.py"
+        "*test.py"
     ],
     "python.testing.pytestEnabled": false,
     "python.testing.unittestEnabled": true,
     "python.analysis.extraPaths": [
-        "./memsim"
+        "./memsim",
+        "./memsim/src"
     ]
 }
