@@ -106,6 +106,7 @@ def collapse_contiguous_ranges(a_list: list):
     """
     if not a_list:
         return []
+    
 
     ranges = []
     open = a_list[0]
@@ -121,6 +122,8 @@ def collapse_contiguous_ranges(a_list: list):
     return ranges
 
 def check_number_in_range(number, range):
+    if range == []:
+        return True
     for  pair in range:
         if number >= pair[0] and number <= pair[1]:
             return True
