@@ -1,5 +1,5 @@
-from diag import Diagram
-from diag import Colors
+from diag.diag import Diagram
+from diag.diag import Colors
 
 HEIGHT = 18
 

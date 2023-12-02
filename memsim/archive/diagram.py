@@ -1,5 +1,5 @@
 import random
-import graphviz
+import graphviz # type: ignore
 
 BOX_FONTSIZE = "12"
 LABEL_FONTSIZE = "11"
@@ -11,7 +11,7 @@ class Box:
         self.handle = handle
         self.label = label
         self.dot = dot
-        self.sections = []
+        self.sections: list[dict[str, object]] = []
 
     def add_section_to_box(self, label: str, sub: str, height: int = 10):
         self.sections.append({"label": label, "sublabel": sub, "height": height})
@@ -20,7 +20,7 @@ class Tier:
     def __init__(self, label: str, dot: graphviz.Digraph, rank: str):
         self.label = label
         self.dot = dot
-        self.boxes = []
+        self.boxes: list[Box] = []
         self.rank = rank
         self.digraph = graphviz.Digraph(name=label)
 
@@ -80,7 +80,7 @@ class Diagram:
         self.boxes[handle] = Box(label, handle, self.dot)
         return self.boxes[handle]
     
-    def render_box(self, box, tier: Tier =None):
+    def render_box(self, box, tier: Tier | None = None):
         label_start = f"""<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD sides="b"><B><font color="blue">{box.label}</font></B></TD></TR>"""
         label_end = """</table>>"""
         label = label_start

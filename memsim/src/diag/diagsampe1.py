@@ -1,4 +1,4 @@
-from diag import Diagram
+from diag.diag import Diagram
 
 
 d =  Diagram("test")

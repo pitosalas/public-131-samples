@@ -1,4 +1,4 @@
-from diag import Diagram, Colors
+from diag.diag import Diagram, Colors
 HEIGHT = 18
 d =  Diagram("memsim/diag/diagsample3", "LR")
 colors = Colors("p4")

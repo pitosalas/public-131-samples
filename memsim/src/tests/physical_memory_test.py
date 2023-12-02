@@ -1,6 +1,5 @@
 import unittest
 
-from lib.physical_memory import FixedSegPhysMem, PagedPhysMem, VarSegPhysMem
 from lib.utils import convert_size_with_multiplier
 
 

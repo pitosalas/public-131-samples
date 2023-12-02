@@ -1,4 +1,4 @@
-import graphviz
+import graphviz # type: ignore
 import random
 
 BOX_FONTSIZE = "11"
@@ -11,7 +11,7 @@ class Box:
         self.handle = handle
         self.label = label
         self.dot = dot
-        self.sections = []
+        self.sections: list[dict[str,object]] = []
 
     def add_section_to_box(
         self, ident: str, label: str, sub: str, color: str, height: int = 18
@@ -34,7 +34,7 @@ class Tier:
     def __init__(self, label: str, dot: graphviz.Digraph, rank: str):
         self.label = label
         self.dot = dot
-        self.boxes = []
+        self.boxes: list[Box] = []
         self.rank = rank
         self.digraph = graphviz.Digraph(name=label)
 
@@ -56,8 +56,8 @@ class Diagram:
             fontname="Helvetica",
         )
         self.dot.attr("edge", arrowsize="0.4")
-        self.boxes = {}
-        self.tiers = {}
+        self.boxes: dict = {}
+        self.tiers: dict = {}
 
     def add_edge(self, src: str, dest: str, col: str = "black", headclip: str = "true", tailclip: str = "true"):
         self.dot.edge(src, dest, color=col, headclip=headclip, tailclip=tailclip)
@@ -83,7 +83,7 @@ class Diagram:
     def render_box_in_tier(self, tier: Tier, box: Box):
         self.render_box(box, tier)
 
-    def render_box(self, box, tier: Tier = None):
+    def render_box(self, box, tier: Tier):
         label_start = f"""<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD border="0.0" ><font face="helvetica" color="grey15" point-size="12">{box.label}</font></TD></TR>"""
         label_end = """</table>>"""
         label = label_start

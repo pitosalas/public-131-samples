@@ -3,26 +3,30 @@ A simple memory magement simulation and demonstration app.
 """
 import json
 from diag.diag import Diagram
-from lib.memory_managers import MemoryManager, PagedMm, VarSegMm
-from lib.memory_managers import FixedSegMm
+from lib.mm_fixed_seg import FixedSegMm
+from lib.mm_base import MemoryManager
+from lib.mm_paged import PagedMm
 from lib.reporter import Reporter
+from lib.mm_sparse_paged import SparsePagedMm
 from lib.utils import MmFactory
+from lib.mm_var_seg import VarSegMm
 
-SCRIPT_FILE="paged0.json"
+SCRIPT_FILE = "sparsep0.json"
 
 class Simulator:
     def __init__(self, reporter: Reporter, diag: Diagram):
         self.rep = reporter
         self.dg = diag
         self.factory = None
-        self.mmanager: MemoryManager = None
+        self.mmanager: MemoryManager | None = None
         self.data = None
 
     def prepare_factory(self):
-        self.factory: MmFactory = MmFactory()
+        self.factory: MmFactory = MmFactory() # type: ignore
         self.factory.register("var_seg", VarSegMm)
         self.factory.register("fixed_seg", FixedSegMm)
         self.factory.register("paged", PagedMm)
+        self.factory.register("sparsep", SparsePagedMm)
 
     def import_json_file(self, filename):
         with open(filename, "r") as f:
@@ -36,12 +40,12 @@ class Simulator:
 
     def execute_command(self, command):
         self.rep.add_trace(command)
-        if command[0] == "a":
-            self.mmanager.allocate(command[1], int(command[2]) * self.def_mult)
-        elif command[0] == "d":
-            self.mmanager.deallocate(command[1])
+        if command[0] == "l":
+            self.mmanager.launch(command[1], int(command[2]) * self.def_mult)
+        elif command[0] == "t":
+            self.mmanager.terminate(command[1])
         elif command[0] == "l":
-            self.mmanager.load(command[1], int(command[2] * self.def_mult))
+            self.mmanager.allocate(command[1], int(command[2] * self.def_mult))
         elif command[0] == "t":
             self.mmanager.touch(command[1], int(command[2]), int(command[3]))
         else:
@@ -59,6 +63,7 @@ class Simulator:
             self.execute_command(step)
         self.mmanager.report(self.rep)
         self.mmanager.graph(self.dg)
+
 
 if __name__ == "__main__":
     rep = Reporter()

@@ -3,7 +3,7 @@
     "default_multiplier": "2**12",
     "proportion_allocated": 0.5,
     "script": [
-        ["a", "p1", "4"]
+        ["l", "p1", "4"]
     ],
     "algo": {
         "name": "paged",
@@ -12,7 +12,7 @@
     "memory": {
         "base_units": "hex",
         "size": {
-            "size": 1,
+            "size": 4,
             "multiplier": "2**16"
         }
     }

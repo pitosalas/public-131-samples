@@ -1,8 +1,5 @@
 import unittest
 
-from lib.memory_managers import FixedSegMm, PagedMm, VarSegMm
-
-
 class TestMemoryManager(unittest.TestCase):
     def setUp(self):
         self.json_file = {

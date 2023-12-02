@@ -1,4 +1,4 @@
-from diag import Diagram, Colors
+from diag.diag import Diagram, Colors
 
 d = Diagram("memsim/diag/diagsample5", "LR")
 
@@ -11,7 +11,7 @@ fifth = d.add_tier("cluster_fifth", rank="source")
 # Top level pointers
 top = d.add_box("inode", "top")
 
-top.add_section_to_box(f"meta", "meta data", "names, sizes, <br/>owners, dates,<br/> etc.", "darkseagreen2", 50)
+top.add_section_to_box("meta", "meta data", "names, sizes, <br/>owners, dates,<br/> etc.", "darkseagreen2", 50)
 
 colors = Colors("p4")
 

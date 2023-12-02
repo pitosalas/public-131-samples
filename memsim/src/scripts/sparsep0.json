@@ -1,0 +1,19 @@
+{
+    "scenario": "Tiny Example Sparse Paged Memory Manager",
+    "default_multiplier": "2**12",
+    "script": [
+        ["a", "p1", "1"],
+        ["t", "p1", "1"]
+    ],
+    "algo": {
+        "name": "sparsep",
+        "page_table_size": 1024
+    },
+    "memory": {
+        "base_units": "hex",
+        "size": {
+            "size": 2,
+            "multiplier": "2**12"
+        }
+    }
+}

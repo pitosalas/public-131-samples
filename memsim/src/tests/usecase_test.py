@@ -1,6 +1,6 @@
 import unittest
-
-from lib.memory_managers import FixedSegMm, VarSegMm
+from lib.mm_fixed_seg import FixedSegMm
+from lib.mm_var_seg import VarSegMm
 
 
 class UseCaseTest(unittest.TestCase):
