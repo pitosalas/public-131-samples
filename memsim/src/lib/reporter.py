@@ -15,12 +15,14 @@ class Reporter:
         self.defailt_multiplier = default_multiplier
 
     def add_trace(self, step):
-        if step[0] == "a":
-            self.trace += f"       LOAD: {step[1]} (asks {pretty_mem_str(int(step[2])*self.defailt_multiplier)} bytes\n"
-        elif step[0] == "d":
-            self.trace += f"     UNLOAD: {step[1]}\n"
+        if step[0] == "l":
+            self.trace += f"       LAUNCH: {step[1]} (asks {pretty_mem_str(int(step[2])*self.defailt_multiplier)})\n"
+        elif step[0] == "t":
+            self.trace += f"     TERMINATE: {step[1]}\n"
+        elif step[0] == "a":
+            self.trace += f"     ALLOCATE: {step[1]} (allocate logical page at offset {pretty_mem_str(int(step[2])*self.defailt_multiplier)})\n"
         else:
-            raise Exception(f"Invalid script file: {step['do']}")
+            raise Exception(f"Invalid script file: {step}")
 
     def add_allocations(self, allocs: dict[str, PCB]) -> None:
         self.allocation_stats = "\n        ".join(

@@ -3,15 +3,14 @@ A simple memory magement simulation and demonstration app.
 """
 import json
 from diag.diag import Diagram
+from lib.mm_2lvl_paged import TwoLvlPagedMm
 from lib.mm_fixed_seg import FixedSegMm
-from lib.mm_base import MemoryManager
+from lib.mm_base import MemoryManager, MmFactory
 from lib.mm_paged import PagedMm
 from lib.reporter import Reporter
-from lib.mm_sparse_paged import SparsePagedMm
-from lib.utils import MmFactory
 from lib.mm_var_seg import VarSegMm
 
-SCRIPT_FILE = "sparsep0.json"
+SCRIPT_FILE = "twolevel1.json"
 
 class Simulator:
     def __init__(self, reporter: Reporter, diag: Diagram):
@@ -22,11 +21,11 @@ class Simulator:
         self.data = None
 
     def prepare_factory(self):
-        self.factory: MmFactory = MmFactory() # type: ignore
+        self.factory: MmFactory = MmFactory() 
         self.factory.register("var_seg", VarSegMm)
         self.factory.register("fixed_seg", FixedSegMm)
         self.factory.register("paged", PagedMm)
-        self.factory.register("sparsep", SparsePagedMm)
+        self.factory.register("twolevel", TwoLvlPagedMm)
 
     def import_json_file(self, filename):
         with open(filename, "r") as f:
@@ -44,12 +43,10 @@ class Simulator:
             self.mmanager.launch(command[1], int(command[2]) * self.def_mult)
         elif command[0] == "t":
             self.mmanager.terminate(command[1])
-        elif command[0] == "l":
+        elif command[0] == "a":
             self.mmanager.allocate(command[1], int(command[2] * self.def_mult))
-        elif command[0] == "t":
-            self.mmanager.touch(command[1], int(command[2]), int(command[3]))
         else:
-            raise Exception(f"Invalid script file: {command['do']}")
+            raise Exception(f"Invalid script file: {command}")
 
     def batch(self):
         file_name = f"src/scripts/{SCRIPT_FILE}"
@@ -58,7 +55,8 @@ class Simulator:
         self.prepare_factory()
         algo = self.config_file["algo"]["name"]
         rep.info(self.config_file["scenario"], algo, file_name, self.def_mult)
-        self.mmanager = self.factory.create(algo)(self.config_file)
+        clazz = self.mmanager = self.factory.create(algo)
+        self.mmanager = clazz(self.config_file)
         for step in self.config_file["script"]:
             self.execute_command(step)
         self.mmanager.report(self.rep)

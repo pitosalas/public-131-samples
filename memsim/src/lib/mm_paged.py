@@ -1,8 +1,8 @@
 from diag.diag import Diagram
 from lib.mm_base import MemoryManager
+from lib.pagetables import PCB
 from lib.pm_paged import PagedPhysMem
 from lib.reporter import Reporter
-from lib.utils import PCB
 
 
 class PagedMm(MemoryManager):

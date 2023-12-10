@@ -28,6 +28,15 @@ class PageTable:
     def __str__(self):
         return f"PageTable:  {collapse_contiguous_ranges(self.table)}"
     
+"""
+We create this in its empty state. We allocate the outer page table with all None
+to indicate that there are no inner page tables yet. When we need to allocate a
+page, we allocate the inner page table, and then allocate the page within that
+table. The outer page table is indexed by the outer page number. The inner page
+table is indexed by the inner page number. The inner page number is the offset1
+from the logical address. The outer page number is the offset2 from the logical
+address.
+"""
 class TwoLevelPageTable:
     def __init__(self, pagesize: int, page_count: int):
         self.table: list[None | int] = [None] * page_count
