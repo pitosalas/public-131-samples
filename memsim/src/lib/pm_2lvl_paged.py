@@ -11,7 +11,7 @@ class TwoLevelPagedPm(PhysMem):
         self.memsize = convert_size_with_multiplier(memory_param["memory"]["size"])
         self.pagesize = memory_param["algo"]["page_table_size"]
         if self.memsize % self.pagesize != 0:
-            raise Exception("Memory size must be a multiple of page size")
+            raise ValueError("Memory size must be a multiple of page size")
         self.frame_count = self.memsize // self.pagesize
         self.freelist = [None] * self.frame_count
         self.page_tables = {}
@@ -26,7 +26,7 @@ class TwoLevelPagedPm(PhysMem):
             required_frames += 1
         result = self.alloc(process, required_frames)
         if result is None:
-            raise Exception("Allocation failed to find space")
+            raise ValueError("Allocation failed to find space")
         page_table = TwoLevelPageTable(self.pagesize, required_frames)
         self.page_tables[process] = page_table
         return page_table
@@ -39,11 +39,10 @@ class TwoLevelPagedPm(PhysMem):
         return target_frames
 
     def terminate(self, mapping: PageTableOrNone) -> None:
-        if mapping is None or not type(mapping) == TwoLevelPageTable:
-            raise Exception("Invalid mapping")
+        if mapping is None or type(mapping) != TwoLevelPageTable:
+            raise ValueError("Invalid mapping")
         for frame in mapping.table:
             self.frame_table[frame] = None
-        pass
 
     def build_page_dir(self, process: str, n_frames: int) -> PageTableOrNone:
         return None

@@ -46,7 +46,7 @@ class Simulator:
         elif command[0] == "a":
             self.mmanager.allocate(command[1], int(command[2] * self.def_mult))
         else:
-            raise Exception(f"Invalid script file: {command}")
+            raise ValueError(f"Invalid script file: {command}")
 
     def batch(self):
         file_name = f"src/scripts/{SCRIPT_FILE}"

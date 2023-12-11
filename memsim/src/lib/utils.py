@@ -59,34 +59,28 @@ def collapse_contiguous_ranges(a_list: list):
         return []
 
     ranges = []
-    open = a_list[0]
+    open_range = a_list[0]
     previous = None
 
     for entry in a_list:
         if previous is not None and entry != previous + 1:
-            ranges.append((open, previous))
-            open = entry
+            ranges.append((open_range, previous))
+            open_range = entry
         previous = entry
 
-    ranges.append((open, a_list[-1]))
+    ranges.append((open_range, a_list[-1]))
     return ranges
 
 
 def check_number_in_range(number, range):
     if range == []:
         return True
-    for pair in range:
-        if number >= pair[0] and number <= pair[1]:
-            return True
-    return False
+    return any(number >= pair[0] and number <= pair[1] for pair in range)
 
 def find_free_block(size, free_list):
-    for block in free_list:
-        if block.size >= size:
-            return block
-    return None
+    return next((block for block in free_list if block.size >= size), None)
 
-def find_free_sequence(lst, target, n):
+def find_free_sequence(lst, target, n):  # sourcery skip: use-next
     start_of_sequence = None
     for i in range(len(lst)):
         if all(x is target for x in lst[i:i+n]): 

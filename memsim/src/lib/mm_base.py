@@ -46,7 +46,7 @@ class MmFactory:
         self.memory_manager_classes[name] = memory_manager_class
 
     def create(self, name):
-        clazz = self.memory_manager_classes.get(name)
-        if not clazz:
+        if clazz := self.memory_manager_classes.get(name):
+            return clazz
+        else:
             raise ValueError(name)
-        return clazz

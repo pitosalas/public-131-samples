@@ -4,7 +4,6 @@ from lib.utils import pretty_mem_str
 class Reporter:
     def __init__(self):
         self.trace = ""
-        pass
 
     def info(self, scenario: str, algo: str, file_name: str, default_multiplier: int):
         self.scenario = scenario
@@ -22,7 +21,7 @@ class Reporter:
         elif step[0] == "a":
             self.trace += f"     ALLOCATE: {step[1]} (allocate logical page at offset {pretty_mem_str(int(step[2])*self.defailt_multiplier)})\n"
         else:
-            raise Exception(f"Invalid script file: {step}")
+            raise ValueError(f"Invalid script file: {step}")
 
     def add_allocations(self, allocs: dict[str, PCB]) -> None:
         self.allocation_stats = "\n        ".join(
@@ -34,9 +33,7 @@ class Reporter:
 
     def add_free_segments(self, free_segments: list[int]) -> None:
         self.free_segments = free_segments
-        strings = []
-        for block in self.free_segments:
-            strings.append(f"{str(block)}")
+        strings = [f"{str(block)}" for block in self.free_segments]
         print_string = f"Free Segments:\n        {strings}"
         self.phys_memory_stats = print_string
 

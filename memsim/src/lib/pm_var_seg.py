@@ -15,17 +15,11 @@ class VarSegPhysMem(PhysMem):
         free_in_meg = self.free_memory() / 2**20
         return f"PhysicalMemory = {memory_in_meg} MB, Total Free = {free_in_meg} MB"
     
-    def find_free_block(self, size) -> Block | None :
-        for block in self.freelist:
-            if block.size >= size:
-                return block
-        return None
+    def find_free_block(self, size) -> Block | None:
+        return next((block for block in self.freelist if block.size >= size), None)
 
     def free_memory(self) -> int:
-        total_free = 0
-        for block in self.freelist:
-            total_free += block.size
-        return total_free
+        return sum(block.size for block in self.freelist)
 
     def allocate(self, size: int) -> Block | None:
         """
@@ -36,7 +30,6 @@ class VarSegPhysMem(PhysMem):
             return None
         if block.size == size:
             self.freelist.remove(block)
-            return block
         else:
             self.freelist.remove(block)
             self.freelist.append(
@@ -46,7 +39,8 @@ class VarSegPhysMem(PhysMem):
                 )
             )
             block.size = size
-            return block
+
+        return block
 
     def touch(self, address: int) -> bool:
         return True

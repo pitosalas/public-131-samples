@@ -15,7 +15,7 @@ class VarSegMm(MemoryManager):
     def launch(self, process: str, size: int):
         block = self.physical_memory.allocate(size)
         if block is None:
-            raise Exception("Allocation failed to find space")
+            raise ValueError("Allocation failed to find space")
         self.allocations[process] = PCB(process, block)
 
     def allocate(self, process: str, size: int):
@@ -25,9 +25,9 @@ class VarSegMm(MemoryManager):
     def touch(self, process: str, address: int):
         allocation = self.allocations[process]
         if allocation is None:
-            raise Exception("process not found")
+            raise ValueError("process not found")
         if not allocation.mapping.contains(address):
-            raise Exception("address not found")
+            raise ValueError("address not found")
         self.physical_memory.touch(allocation.mapping, address)
 
     def terminate(self, process):
