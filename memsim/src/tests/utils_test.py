@@ -80,10 +80,7 @@ def check_lists(list1, list2, list3):
     c2 = Counter(list2)
     c3 = Counter(list3)
     c2.update(c3)
-    for elem in c1:
-        if c1[elem] != c2[elem]:
-            return False
-    return True
+    return all(c1[elem] == c2[elem] for elem in c1)
 
 
 if __name__ == "__main__":

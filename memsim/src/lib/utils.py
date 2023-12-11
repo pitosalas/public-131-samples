@@ -75,23 +75,20 @@ def collapse_contiguous_ranges(a_list: list):
 def check_number_in_range(number, range):
     if range == []:
         return True
-    for pair in range:
-        if number >= pair[0] and number <= pair[1]:
-            return True
-    return False
+    return any(number >= pair[0] and number <= pair[1] for pair in range)
 
 def find_free_block(size, free_list):
-    for block in free_list:
-        if block.size >= size:
-            return block
-    return None
+    return next((block for block in free_list if block.size >= size), None)
 
 def find_free_sequence(lst, target, n):
-    start_of_sequence = None
-    for i in range(len(lst)):
-        if all(x is target for x in lst[i:i+n]): 
-            start_of_sequence = i
-            break
+    start_of_sequence = next(
+        (
+            i
+            for i in range(len(lst))
+            if all(x is target for x in lst[i : i + n])
+        ),
+        None,
+    )
     if start_of_sequence is None:
         return None
     return(start_of_sequence, start_of_sequence+n)

@@ -43,7 +43,6 @@ class FixedSegMm(MemoryManager):
     def report(self, rep: Reporter):
         rep.add_allocations(self.allocations)
         self.physical_memory.report(rep)
-        pass
 
     def merge_all_blocks(self):
         blocks = []

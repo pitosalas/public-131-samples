@@ -39,11 +39,10 @@ class TwoLevelPagedPm(PhysMem):
         return target_frames
 
     def terminate(self, mapping: PageTableOrNone) -> None:
-        if mapping is None or not type(mapping) == TwoLevelPageTable:
+        if mapping is None or type(mapping) != TwoLevelPageTable:
             raise Exception("Invalid mapping")
         for frame in mapping.table:
             self.frame_table[frame] = None
-        pass
 
     def build_page_dir(self, process: str, n_frames: int) -> PageTableOrNone:
         return None

@@ -48,10 +48,10 @@ class PagedMm(MemoryManager):
 
         # Now create boxes for each process' page table
         t2 = dg.add_tier("right", rank="source")
+        color = "grey15"
+        edgecolor = "grey15"
         for process, allocation in self.allocations.items():
             box = dg.add_box(process, process)
-            color = "grey15"
-            edgecolor = "grey15"
             for id, frame in enumerate(allocation.mapping.table):
                 box.add_section_to_box(
                     f"{id}", f"frame: {frame}", f"page: {id}", color, 30

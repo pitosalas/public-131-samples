@@ -11,7 +11,7 @@ class FixedSegPhysMem(PhysMem):
         self.seg_count = self.memsize // self.segsize
         if self.memsize % self.segsize != 0:
             raise Exception("Memory size must be a multiple of segment size")
-        self.free_segments = [i for i in range(self.seg_count)]
+        self.free_segments = list(range(self.seg_count))
         self.seg_table: list[None | str] = [None] * self.seg_count
 
     def __str__(self):
@@ -21,12 +21,11 @@ class FixedSegPhysMem(PhysMem):
         segments = self.find_contiguous_segments(size, self.free_segments)
         if segments is None:
             return None
-        else:
-            self.free_segments = segments[1]
-            for seg in segments[0]:
-                self.seg_table[seg] = process
-            self.seg_table[segments[0][0]] = process
-            return Block(segments[0][0]*self.segsize, size)
+        self.free_segments = segments[1]
+        for seg in segments[0]:
+            self.seg_table[seg] = process
+        self.seg_table[segments[0][0]] = process
+        return Block(segments[0][0]*self.segsize, size)
         
     def find_contiguous_segments(self, size, free_list) -> list[list[int]] | None:
         segs_needed = size // self.segsize
