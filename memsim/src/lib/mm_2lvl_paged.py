@@ -30,7 +30,6 @@ class TwoLvlPagedMm(MemoryManager):
 
     def __str__(self) -> str:
         return "SparsePagedMm"
-        pass
 
     def report(self, rep: Reporter):
         rep.add_allocations(self.pcbs)

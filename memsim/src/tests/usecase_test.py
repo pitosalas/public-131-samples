@@ -21,7 +21,6 @@ class UseCaseTest(unittest.TestCase):
     def test_created(self):
         self.assertIsNotNone(self.fixedseg_mm)
         self.assertIsNotNone(self.varseg_mm)
-        pass
 
     def test_alocation(self):
         self.fixedseg_mm.allocate("p1", 4096)

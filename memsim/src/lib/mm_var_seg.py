@@ -52,11 +52,18 @@ class VarSegMm(MemoryManager):
         self.physical_memory.report(rep)
 
     def merge_all_blocks(self):
-        blocks = []
-        for block in self.physical_memory.freelist:
-            blocks.append({'label': "FREE", 'start': block.physical_address, 'size': block.size})
-        for allocation in self.allocations.values():
-            blocks.append({'label': allocation.process, 'start': allocation.mapping.physical_address, 'size': allocation.mapping.size})
+        blocks = [
+            {'label': "FREE", 'start': block.physical_address, 'size': block.size}
+            for block in self.physical_memory.freelist
+        ]
+        blocks.extend(
+            {
+                'label': allocation.process,
+                'start': allocation.mapping.physical_address,
+                'size': allocation.mapping.size,
+            }
+            for allocation in self.allocations.values()
+        )
         return sorted(blocks,key=lambda x: x["start"])
 
 

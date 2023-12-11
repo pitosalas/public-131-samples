@@ -61,7 +61,7 @@ class Diagram:
 
     def paged_mem_complete(self):
         last_bar = self.paged_mem_string.rfind("|")
-        self.dot.node("frame", label=self.paged_mem_string[0:last_bar])
+        self.dot.node("frame", label=self.paged_mem_string[:last_bar])
 
     def paged_mem_frame(self, frame_num: int, label: str):
         self.paged_mem_string += f"<{frame_num}>{label}|"
@@ -74,7 +74,7 @@ class Diagram:
             label_string += f"<{frame}>{frame}|"
             self.dot.edge(f"{process}:{frame}", f"frame:{frame}", color=str(color))
         last_bar = label_string.rfind("|")
-        subgraph.node(process, label=label_string[0:last_bar])
+        subgraph.node(process, label=label_string[:last_bar])
 
     def add_box(self, label: str, handle: str):
         self.boxes[handle] = Box(label, handle, self.dot)
