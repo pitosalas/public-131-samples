@@ -1,0 +1,47 @@
+{
+    "scenario": "Tiny Example Paged Memory Manager",
+    "default_multiplier": "2**12",
+    "script": [
+        [
+            "a",
+            "p1",
+            1
+        ],
+        [
+            "a",
+            "p2",
+            3
+        ],
+        [
+            "a",
+            "p3",
+            10
+        ],
+        [
+            "d",
+            "p3",
+            3
+        ],
+        [
+            "a",
+            "p5",
+            32
+        ],
+        [
+            "d",
+            "p1",
+            1
+        ]
+    ],
+    "algo": {
+        "name": "paged",
+        "page_size": 2048
+    },
+    "memory": {
+        "base_units": "hex",
+        "size": {
+            "size": 1,
+            "multiplier": "2**18"
+        }
+    }
+}
