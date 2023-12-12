@@ -1,12 +1,14 @@
 import random
 
+import graphviz
+
 BOX_FONTSIZE = "11"
 LABEL_FONTSIZE = "10"
 SUB_LABEL_FONTSIZE = "9"
 
 
 class Box:
-    def __init__(self, label: str, handle: str, dot):
+    def __init__(self, label: str, handle: str, dot: graphviz.Digraph):
         self.handle = handle
         self.label = label
         self.dot = dot
@@ -30,7 +32,7 @@ class Box:
 
 
 class Tier:
-    def __init__(self, label: str, dot, rank: str):
+    def __init__(self, label: str, dot: graphviz.Digraph, rank: str):
         self.label = label
         self.dot = dot
         self.boxes: list[Box] = []
