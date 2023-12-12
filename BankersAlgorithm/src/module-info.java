@@ -1,9 +1,0 @@
-/**
- * 
- */
-/**
- * @author pitosalas
- *
- */
-module Banker {
-}
