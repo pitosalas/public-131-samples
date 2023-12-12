@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from lib.utils import pretty_mem_str, collapse_contiguous_ranges
 
+WORD_LENGTH = 32
 class MemoryMapping(ABC):
-    def __init__(self, pagesize, capacity_bytes):
-        self.pagesize = pagesize
+    def __init__(self, capacity_bytes):
         self.capacity_bytes = capacity_bytes
 
     @abstractmethod
@@ -21,30 +21,36 @@ address.
 """
 class TwoLevelPageTable(MemoryMapping):
     def __init__(self, page_size: int, capcity_bytes: int):
-        super().__init__(page_size, capcity_bytes)
+        super().__init__(capcity_bytes)
+        self.page_size = page_size
         outer_page_count = capcity_bytes // page_size
         self.table: list[None | list[int]] = [None] * outer_page_count
-        self.page_size = page_size
 
     def access(self, logical_address: int) -> int | None:
-        outer_page_number, inner_page_number, page_offset = self.address_fields(logical_address)   
+        outer_page_number, inner_page_number, page_offset = self.extract_fields(logical_address)   
         if self.table[outer_page_number] is None:
             self.table[outer_page_number] = [None] * (self.page_size // 4)
         inner_page_table = self.table[outer_page_number]
         if inner_page_table[inner_page_number] is None:
             inner_page_table[inner_page_number] = "allocated"
+        return inner_page_table[inner_page_number] * self.page_size + page_offset
     
-    def address_fields(self, logical_address: int) -> tuple[int, int, int]:
-        outer_page_number = logical_address // self.page_size
-        inner_page_number = (logical_address % self.page_size) // 4
-        page_offset = logical_address % 4
-        return outer_page_number, inner_page_number, page_offset
-    
-    def set_frame(self, page_number: int, frame_number: int):
-        self.table[page_number] = frame_number
-    
+
+    def extract_fields(self, address: int) -> tuple[int, int, int]:
+        # Calculate the number of bits needed for the page offset
+        total_bits = WORD_LENGTH
+        page_number_bits = self.page_size.bit_length()
+        offset_bits = total_bits - 2 * page_number_bits
+
+        # Extract the fields from the address
+        outer_page_number = address >> offset_bits
+        inner_page_number = (address >> (offset_bits - page_number_bits)) & ((1 << page_number_bits) - 1)
+        offset = address & ((1 << offset_bits) - 1)
+        return outer_page_number, inner_page_number, offset
+
     def __str__(self):
         return f"TwoLevelPageTable:  {collapse_contiguous_ranges(self.table)}"
+
 
    
 class Block:
