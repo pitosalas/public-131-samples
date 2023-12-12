@@ -1,0 +1,11 @@
+INDEX VERSION 1.134+/Users/pitosalas/mydev/public-131-samples/.metadata/.plugins/org.eclipse.jdt.core
+3964594916.index
+664114769.index
+208110701.index
+2178170337.index
+1865797976.index
+2293152077.index
+1610580830.index
+1069538751.index
+2970764809.index
+3082565367.index

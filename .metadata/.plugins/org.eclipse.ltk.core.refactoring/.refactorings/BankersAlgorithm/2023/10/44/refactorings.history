@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;gfg&apos; in &apos;cosi131.BankerMain.main(...)&apos; to &apos;bnker&apos;&#x0A;- Original project: &apos;BankersAlgorithm&apos;&#x0A;- Original element: &apos;cosi131.BankerMain.main(String[]).gfg&apos;&#x0A;- Renamed element: &apos;gfg&apos;&#x0A;- Update references to refactored element" description="Rename local variable &apos;gfg&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;cosi131{BankerMain.java[BankerMain~main~\[QString;@gfg!2261!2294!2272!2274!QBankerMain;!0!false" name="bnker" references="true" stamp="1698712840725" version="1.0"/>
+</session>

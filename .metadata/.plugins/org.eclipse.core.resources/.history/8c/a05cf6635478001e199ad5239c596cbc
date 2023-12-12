@@ -1,0 +1,30 @@
+package cosi131;
+
+public class ChefRunnable implements Runnable {
+	
+	private SpatulaResource spat;
+	private WokResource wok;
+
+	ChefRunnable(SpatulaResource spat, WokResource wok) {
+		this.spat = spat;
+		this.wok = wok;
+	}
+
+	@Override
+	public void run() {
+		for (int i=0; i<1000; i++) {
+			try {
+				spat.acquire();
+				wok.acquire();
+				System.out.println("Chef Owns spatula and wok!");
+				Thread.sleep(1500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			wok.release();
+			spat.release();
+			System.out.printf("Released spatula and wok and Serving platter: %d\n", i);
+		}
+	}
+
+}
