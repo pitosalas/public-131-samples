@@ -24,16 +24,16 @@ class UseCaseTest(unittest.TestCase):
         pass
 
     def test_alocation(self):
-        self.fixedseg_mm.allocate("p1", 4096)
+        self.fixedseg_mm.access("p1", 4096)
         allocation = self.fixedseg_mm.allocations["p1"]
         self.assertEqual(allocation.mapping.size, 4096)
 
-        self.varseg_mm.allocate("p1", 4096)
+        self.varseg_mm.access("p1", 4096)
         self.assertEqual(allocation.mapping.size, 4096)
 
     def test_touch(self):
-        self.fixedseg_mm.allocate("p1", 4096)
+        self.fixedseg_mm.access("p1", 4096)
         self.assertEqual(self.fixedseg_mm.touch("p1", 200), True)
 
-        self.varseg_mm.allocate("p1", 4096)
+        self.varseg_mm.access("p1", 4096)
         self.assertEqual(self.fixedseg_mm.touch("p1", 200), True)

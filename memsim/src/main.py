@@ -5,7 +5,7 @@ import json
 from diag.diag import Diagram
 from lib.mm_2lvl_paged import TwoLvlPagedMm
 from lib.mm_fixed_seg import FixedSegMm
-from lib.mm_base import MemoryManager, MmFactory
+from lib.mm_base import MmFactory
 from lib.mm_paged import PagedMm
 from lib.reporter import Reporter
 from lib.mm_var_seg import VarSegMm
@@ -17,7 +17,7 @@ class Simulator:
         self.rep = reporter
         self.dg = diag
         self.factory = None
-        self.mmanager: MemoryManager | None = None
+        self.mmanager
         self.data = None
 
     def prepare_factory(self):
@@ -44,7 +44,7 @@ class Simulator:
         elif command[0] == "t":
             self.mmanager.terminate(command[1])
         elif command[0] == "a":
-            self.mmanager.allocate(command[1], int(command[2] * self.def_mult))
+            self.mmanager.access(command[1], int(command[2] * self.def_mult))
         else:
             raise ValueError(f"Invalid script file: {command}")
 
@@ -55,7 +55,7 @@ class Simulator:
         self.prepare_factory()
         algo = self.config_file["algo"]["name"]
         rep.info(self.config_file["scenario"], algo, file_name, self.def_mult)
-        clazz = self.mmanager = self.factory.create(algo)
+        clazz = self.factory.create(algo)
         self.mmanager = clazz(self.config_file)
         for step in self.config_file["script"]:
             self.execute_command(step)
