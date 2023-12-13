@@ -1,0 +1,332 @@
+On branch main
+Your branch is up to date with 'origin/main'.
+
+You are currently reverting commit db511ba.
+  (fix conflicts and run "git revert --continue")
+  (use "git revert --skip" to skip this patch)
+  (use "git revert --abort" to cancel the revert operation)
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   .DS_Store
+	new file:   FFSAlgorithm/.DS_Store
+	new file:   FFSAlgorithm/src/.DS_Store
+	new file:   deadlock/.DS_Store
+	new file:   deadlock/src/.DS_Store
+	new file:   java-producerconsumer/bin/cosi131/Consumer.class
+	new file:   java-producerconsumer/bin/cosi131/Producer.class
+	new file:   java-producerconsumer/bin/cosi131/WidgetFactory.class
+	new file:   memsim/.DS_Store
+	new file:   memsim/.hypothesis/examples/02260a31e7e2fd94/68e09c5bfbe3cdbe
+	new file:   memsim/.hypothesis/examples/05d1ecf948be61b5/51701f7c2f49ca60
+	new file:   memsim/.hypothesis/examples/05d1ecf948be61b5/8872bfef53931c5e
+	new file:   memsim/.hypothesis/examples/0e2d5c8030067a50/9bffbb4ffc3fcd9c
+	new file:   memsim/.hypothesis/examples/0e2d5c8030067a50/bf04895968ac4e5b
+	new file:   memsim/.hypothesis/examples/14e7b6bebf88b17b/68e09c5bfbe3cdbe
+	new file:   memsim/.hypothesis/examples/14e7b6bebf88b17b/bec021b4f368e306
+	new file:   memsim/.hypothesis/examples/15eea09e1fe91dbd/a1e98d5bbc811abc
+	new file:   memsim/.hypothesis/examples/15eea09e1fe91dbd/f275c59ab2eb00eb
+	new file:   memsim/.hypothesis/examples/161a83898a721900/b56705a73cf280f0
+	new file:   memsim/.hypothesis/examples/16f1da9a0d509b97/68e09c5bfbe3cdbe
+	new file:   memsim/.hypothesis/examples/18968ea4f7a029ab/20f7d9ffa86054ce
+	new file:   memsim/.hypothesis/examples/18968ea4f7a029ab/b56705a73cf280f0
+	new file:   memsim/.hypothesis/examples/23dcbf8dc79da1ed/050aeff993017985
+	new file:   memsim/.hypothesis/examples/241b8d4b46b3493c/68e09c5bfbe3cdbe
+	new file:   memsim/.hypothesis/examples/2adccf629c744b04/407bf5ddce835025
+	new file:   memsim/.hypothesis/examples/2adccf629c744b04/6aeaf4ed5e24235b
+	new file:   memsim/.hypothesis/examples/2adccf629c744b04/7341d984c52d1ec2
+	new file:   memsim/.hypothesis/examples/2adccf629c744b04/94fd59f757948f79
+	new file:   memsim/.hypothesis/examples/2adccf629c744b04/9c979dace21cbcf9
+	new file:   memsim/.hypothesis/examples/2adccf629c744b04/bf83ddb1d43c0854
+	new file:   memsim/.hypothesis/examples/2adccf629c744b04/ddabad6c700e5132
+	new file:   memsim/.hypothesis/examples/2adccf629c744b04/e1559f4447942bb8
+	new file:   memsim/.hypothesis/examples/2adccf629c744b04/e1e0fbe0e0f6ab3b
+	new file:   memsim/.hypothesis/examples/337df0df3543c984/3f011b9c2bee21b0
+	new file:   memsim/.hypothesis/examples/337df0df3543c984/515b2a956840b5bc
+	new file:   memsim/.hypothesis/examples/337df0df3543c984/c0fd41eb2db2b485
+	new file:   memsim/.hypothesis/examples/337df0df3543c984/da8217d559dd64ed
+	new file:   memsim/.hypothesis/examples/337df0df3543c984/ec1dbf50cd7234c4
+	new file:   memsim/.hypothesis/examples/37fd167014a6bc79/163fa644f741db93
+	new file:   memsim/.hypothesis/examples/3b1df4de42d9e2eb/050aeff993017985
+	new file:   memsim/.hypothesis/examples/3bf713e0b6f81f4c/68e09c5bfbe3cdbe
+	new file:   memsim/.hypothesis/examples/3c961a323939cc32/68e09c5bfbe3cdbe
+	new file:   memsim/.hypothesis/examples/424e347363cc6e2b/9a2acc02099cf9a4
+	new file:   memsim/.hypothesis/examples/55c0395fb7fedb2a/68e09c5bfbe3cdbe
+	new file:   memsim/.hypothesis/examples/57945e760317c306/68e09c5bfbe3cdbe
+	new file:   memsim/.hypothesis/examples/57945e760317c306/bec021b4f368e306
+	new file:   memsim/.hypothesis/examples/59392ed1136c7b40/68e09c5bfbe3cdbe
+	new file:   memsim/.hypothesis/examples/61f65299cd72311a/1ef2d76e6471c5f9
+	new file:   memsim/.hypothesis/examples/61f65299cd72311a/726b5585ab8b190e
+	new file:   memsim/.hypothesis/examples/61f65299cd72311a/9a2acc02099cf9a4
+	new file:   memsim/.hypothesis/examples/61f65299cd72311a/cea37225a5de61f4
+	new file:   memsim/.hypothesis/examples/67cf061b2eaab3fd/68e09c5bfbe3cdbe
+	new file:   memsim/.hypothesis/examples/711b2323afee7df8/68e09c5bfbe3cdbe
+	new file:   memsim/.hypothesis/examples/711b2323afee7df8/bec021b4f368e306
+	new file:   memsim/.hypothesis/examples/85f44ae41ea6e85a/68e09c5bfbe3cdbe
+	new file:   memsim/.hypothesis/examples/97f46a71f7096e92/03607b7b638fdfe6
+	new file:   memsim/.hypothesis/examples/97f46a71f7096e92/2a6e06079a5b06fc
+	new file:   memsim/.hypothesis/examples/97f46a71f7096e92/59dd48f773b4a218
+	new file:   memsim/.hypothesis/examples/97f46a71f7096e92/99cf261f174e43d8
+	new file:   memsim/.hypothesis/examples/97f46a71f7096e92/a2fe7a08b085c661
+	new file:   memsim/.hypothesis/examples/97f46a71f7096e92/c95c96a3a1bde586
+	new file:   memsim/.hypothesis/examples/97f46a71f7096e92/efbf6d64ad40ffb9
+	new file:   memsim/.hypothesis/examples/97f46a71f7096e92/f280c636cd191d08
+	new file:   memsim/.hypothesis/examples/a4258f7248af0174/394341b7182cd227
+	new file:   memsim/.hypothesis/examples/a4258f7248af0174/9bffbb4ffc3fcd9c
+	new file:   memsim/.hypothesis/examples/a4258f7248af0174/bf04895968ac4e5b
+	new file:   memsim/.hypothesis/examples/b8929af93bec934c/050aeff993017985
+	new file:   memsim/.hypothesis/examples/ba0772594869bf97/68e09c5bfbe3cdbe
+	new file:   memsim/.hypothesis/examples/bcbc9174c702607b/b27181534fec3925
+	new file:   memsim/.hypothesis/examples/c559254306b01365/1ef2d76e6471c5f9
+	new file:   memsim/.hypothesis/examples/c559254306b01365/726b5585ab8b190e
+	new file:   memsim/.hypothesis/examples/c559254306b01365/9a2acc02099cf9a4
+	new file:   memsim/.hypothesis/examples/c559254306b01365/cea37225a5de61f4
+	new file:   memsim/.hypothesis/examples/cf8faffbf61e6f30/9a2acc02099cf9a4
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/02d058c4289e7b59
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/03208dca09f9e959
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/041e164338cc6a7e
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/058e0110a490a9cd
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/07af4b0e64e9f4a2
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/086b71b5d9613ecb
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/0b7c8c32b33011b8
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/0c2957cebde87b29
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/0c4ccefd9f82bd97
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/0e52572ad763ee95
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/0eb9d07395640d49
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/0fc5a0d499567184
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/112b62e3788826f9
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/1190e4cc24033b38
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/12bb6693a7db7d85
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/188d0c00c40931ea
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/1ab474797f62d319
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/27ca0271ed8b5e6b
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/27ddddac00087b7e
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/2b0fb7724e353777
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/335e87b760b27ea3
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/3375036c61d2e63c
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/341695df1c735732
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/3ae2604e82271b87
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/3d70b256501a8540
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/3de85d2aa0151fe9
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/40b38db43fb85b28
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/45757a5f8f1da276
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/47194050ae47d3e5
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/481a1d1e2bfb4c31
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/496c5f08ab0c0c2f
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/4a9abb7dfd2fe434
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/4abbd7d1b1fca7b0
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/4c294544fdf53324
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/4fbb6817ba4fff43
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/523eb743e88ffe44
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/5487db0984bfe066
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/55ee5c5705e61aa1
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/56d37029055796fb
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/591ef51117054406
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/5a870668d0c413b8
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/5ba93e0c6da6e6ed
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/6237a229bf3cb1e6
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/663cacc6158f5d4c
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/6688cb23c59a6cf4
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/677a3f537042a267
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/68b3b226bb50b9ea
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/6966be36bd9ccc08
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/6a8905456c95b7d4
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/6b882e92ece20443
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/6eb143cba78552e3
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/71dc084db5d4acf4
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/72b9c03d55538dfa
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/778a7a7f7446824b
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/7933ece6742e797a
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/793bdeeaa35f80f3
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/79a4029b8e3e0464
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/7b35ecc762bb39b0
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/7d75573910b0ec47
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/7dbf8a90969f1810
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/7f101edee2641fd7
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/81f796e29238cae9
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/839de3dac1c8903b
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/8441c42110b0742d
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/86624d8b5e254e79
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/887a00c107543fcb
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/88ce19ab6c23219c
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/892a74de8188fecc
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/89c02aae3759c336
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/8a85a9d14ec14503
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/8d094257e31048c7
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/8d970d10ea9ff7c7
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/903285bbbac22f04
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/92e22aa5714ea145
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/92e3f3d45b23a7da
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/93d56186c2ab1395
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/94fccbf777d7e1a0
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/990a327381029a40
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/9958efb8306e57c2
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/997dc550bed3ebc0
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/99d0cc62b74bb787
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/99f47feabc4ee470
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/9f066eb90ba3557b
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/9fd8bec1fd13b2cc
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/a113e2ae4a2b79c4
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/a2d336367cd454ad
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/a516741b52c99599
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/a74d4d08944b26f1
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/ab34f8563c421402
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/ad0d77b9bd18fcac
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/ae7db3eb6d7b3e71
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/aee440c43eb91c9f
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/b0b584203272499f
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/b469e2b5953badd6
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/b4fd2434cebafbd8
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/ba295ff5def6f7c9
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/bc25b915a1a10770
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/be53cae20d90bed6
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/bfa1ad259b789fda
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/bff87a7c0a79a7cb
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/c0849443849d8e8a
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/c15dfc71308e76b6
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/c2ecea5a95970925
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/c58106232adcaf33
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/c5934fa8d868941c
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/c7db7c2deb7d13e7
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/c89003fb86090c3e
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/c90d8c658b86fa38
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/ca5b130fc28a4a6b
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/cd355c5785b60ca8
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/cd91fc6f7363771d
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/d770e58154b7d9b3
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/d7d62189e7d33502
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/dc9ec8a8624bd841
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/e11b06be94fc6617
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/e1dca840a609aaab
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/e3591c3c7fa0641d
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/e3e2ca19e672a2c9
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/e5307b92b57ace0a
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/e886c5237f5ab9bb
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/e8d5011291c0c989
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/e93e5bfe851334be
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/e9916fd9ab8c7c71
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/e9ec00766542297e
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/ea9e9ab3a408f333
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/eb343f8297de45ea
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/f0c5f3c994363b8b
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/f19dad96b346a968
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/f413caa84a322c81
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/f7cabbc709114fdd
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/fa22043e2010e015
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/fc5cb792fc6350ec
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/fc85afe344b5dbe2
+	new file:   memsim/.hypothesis/examples/d020822fcc5ddf70/fefbc5d9ae176126
+	new file:   memsim/.hypothesis/examples/d4b18f6aa8c07a93/7ccc36ca5819f03e
+	new file:   memsim/.hypothesis/examples/d80a0af5c29cf970/b27181534fec3925
+	new file:   memsim/.hypothesis/examples/dc0ade8d20ec79f8/394341b7182cd227
+	new file:   memsim/.hypothesis/examples/dc0ade8d20ec79f8/a1e98d5bbc811abc
+	new file:   memsim/.hypothesis/examples/dc0ade8d20ec79f8/f275c59ab2eb00eb
+	new file:   memsim/.hypothesis/examples/dd1849b5c3a01a20/68e09c5bfbe3cdbe
+	new file:   memsim/.hypothesis/examples/dd1849b5c3a01a20/bec021b4f368e306
+	new file:   memsim/.hypothesis/examples/f7181c77f14723e8/b56705a73cf280f0
+	new file:   memsim/.hypothesis/examples/f91de48eb7cf66f3/68e09c5bfbe3cdbe
+	new file:   memsim/.hypothesis/examples/fb5ba28e6e96e620/050aeff993017985
+	new file:   memsim/.hypothesis/examples/fb5ba28e6e96e620/7ccc36ca5819f03e
+	new file:   memsim/.hypothesis/examples/fdcd228bca427bdd/68e09c5bfbe3cdbe
+	new file:   memsim/.hypothesis/examples/fdcd228bca427bdd/bec021b4f368e306
+	new file:   memsim/.ipynb_checkpoints/Untitled-checkpoint.ipynb
+	new file:   memsim/.ipynb_checkpoints/Untitled1-checkpoint.ipynb
+	new file:   memsim/__pycache__/reporter.cpython-311.pyc
+	new file:   memsim/archive/__pycache__/diagram.cpython-311.pyc
+	new file:   memsim/archive/__pycache__/fixed_seg_mm.cpython-311.pyc
+	new file:   memsim/memsim/graphs/paged0.json.gv
+	new file:   memsim/memsim/graphs/paged0.json.svg
+	new file:   memsim/memsim/graphs/twolevel1.json.gv
+	new file:   memsim/memsim/graphs/twolevel1.json.svg
+	new file:   memsim/src/.DS_Store
+	new file:   memsim/src/__pycache__/memory_managers.cpython-312.pyc
+	new file:   memsim/src/__pycache__/physical_memory.cpython-312.pyc
+	new file:   memsim/src/__pycache__/reporter.cpython-312.pyc
+	new file:   memsim/src/__pycache__/utils.cpython-312.pyc
+	new file:   memsim/src/diag/__pycache__/__init__.cpython-310.pyc
+	new file:   memsim/src/diag/__pycache__/__init__.cpython-312.pyc
+	new file:   memsim/src/diag/__pycache__/diag.cpython-310.pyc
+	new file:   memsim/src/diag/__pycache__/diag.cpython-312.pyc
+	modified:   memsim/src/diag/diag.py
+	new file:   memsim/src/lib/__init__.py
+	new file:   memsim/src/lib/__pycache__/__init__.cpython-310.pyc
+	new file:   memsim/src/lib/__pycache__/__init__.cpython-312.pyc
+	new file:   memsim/src/lib/__pycache__/memory_managers.cpython-310.pyc
+	new file:   memsim/src/lib/__pycache__/memory_managers.cpython-312.pyc
+	new file:   memsim/src/lib/__pycache__/mm_2lvl_paged.cpython-312.pyc
+	new file:   memsim/src/lib/__pycache__/mm_base.cpython-312.pyc
+	new file:   memsim/src/lib/__pycache__/mm_fixed_seg.cpython-312.pyc
+	new file:   memsim/src/lib/__pycache__/mm_paged.cpython-312.pyc
+	new file:   memsim/src/lib/__pycache__/mm_var_seg.cpython-312.pyc
+	new file:   memsim/src/lib/__pycache__/pagetables.cpython-312.pyc
+	new file:   memsim/src/lib/__pycache__/physical_memory.cpython-310.pyc
+	new file:   memsim/src/lib/__pycache__/physical_memory.cpython-312.pyc
+	new file:   memsim/src/lib/__pycache__/pm_2lvl_paged.cpython-312.pyc
+	new file:   memsim/src/lib/__pycache__/pm_base.cpython-312.pyc
+	new file:   memsim/src/lib/__pycache__/pm_fixed_seg.cpython-312.pyc
+	new file:   memsim/src/lib/__pycache__/pm_paged.cpython-312.pyc
+	new file:   memsim/src/lib/__pycache__/pm_var_seg.cpython-312.pyc
+	new file:   memsim/src/lib/__pycache__/reporter.cpython-310.pyc
+	new file:   memsim/src/lib/__pycache__/reporter.cpython-312.pyc
+	new file:   memsim/src/lib/__pycache__/utils.cpython-310.pyc
+	new file:   memsim/src/lib/__pycache__/utils.cpython-312.pyc
+	new file:   memsim/src/lib/mm_2lvl_paged.py
+	new file:   memsim/src/lib/mm_base.py
+	new file:   memsim/src/lib/mm_fixed_seg.py
+	new file:   memsim/src/lib/mm_paged.py
+	new file:   memsim/src/lib/mm_var_seg.py
+	new file:   memsim/src/lib/pagetables.py
+	new file:   memsim/src/lib/pm_2lvl_paged.py
+	new file:   memsim/src/lib/pm_base.py
+	new file:   memsim/src/lib/pm_fixed_seg.py
+	new file:   memsim/src/lib/pm_paged.py
+	new file:   memsim/src/lib/pm_var_seg.py
+	new file:   memsim/src/lib/reporter.py
+	new file:   memsim/src/lib/utils.py
+	modified:   memsim/src/main.py
+	new file:   memsim/src/tests/__pycache__/__init__.cpython-310.pyc
+	new file:   memsim/src/tests/__pycache__/__init__.cpython-311.pyc
+	new file:   memsim/src/tests/__pycache__/__init__.cpython-312.pyc
+	new file:   memsim/src/tests/__pycache__/hypothesis_test.cpython-310.pyc
+	new file:   memsim/src/tests/__pycache__/hypothesis_test.cpython-311.pyc
+	new file:   memsim/src/tests/__pycache__/hypothesis_test.cpython-312.pyc
+	new file:   memsim/src/tests/__pycache__/hypothesis_tests.cpython-312.pyc
+	new file:   memsim/src/tests/__pycache__/memory_managers_test.cpython-310.pyc
+	new file:   memsim/src/tests/__pycache__/memory_managers_test.cpython-311.pyc
+	new file:   memsim/src/tests/__pycache__/memory_managers_test.cpython-312.pyc
+	new file:   memsim/src/tests/__pycache__/physical_memory_test.cpython-310.pyc
+	new file:   memsim/src/tests/__pycache__/physical_memory_test.cpython-312.pyc
+	new file:   memsim/src/tests/__pycache__/physical_memory_tests.cpython-311.pyc
+	new file:   memsim/src/tests/__pycache__/physical_memory_tests.cpython-312.pyc
+	new file:   memsim/src/tests/__pycache__/usecase_test.cpython-310.pyc
+	new file:   memsim/src/tests/__pycache__/usecase_test.cpython-311.pyc
+	new file:   memsim/src/tests/__pycache__/usecase_test.cpython-312.pyc
+	new file:   memsim/src/tests/__pycache__/utils_test.cpython-310.pyc
+	new file:   memsim/src/tests/__pycache__/utils_test.cpython-311.pyc
+	new file:   memsim/src/tests/__pycache__/utils_test.cpython-312.pyc
+
+Unmerged paths:
+  (use "git restore --staged <file>..." to unstage)
+  (use "git add <file>..." to mark resolution)
+	added by them:   sked~parent of db511ba (Update .gitignore and clear index)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   memsim/src/diag/__pycache__/diag.cpython-312.pyc
+	modified:   memsim/src/lib/__pycache__/__init__.cpython-312.pyc
+	modified:   memsim/src/lib/__pycache__/mm_base.cpython-312.pyc
+	modified:   memsim/src/lib/__pycache__/mm_fixed_seg.cpython-312.pyc
+	modified:   memsim/src/lib/__pycache__/mm_var_seg.cpython-312.pyc
+	modified:   memsim/src/lib/__pycache__/pagetables.cpython-312.pyc
+	modified:   memsim/src/lib/__pycache__/pm_base.cpython-312.pyc
+	modified:   memsim/src/lib/__pycache__/pm_fixed_seg.cpython-312.pyc
+	modified:   memsim/src/lib/__pycache__/pm_var_seg.cpython-312.pyc
+	modified:   memsim/src/lib/__pycache__/reporter.cpython-312.pyc
+	modified:   memsim/src/lib/__pycache__/utils.cpython-312.pyc
+	modified:   memsim/src/tests/__pycache__/usecase_test.cpython-312.pyc
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	foo.txt
+

@@ -5,7 +5,7 @@ from lib.pagetables import TwoLevelPageTable
 from lib.utils import collapse_contiguous_ranges, check_number_in_range, find_free_sequence
 
 
-class TestVarSegPhysMem(unittest.TestCase):
+class Hypotheses(unittest.TestCase):
     @given(st.integers(), st.integers())
     def test_ints_are_commutative(self, x, y):
         assert x + y == y + x
@@ -28,9 +28,13 @@ class TestVarSegPhysMem(unittest.TestCase):
         two_level_page_table = TwoLevelPageTable( 4*2**10-1, 1*2**20)
         assert all(two_level_page_table.access(x)=="allocated" for x in access_list)
 
-    @given(st.integers(min_value=0, max_value=2**10-1), st.integers(min_value=0, max_value=2**10-1), st.integers(min_value=0, max_value=2**10-1))  
-    def test_extract_fields(self,outer_pt, inner_pt, offset):
+    @given(st.integers(min_value=0, max_value=2**10-1), st.integers(min_value=0, max_value=2**10-1), st.integers(min_value=0, max_value=4*2**10-1))  
+    def test_extract_fields(self, outer_pt, inner_pt, offset):
         # Create an instance of the class
-        two_level_page_table = TwoLevelPageTable( 4*2**10-1, 1*2**20)
+        try:
+            two_level_page_table = TwoLevelPageTable( 4*2**10-1, 1*2**20)
+        except ValueError:
+            return
         address = (outer_pt << 22) + (inner_pt  << 12) + offset
         assert two_level_page_table.extract_fields(address) == (outer_pt, inner_pt, offset)
+

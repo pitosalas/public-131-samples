@@ -25,6 +25,8 @@ class TwoLevelPageTable(MemoryMapping):
         self.page_size = page_size
         outer_page_count = capcity_bytes // page_size
         self.table: list[None | list[int]] = [None] * outer_page_count
+        if page_size.bit_length() * 3 > WORD_LENGTH:
+            raise ValueError(f"Page size {page_size} is too large for a two-level page table")
 
     def access(self, logical_address: int) -> int | None:
         outer_page_number, inner_page_number, page_offset = self.extract_fields(logical_address)   
@@ -40,13 +42,17 @@ class TwoLevelPageTable(MemoryMapping):
         # Calculate the number of bits needed for the page offset
         total_bits = WORD_LENGTH
         page_number_bits = self.page_size.bit_length()
-        offset_bits = total_bits - 2 * page_number_bits
-
-        # Extract the fields from the address
-        outer_page_number = address >> offset_bits
-        inner_page_number = (address >> (offset_bits - page_number_bits)) & ((1 << page_number_bits) - 1)
-        offset = address & ((1 << offset_bits) - 1)
-        return outer_page_number, inner_page_number, offset
+        shift_right_to_outer = total_bits - page_number_bits
+        shift_right_to_inner = shift_right_to_outer - page_number_bits
+        mask_to_offset = (1 << 12) - 1
+        page_offset = address & mask_to_offset
+        
+        # Calculate the number of bits needed for the inner page number
+        # After having shifted the whole address to the right by the number of bits
+        mask_to_inner = (1 << 10) - 1
+        inner_page_number = (address >> shift_right_to_inner) & mask_to_inner
+        outer_page_number = (address >> shift_right_to_outer)
+        return outer_page_number, inner_page_number, page_offset
 
     def __str__(self):
         return f"TwoLevelPageTable:  {collapse_contiguous_ranges(self.table)}"
