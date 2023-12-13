@@ -16,7 +16,7 @@ Bullet 1: (note that overhead is always far smaller than data)
     Part 4: Large File, Data (~ 9G)
 Bullet 2: (Note overhead will always be very small, below 10%)
     Part 1: Small FIle Ovh % ~.2%
-    Part 2: Larg File Ovh % ~.01%
+    Part 2: Large File Ovh % ~.01%
 Bullet 3: (+1 if they count the inode separately)
     Part 1: Max Mem Ref Small File: 1 
     Part 2: Min Mem Ref Small File: 1
