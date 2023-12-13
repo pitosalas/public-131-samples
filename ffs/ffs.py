@@ -25,6 +25,9 @@ class Info:
     double: int
     triple: int
 
+    def __str__(self):
+        return f"Alloc: {p(self.alloc)}, Overhead: {p(self.overhead)}, Direct: {self.direct}, Indirect: {self.indirect}, Double: {self.double}, Triple: {self.triple}"
+
 # Constants
 mb = 2**20
 kb = 2**10
@@ -38,6 +41,7 @@ lba = 4
 lba_per_block = int(block / lba)
 inode = 15 * 4
 
+
 # Capacities of each level
 direct_capacity = 12 * block
 indirect_capacity = lba_per_block * block
@@ -46,23 +50,23 @@ triple_indirect_capacity = lba_per_block * lba_per_block * lba_per_block * block
 
 # Helpers
 def p(n):   
-    return(f"{n:,.2f} Bytes, {(n/mb):,.2f} Meg")
+    return(f"{n:,.2f}B, ({(n/mb):,.2f}M)")
 
-print_on = True
-def pp(s):
+print_on = False
+def pp(s, print_on=False):
     if print_on:
         print(s)
 
-def pp_info(so_far: Info):
-    pp(f"Allocated: {p(so_far.alloc)}, Overhead: {p(so_far.overhead)}")
-    pp(f"Direct: {so_far.direct}, Indirect: {so_far.indirect}, Double: {so_far.double}, Triple: {so_far.triple}")
+def pp_info(so_far: Info, print_on = False):
+    pp(f"Allocated: {p(so_far.alloc)}, Overhead: {p(so_far.overhead)}, ({100*so_far.overhead/(so_far.overhead+so_far.alloc):.3f}%)", print_on)
+    pp(f"Direct: {so_far.direct}, Indirect: {so_far.indirect}, Double: {so_far.double}, Triple: {so_far.triple}", print_on)
 
 def fill_direct(size: int) -> (bool, Info):
     found = False
     so_far = Info(0, 0, 0, 0, 0, 0)
     so_far.overhead = inode
 # start filling it with direct pointers
-    for so_far.direct in range(1, 12):
+    for so_far.direct in range(1, 13):
         so_far.alloc = so_far.direct * block
         if (so_far.alloc) > size:
             found = True
@@ -92,11 +96,11 @@ def fill_double_indirect(size: int, so_far: Info)  -> (bool, Info):
     pp("Adding double indirect block")
     so_far.overhead += block
     found = False
-    for so_far.double in range(1, lba_per_block):
+    for so_far.double in range(1, lba_per_block+1):
         # so_far.allocate an indirect block
         so_far.overhead += block
         # and start filling it with pointers
-        for _ in range(1, lba_per_block):
+        for _ in range(1, lba_per_block+1):
             so_far.alloc += block
             if (so_far.alloc > size):
                 found = True
@@ -116,9 +120,9 @@ def fill_trip_indirect(size: int, so_far: Info)  -> (bool, Info):
         # so_far.allocate a double indirect block
         so_far.overhead += block
         # start filling it with pointers to indirect blocks
-        for so_far.triple in range(1, lba_per_block):
+        for so_far.triple in range(1, lba_per_block+1):
             so_far.overhead += block
-            for _ in range(1,lba_per_block):
+            for _ in range(1,lba_per_block+1):
                 so_far.alloc += block
                 if so_far.alloc > size:
                     found = True
@@ -206,22 +210,34 @@ def plot():
     plt.show()
 
 def report():
-    s1, o1, di1, i1, d1, t1 = xsearch(file1_size)
-    s2, o2, di2, i2, d2, t2 = xsearch(file2_size)
+    success1, info1 = xsearch(file1_size)
+    print("\nMethod 1********")
+    print(f"""\nFile size: {p(file1_size)},\n Success: {success1}""")
+    pp_info(info1, True)
+    success2, info2 = xsearch(file2_size)
+    print(f"""\nFile size: {p(file2_size)},\n Success: {success2}""")
+    pp_info(info2, True)
 
-    print(f"""File size: {p(file1_size)},\n   total storage: {p(s1)},\n   total overhead {p(o1)}\n   overhead {o1/(s1+o1)*100.0:.2f}%""")
-    print(f"""   pointers: direct: {di1}, indirect: {i1}, double indirect: {d1}, triple indirect: {t1}""")
-    print(f"""File size: {p(file2_size)},\n   total storage: {p(s2)},\n   total overhead {p(o2)}\n   overhead {o2/(s2+o2)*100.0:.2f}%""")
-    print(f"""   pointers: direct: {di2}, indirect: {i2}, double indirect: {d2}, triple indirect: {t2}""")
-    
-    print(f"\n\nCase 1: File size: {p(file1_size)}:\n   total data memory: {p(s1)}, total ovh: {p(o1)}")
-    print(f"   overhead {o1/(s1+o1)*100.0:.2f}%""")
-    print(f"Case 2: File size: {p(file2_size)}:\n   total data memory: {p(s2)}, total ovh: {p(o2)}")
-    print(f"   overhead {o2/(s2+o2)*100.0:.2f}%""")
+    print("\nMethod 2********")
+    success1, info1 = ysearch(file1_size)
+    success2, info2 = ysearch(file2_size)
+    print(f"""\nFile size: {p(file1_size)},\n Success: {success1}""")
+    pp_info(info1, True)
+    print(f"""\nFile size: {p(file2_size)},\n Success: {success2}""")
+    pp_info(info2, True)
 
 
-#report()
-xsearch(file2_size)
-ysearch(file2_size)
+
+report()
+
+# print("\n\n\n******FILE1*******\n")
+
+# xsearch(file1_size)
+# ysearch(file1_size)
+
+# print("\n\n\n******FILE2*******\n")
+
+# xsearch(file2_size)
+# ysearch(file2_size)
 
 
