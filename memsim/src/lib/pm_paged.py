@@ -46,9 +46,5 @@ class PagedPhysMem(PhysMem):
         rep.add_paged_memory_stats(
             self.memsize, self.pagesize, self.frame_count, self.frame_table
         )
-
-    def touch(self, address: int) -> bool:
-        return True
-
     def graph(self):
         print("Graph called in physmem")

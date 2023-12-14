@@ -1,6 +1,6 @@
 import random
 
-import graphviz
+import graphviz # type: ignore
 
 BOX_FONTSIZE = "11"
 LABEL_FONTSIZE = "10"
@@ -134,24 +134,21 @@ class Colors:
 
     def rotate(self, max: int) -> str:
         self.last += 1
-        max = min(max, len(self.palette))
-        return self.palette[self.last % max]
+        max_val = min(max, len(self.palette))
+        return self.palette[self.last % max_val]
     
     def adjust_color(self, color: str, amount: int) -> str:
         color_hex = int(color.lstrip("#"), 16)
         red = (color_hex >> 16) & 0xFF
-        green = (color_hex >> 8) & 0xFF 
+        green = (color_hex >> 8) & 0xFF
         blue = color_hex & 0xFF
         newRed = min(red + amount, 255)
-        newGreen = min(green + amount, 255)  
-        newBlue = min(blue + amount, 255)        
+        newGreen = min(green + amount, 255)
+        newBlue = min(blue + amount, 255)
         newColor = (newRed << 16) + (newGreen << 8) + newBlue
         hex_str = hex(newColor) # convert int to hex 
         hex_str = hex_str.lstrip("0x") # remove 0x prefix
-        hex_str = "#" + hex_str # add # prefix
-        return hex_str
-
-        return hex(newColor)
+        return f"#{hex_str}"
     
     def alternate(self, color: str, amount: int) -> str:
         if (self.flip_flop):

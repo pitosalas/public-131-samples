@@ -6,10 +6,6 @@ class MemoryMapping(ABC):
     def __init__(self, capacity_bytes):
         self.capacity_bytes = capacity_bytes
 
-    @abstractmethod
-    def access(self, logical_address):
-        pass
-
 """
 We create this in its empty state. We allocate the outer page table with all None
 to indicate that there are no inner page tables yet. When we need to allocate a
@@ -24,18 +20,20 @@ class TwoLevelPageTable(MemoryMapping):
         super().__init__(entries_per_page_table**2 * page_size)
         self.page_size = page_size
         self.page_table_size = entries_per_page_table
-        self.table: list[None | list[int]] = [None] * entries_per_page_table
+        self.table: list[None | list[int]] | None = [None] * entries_per_page_table
         if (page_size-1).bit_length() * 3 > WORD_LENGTH:
             raise ValueError(f"Page size {page_size} is too large for a two-level page table")
 
-    def access(self, logical_address: int) -> int | None:
-        outer_page_number, inner_page_number, page_offset = self.extract_fields(logical_address)   
-        if self.table[outer_page_number] is None:
-            self.table[outer_page_number] = [None] * (self.page_size // 4)
-        inner_page_table = self.table[outer_page_number]
-        if inner_page_table[inner_page_number] is None:
-            inner_page_table[inner_page_number] = "allocated"
-        return inner_page_table[inner_page_number] * self.page_size + page_offset
+    # def access(self, logical_address: int) -> int | None:
+    #     assert self.table is not None
+    #     outer_page_number, inner_page_number, page_offset = self.extract_fields(logical_address)   
+    #     if self.table[outer_page_number] is None:
+    #         self.table[outer_page_number] = [None] * (self.page_size // 4)
+    #     inner_page_table = self.table[outer_page_number]
+    #     assert inner_page_table is not None
+    #     if inner_page_table[inner_page_number] is None:
+    #         inner_page_table[inner_page_number] = "allocated"
+    #     return inner_page_table[inner_page_number] * self.page_size + page_offset
     
 
     def extract_fields(self, address: int) -> tuple[int, int, int]:
@@ -56,15 +54,20 @@ class TwoLevelPageTable(MemoryMapping):
     
     def allocate(self, logical_address: int):
         outer_page_number, inner_page_number, _ = self.extract_fields(logical_address)
+        assert self.table is not None
         if self.table[outer_page_number] is None:
             self.table[outer_page_number] = [None] * self.page_table_size
         inner_page_table = self.table[outer_page_number]
+        assert inner_page_table is not None
         if inner_page_table[inner_page_number] is None:
             inner_page_table[inner_page_number] = "allocated"
     
+    def total_allocated(self) -> int:
+        assert self.table is not None
+        return sum(len(x)*self.page_size for x in self.table if x is not None)
 
     def __str__(self):
-        return "TwoLevelPageTable"
+        return f"""TwoLevelPageTable: {pretty_mem_str(self.total_allocated())} Bytes"""
 
 
    
@@ -96,6 +99,8 @@ class PageTable:
     def __str__(self):
         return f"PageTable:  {collapse_contiguous_ranges(self.table)}"
     
+    def total_allocated(self) -> int:
+        return self.frame_count * self.pagesize
 
 class PCB:
     def __init__(self, process: str, mapping: Block | PageTable):
@@ -103,5 +108,6 @@ class PCB:
         self.process = process
 
     def __str__(self):
+
         return f"{self.process}  {self.mapping}"
 

@@ -3,7 +3,9 @@
     "default_multiplier": "2**12",
     "script": [
         ["l", "p1", "128"],
-        ["a", "p1", "0"]
+        ["a", "p1", "0"],
+        ["a", "p1", "1"]
+
     ],
     "algo": {
         "name": "twolevel",

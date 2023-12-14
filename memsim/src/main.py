@@ -41,12 +41,13 @@ class Simulator:
     
     def execute_command(self, command):
         self.rep.add_trace(command)
+        assert self.mmanager is not None
         if command[0] == "l":
             self.mmanager.launch(command[1], int(command[2]))
         elif command[0] == "t":
             self.mmanager.terminate(command[1])
         elif command[0] == "a":
-            self.mmanager.allocate(command[1], int(command[2] * self.def_mult))
+            self.mmanager.allocate(command[1], int(command[2]) * self.def_mult)
         else:
             raise ValueError(f"Invalid script file: {command}")
 
