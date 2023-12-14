@@ -10,6 +10,9 @@ class PageTableTest(unittest.TestCase):
         outer = 0
         offset = 256
         address = (outer << 22) + (inner << 12) + offset
-        print(two_level_page_table.extract_fields(address))
+        two_level_page_table.extract_fields(address)
+        outer_page_number, inner_page_number, page_offset = two_level_page_table.extract_fields(address)
+        assert outer_page_number == outer and inner_page_number == inner and page_offset == offset
+        
 
 

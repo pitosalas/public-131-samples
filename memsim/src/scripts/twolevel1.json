@@ -2,7 +2,7 @@
     "scenario": "Tiny Example Sparse Paged Memory Manager",
     "default_multiplier": "2**12",
     "script": [
-        ["l", "p1", "1"],
+        ["l", "p1", "128"],
         ["a", "p1", "0"]
     ],
     "algo": {

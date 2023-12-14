@@ -15,7 +15,7 @@ class Reporter:
 
     def add_trace(self, step):
         if step[0] == "l":
-            self.trace += f"       LAUNCH: {step[1]} (asks {pretty_mem_str(int(step[2])*self.defailt_multiplier)})\n"
+            self.trace += f"       LAUNCH: {step[1]} (max {pretty_mem_str(int(step[2])*self.defailt_multiplier)})\n"
         elif step[0] == "t":
             self.trace += f"     TERMINATE: {step[1]}\n"
         elif step[0] == "a":
@@ -24,9 +24,9 @@ class Reporter:
             raise ValueError(f"Invalid script file: {step}")
 
     def add_allocations(self, allocs: dict[str, PCB]) -> None:
-        self.allocation_stats = "\n        ".join(
-            str(alloc) for alloc in allocs.values()
-        )
+        self.allocation_stats = ""
+        for pcb in allocs.values():
+            self.allocation_stats += f"       {pcb}\n"
 
     def add_segmented_memory_stats(self, memsize, segsize):
         self.phys_memory_stats = f"Physical Memory\n           {pretty_mem_str(memsize)}, segment size: {pretty_mem_str(segsize)}"
@@ -59,4 +59,4 @@ class Reporter:
         print(f"\n   TRACE OF SIMULATION:\n{self.trace}")
         print("   AT COMPLETION:\n      Process Allocations:")
         print(f"        {self.allocation_stats}")
-        print(f"      {self.phys_memory_stats}")
+        print(f"        {self.phys_memory_stats}")

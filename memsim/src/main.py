@@ -31,16 +31,18 @@ class Simulator:
         with open(filename, "r") as f:
             self.config_file = json.load(f)
 
-    # available commands: a, d
-    # a: allocate (process, size)
-    # d: deallocate (process)
-    # l: load (process, maxsize)
+    # available commands: l, t, a, d
+    # l: launch (process, pointers per page table)
     # t: touch (process, start, end)
-
+    # a: allocate (process, address)
+    #   allocate a block of memory at the address
+    # d: deallocate (process)
+    #   deallocate a block of memory at the address
+    
     def execute_command(self, command):
         self.rep.add_trace(command)
         if command[0] == "l":
-            self.mmanager.launch(command[1], int(command[2]) * self.def_mult)
+            self.mmanager.launch(command[1], int(command[2]))
         elif command[0] == "t":
             self.mmanager.terminate(command[1])
         elif command[0] == "a":
@@ -49,7 +51,7 @@ class Simulator:
             raise ValueError(f"Invalid script file: {command}")
 
     def batch(self):
-        file_name = f"src/scripts/{SCRIPT_FILE}"
+        file_name = f"scripts/{SCRIPT_FILE}"
         self.import_json_file(file_name)
         self.def_mult = eval(self.config_file["default_multiplier"])
         self.prepare_factory()
@@ -61,7 +63,6 @@ class Simulator:
             self.execute_command(step)
         self.mmanager.report(self.rep)
         self.mmanager.graph(self.dg)
-
 
 if __name__ == "__main__":
     rep = Reporter()

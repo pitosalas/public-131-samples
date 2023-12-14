@@ -17,7 +17,7 @@ class FixedSegMm(MemoryManager):
     def launch(self, process: str, size: int):
         mapping = self.physical_memory.allocate(process, size)
         if mapping is None:
-            raise Exception(f"Allocation request {size} for process {process} failed")
+            raise ValueError(f"Allocation request {size} for process {process} failed")
         self.allocations[process] = PCB(process, mapping)
 
     def touch(self, process: str, address: int) -> bool:
@@ -32,11 +32,10 @@ class FixedSegMm(MemoryManager):
     def allocate(self, process: str, size: int):
         pass
 
-
     def terminate(self, process: str):
         allocation = self.allocations[process]
         if allocation is None:
-            raise Exception("process not found")
+            raise ValueError("process not found")
         self.physical_memory.deallocate(allocation.mapping)
         del self.allocations[process]
 

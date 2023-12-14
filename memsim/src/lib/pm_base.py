@@ -23,16 +23,8 @@ class PhysMem(ABC):
     @abstractmethod
     def launch(self, process: str, size: int) -> Block | PageTable | TwoLevelPageTable | None:
         return None
-    
 
-    @abstractmethod
-    def terminate(self, mapping: Block | PageTable | TwoLevelPageTable) -> None:
-        pass
 
-    @abstractmethod
-    def touch(self, process: str, address: int) -> bool:
-        return True
-    
     @abstractmethod
     def report(self, rep: Reporter):
         pass

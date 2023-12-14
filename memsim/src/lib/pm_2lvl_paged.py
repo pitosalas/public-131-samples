@@ -1,7 +1,7 @@
 from lib.pm_base import PhysMem, PageTableOrNone
 from lib.reporter import Reporter
-from lib.pagetables import Block, PageTable, TwoLevelPageTable
-from lib.utils import convert_size_with_multiplier, find_free_sequence, set_sequence
+from lib.pagetables import TwoLevelPageTable
+from lib.utils import convert_size_with_multiplier
 
 
 class TwoLevelPagedPm(PhysMem):
@@ -14,44 +14,26 @@ class TwoLevelPagedPm(PhysMem):
             raise ValueError("Memory size must be a multiple of page size")
         self.frame_count = self.memsize // self.pagesize
         self.freelist = [None] * self.frame_count
-        self.page_tables = {}
+        self.page_tables:dict[str, TwoLevelPageTable] = {}
 
     def __str__(self):
         return f"TwoLevelPagedPm = {self.memsize} MB"
 
-    def launch(self, process: str, size: int) -> PageTableOrNone:
-
-        required_frames = size // self.pagesize
-        if size % self.pagesize != 0:
-            required_frames += 1
-        result = self.alloc(process, required_frames)
-        if result is None:
-            raise ValueError("Allocation failed to find space")
-        page_table = TwoLevelPageTable(self.pagesize, required_frames)
+    def launch(self, process: str, outer_page_table_entries: int) -> PageTableOrNone:
+        page_table = TwoLevelPageTable(self.pagesize, outer_page_table_entries)
         self.page_tables[process] = page_table
         return page_table
 
-    def alloc(self, marker: int, required_frames: int):
-        target_frames = find_free_sequence(self.freelist, None, required_frames)
-        if target_frames is None:
-            return None
-        set_sequence(self.freelist, target_frames, marker)
-        return target_frames
 
-    def terminate(self, mapping: PageTableOrNone) -> None:
-        if mapping is None or type(mapping) != TwoLevelPageTable:
+    def allocate(self, process: str, address: int):
+        page_table: TwoLevelPageTable = self.page_tables[process]
+        if page_table is None:
             raise ValueError("Invalid mapping")
-        for frame in mapping.table:
-            self.frame_table[frame] = None
-
-    def build_page_dir(self, process: str, n_frames: int) -> PageTableOrNone:
-        return None
+        page_table.allocate(address)
+        
 
     def report(self, rep: Reporter):
         pass
-
-    def touch(self, address: int) -> bool:
-        return True
 
     def graph(self):
         print("Graph called in physmem")
@@ -59,8 +41,6 @@ class TwoLevelPagedPm(PhysMem):
     def reserve_free_frames(self, count: int):
         pass
 
-    def allocate(self, process: str, size: int) -> Block | PageTable | None:
-        pass
 
     def deallocate(self, process: str) -> None:
         pass

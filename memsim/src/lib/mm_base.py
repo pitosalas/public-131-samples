@@ -19,7 +19,7 @@ class MemoryManager(ABC):
         pass
 
     @abstractmethod
-    def allocate(self, process: str, size: int):
+    def allocate(self, process: str, address: int):
         pass
 
     @abstractmethod

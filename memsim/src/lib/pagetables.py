@@ -20,12 +20,12 @@ from the logical address. The outer page number is the offset2 from the logical
 address.
 """
 class TwoLevelPageTable(MemoryMapping):
-    def __init__(self, page_size: int, capcity_bytes: int):
-        super().__init__(capcity_bytes)
+    def __init__(self, page_size: int, entries_per_page_table: int):
+        super().__init__(entries_per_page_table**2 * page_size)
         self.page_size = page_size
-        outer_page_count = capcity_bytes // page_size
-        self.table: list[None | list[int]] = [None] * outer_page_count
-        if page_size.bit_length() * 3 > WORD_LENGTH:
+        self.page_table_size = entries_per_page_table
+        self.table: list[None | list[int]] = [None] * entries_per_page_table
+        if (page_size-1).bit_length() * 3 > WORD_LENGTH:
             raise ValueError(f"Page size {page_size} is too large for a two-level page table")
 
     def access(self, logical_address: int) -> int | None:
@@ -53,9 +53,18 @@ class TwoLevelPageTable(MemoryMapping):
         inner_page_number = (address >> shift_right_to_inner) & mask_to_inner
         outer_page_number = (address >> shift_right_to_outer)
         return outer_page_number, inner_page_number, page_offset
+    
+    def allocate(self, logical_address: int):
+        outer_page_number, inner_page_number, _ = self.extract_fields(logical_address)
+        if self.table[outer_page_number] is None:
+            self.table[outer_page_number] = [None] * self.page_table_size
+        inner_page_table = self.table[outer_page_number]
+        if inner_page_table[inner_page_number] is None:
+            inner_page_table[inner_page_number] = "allocated"
+    
 
     def __str__(self):
-        return f"TwoLevelPageTable:  {collapse_contiguous_ranges(self.table)}"
+        return "TwoLevelPageTable"
 
 
    
