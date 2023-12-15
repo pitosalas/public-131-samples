@@ -1,6 +1,7 @@
 import unittest
 from lib.mm_fixed_seg import FixedSegMm
 from lib.mm_paged import PagedMm
+
 from lib.mm_var_seg import VarSegMm
 
 class TestMemoryManager(unittest.TestCase):
