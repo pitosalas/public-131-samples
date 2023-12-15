@@ -52,6 +52,7 @@ class VarSegMm(MemoryManager):
         self.physical_memory.report(rep)
 
     def merge_all_blocks(self):
+        # sourcery skip: for-append-to-extend, list-comprehension
         blocks = []
         for block in self.physical_memory.freelist:
             blocks.append({'label': "FREE", 'start': block.physical_address, 'size': block.size})

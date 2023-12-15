@@ -94,3 +94,16 @@ def set_sequence(lst: list[None|str], first_last: set[int], process: str):
     for i in range(first_last[0], first_last[1]):
         lst[i] = process
         
+def extract_fields(address: int, outer_pn_bits: int, inner_pn_bits: int, offset_bits: int) -> tuple[int, int, int]:
+    shift_right_to_outer = inner_pn_bits + offset_bits
+    shift_right_to_inner = offset_bits
+    mask_to_offset = (1 << offset_bits) - 1
+    page_offset = address & mask_to_offset
+    
+    # Calculate the number of bits needed for the inner page number
+    # After having shifted the whole address to the right by the number of bits
+    mask_to_inner = (1 << inner_pn_bits) - 1
+    inner_page_number = (address >> shift_right_to_inner) & mask_to_inner
+    outer_page_number = (address >> shift_right_to_outer)
+    return outer_page_number, inner_page_number, page_offset
+    

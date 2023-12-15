@@ -1,71 +1,58 @@
 from abc import ABC
-from arrow import get
 
-from numpy import inner
-from lib.utils import pretty_mem_str, collapse_contiguous_ranges
+from lib.utils import extract_fields, pretty_mem_str, collapse_contiguous_ranges
 
-WORD_LENGTH = 32
 class MemoryMapping(ABC):
     def __init__(self, capacity_bytes):
         self.capacity_bytes = capacity_bytes
 
-"""
-We create this in its empty state. We allocate the outer page table with all None
-to indicate that there are no inner page tables yet. When we need to allocate a
-page, we allocate the inner page table, and then allocate the page within that
-table. The outer page table is indexed by the outer page number. The inner page
-table is indexed by the inner page number. The inner page number is the offset1
-from the logical address. The outer page number is the offset2 from the logical
-address.
-"""
 class TwoLevelPageTable(MemoryMapping):
+    """
+    Two-level page table implementation.
+
+    Args:
+        page_size (int): The size of each page in bytes.
+        entries_per_page_table (int): The number of entries per page table.
+
+    Attributes:
+        page_size (int): The size of each page in bytes.
+        entries_per_page_table (int): The number of entries per page table.
+        table (list[None | list[int]] | None): The two-level page table.
+
+    Methods:
+        allocate(logical_address: int) -> None:
+            Allocates a page in the two-level page table for the given logical address.
+
+        get_statistics() -> tuple[int, int]:
+            Returns the number of inner page tables and data pages in the two-level page table.
+
+        outer_pt_str() -> str:
+            Returns a string representation of the outer page table.
+
+        inner_pt_str() -> str:
+            Returns a string representation of the inner page tables.
+
+        __str__() -> str:
+            Returns a string representation of the TwoLevelPageTable object.
+    """
     def __init__(self, page_size: int, entries_per_page_table: int):
         super().__init__(entries_per_page_table**2 * page_size)
         self.page_size = page_size
-        self.page_table_size = entries_per_page_table
+        self.entries_per_page_table = entries_per_page_table
         self.table: list[None | list[int]] | None = [None] * entries_per_page_table
-        if (page_size-1).bit_length() * 3 > WORD_LENGTH:
-            raise ValueError(f"Page size {page_size} is too large for a two-level page table")
-
-    # def access(self, logical_address: int) -> int | None:
-    #     assert self.table is not None
-    #     outer_page_number, inner_page_number, page_offset = self.extract_fields(logical_address)   
-    #     if self.table[outer_page_number] is None:
-    #         self.table[outer_page_number] = [None] * (self.page_size // 4)
-    #     inner_page_table = self.table[outer_page_number]
-    #     assert inner_page_table is not None
-    #     if inner_page_table[inner_page_number] is None:
-    #         inner_page_table[inner_page_number] = "allocated"
-    #     return inner_page_table[inner_page_number] * self.page_size + page_offset
-    
-
-    def extract_fields(self, address: int) -> tuple[int, int, int]:
-        # Calculate the number of bits needed for the page offset
-        total_bits = WORD_LENGTH
-        page_number_bits = self.page_size.bit_length()
-        shift_right_to_outer = total_bits - page_number_bits
-        shift_right_to_inner = shift_right_to_outer - page_number_bits
-        mask_to_offset = (1 << 12) - 1
-        page_offset = address & mask_to_offset
-        
-        # Calculate the number of bits needed for the inner page number
-        # After having shifted the whole address to the right by the number of bits
-        mask_to_inner = (1 << 10) - 1
-        inner_page_number = (address >> shift_right_to_inner) & mask_to_inner
-        outer_page_number = (address >> shift_right_to_outer)
-        return outer_page_number, inner_page_number, page_offset
     
     def allocate(self, logical_address: int):
-        outer_page_number, inner_page_number, _ = self.extract_fields(logical_address)
+        pt_bits = (self.entries_per_page_table-1).bit_length()
+        offset_bits = (self.page_size-1).bit_length()
+        outer_page_number, inner_page_number, _ = extract_fields(logical_address, pt_bits, pt_bits, offset_bits)
         assert self.table is not None
         if self.table[outer_page_number] is None:
-            self.table[outer_page_number] = [None] * self.page_table_size
+            self.table[outer_page_number] = [None] * self.entries_per_page_table
         inner_page_table = self.table[outer_page_number]
         assert inner_page_table is not None
         if inner_page_table[inner_page_number] is None:
             inner_page_table[inner_page_number] = "allocated"
     
-
     def get_statistics(self) -> tuple[int, int]:
         inner_pt_count = 0
         data_page_count = 0
@@ -86,15 +73,14 @@ class TwoLevelPageTable(MemoryMapping):
         for i, inner_pt in enumerate(self.table):
             if inner_pt is not None:
                 inner_result = "".join("." if entry is None else "x" for entry in inner_pt)
-                result += f"   Inner Page Table {i}: {inner_result.rstrip(".")}..."
-                result += "\n"
+                result += f"                         Inner Page Table {i}: {inner_result.rstrip(".")}...\n"
         return result
 
     def __str__(self):
         inner_pt, data_page = self.get_statistics()
         return f"""2Lvl: {inner_pt} inner page tables, {data_page} data pages
-                   Outer Page Table: {self.outer_pt_str()}
-                   {self.inner_pt_str()}"""
+                      Outer Page Table: {self.outer_pt_str()}
+{self.inner_pt_str()}"""
         
 class Block:
     def __init__(self, start: int, size: int):
