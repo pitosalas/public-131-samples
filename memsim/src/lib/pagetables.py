@@ -1,4 +1,7 @@
-from abc import ABC, abstractmethod
+from abc import ABC
+from arrow import get
+
+from numpy import inner
 from lib.utils import pretty_mem_str, collapse_contiguous_ranges
 
 WORD_LENGTH = 32
@@ -62,15 +65,37 @@ class TwoLevelPageTable(MemoryMapping):
         if inner_page_table[inner_page_number] is None:
             inner_page_table[inner_page_number] = "allocated"
     
-    def total_allocated(self) -> int:
-        assert self.table is not None
-        return sum(len(x)*self.page_size for x in self.table if x is not None)
+
+    def get_statistics(self) -> tuple[int, int]:
+        inner_pt_count = 0
+        data_page_count = 0
+        for inner_pt in self.table:
+            if inner_pt is not None:
+                inner_pt_count += 1
+                for page in inner_pt:
+                    if page is not None:
+                        data_page_count += 1
+        return inner_pt_count, data_page_count
+    
+    def outer_pt_str(self) -> str:
+        result = "".join("." if entry is None else "x" for entry in self.table)
+        return result.rstrip(".")+"......"
+
+    def inner_pt_str(self) -> str:
+        result = ""
+        for i, inner_pt in enumerate(self.table):
+            if inner_pt is not None:
+                inner_result = "".join("." if entry is None else "x" for entry in inner_pt)
+                result += f"   Inner Page Table {i}: {inner_result.rstrip(".")}..."
+                result += "\n"
+        return result
 
     def __str__(self):
-        return f"""TwoLevelPageTable: {pretty_mem_str(self.total_allocated())} Bytes"""
-
-
-   
+        inner_pt, data_page = self.get_statistics()
+        return f"""2Lvl: {inner_pt} inner page tables, {data_page} data pages
+                   Outer Page Table: {self.outer_pt_str()}
+                   {self.inner_pt_str()}"""
+        
 class Block:
     def __init__(self, start: int, size: int):
         self.physical_address = start
@@ -108,6 +133,5 @@ class PCB:
         self.process = process
 
     def __str__(self):
-
         return f"{self.process}  {self.mapping}"
 
