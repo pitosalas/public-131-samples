@@ -10,7 +10,7 @@ class Hypotheses(unittest.TestCase):
         assert x + y == y + x
 
     @given(st.lists(st.integers()))
-    def test_collapse_contiguous_ranges(range: list[int]):
+    def test_collapse_contiguous_ranges(self, range: list[int]):
         collapsed = collapse_contiguous_ranges(range)
         assert all(check_number_in_range(i, collapsed) for i in range)
 

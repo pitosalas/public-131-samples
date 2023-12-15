@@ -8,7 +8,7 @@ class MemoryManager(ABC):
 
     @abstractmethod
     def __init__(self, memory_param: dict):
-        pass
+        self.memory_param = memory_param
 
     @abstractmethod
     def launch(self, process: str, size: int):

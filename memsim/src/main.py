@@ -10,7 +10,7 @@ from lib.mm_paged import PagedMm
 from lib.reporter import Reporter
 from lib.mm_var_seg import VarSegMm
 
-SCRIPT_FILE = "twolevel1.json"
+SCRIPT_FILE = "segvar1.json"
 
 class Simulator:
     def __init__(self, reporter: Reporter, diag: Diagram):
@@ -67,7 +67,7 @@ class Simulator:
 
 if __name__ == "__main__":
     rep = Reporter()
-    dg = Diagram(f"memsim/graphs/{SCRIPT_FILE}", "LR")
+    dg = Diagram(f"graphs/{SCRIPT_FILE}", "LR")
     sim = Simulator(rep, dg)
     sim.batch()
     rep.report()

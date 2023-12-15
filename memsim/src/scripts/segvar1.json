@@ -1,9 +1,9 @@
 {
     "scenario": "Variable Size Segments",
-    "default_multiplier": "2**16",
+    "default_multiplier": "2**10",
     "script": [
-        ["a", "Excel", "1"],
-        ["a", "python", "1"]
+        ["l", "Excel", "4"],
+        ["l", "python", "8"]
     ],
     "algo": {
         "name": "var_seg"
@@ -11,8 +11,8 @@
     "memory": {
             "base_units": "hex",
             "size": {
-                "size": 2,
-                "multiplier": "2**16"
+                "size": 32,
+                "multiplier": "2**10"
             }
         }
 }

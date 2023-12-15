@@ -8,14 +8,15 @@ SUB_LABEL_FONTSIZE = "9"
 
 
 class Box:
-    def __init__(self, label: str, handle: str, dot: graphviz.Digraph):
+    def __init__(self, label: str, handle: str, dot: graphviz.Digraph, width:int = 80):
         self.handle = handle
         self.label = label
         self.dot = dot
+        self.width = width
         self.sections: list[dict[str,object]] = []
 
     def add_section_to_box(
-        self, ident: str, label: str, sub: str, color: str, height: int = 18
+        self, ident: str, label: str, sub: str, color: str, height: int = 21
     ):
         self.sections.append(
             {
@@ -51,7 +52,7 @@ class Diagram:
         self.dot.attr(
             "node",
             shape="none",
-            width="0.4",
+            width="0.8",
             margin="0.04 0.04",
             fontsize="8",
             fontname="Helvetica",
@@ -71,10 +72,10 @@ class Diagram:
         for tier in self.tiers.values():
             tier.digraph.attr(rank=tier.rank)
             self.dot.subgraph(tier.digraph)
-        self.dot.render(outfile=f"{self.name}.svg")
+        self.dot.render(outfile=f"{self.name}.pdf")
 
-    def add_box(self, label: str, handle: str):
-        self.boxes[handle] = Box(label, handle, self.dot)
+    def add_box(self, label: str, handle: str, height: int = 80):
+        self.boxes[handle] = Box(label, handle, self.dot, height)
         return self.boxes[handle]
 
     def render_boxname_in_tier(self, tier: Tier, box_name: str):
@@ -94,7 +95,7 @@ class Diagram:
                 if section["sublabel"] is not None
                 else ""
             )
-            label += f"""<tr><td align="text" color="grey" bgcolor="{section["color"]}" height="{section["height"]}" fixedsize="true" width="80" port="{section["ident"]}">"""
+            label += f"""<tr><td align="text" color="grey" bgcolor="{section["color"]}" height="{section["height"]}" port="{section["ident"]}">"""
             label += f"""<font point-size="{BOX_FONTSIZE}">{section["label"]}</font>{sublabel}</td></tr>"""
         label += label_end
         subgraph = tier.digraph

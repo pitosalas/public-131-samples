@@ -23,13 +23,16 @@ class FixedSegMm(MemoryManager):
     def touch(self, process: str, address: int) -> bool:
         allocation = self.allocations[process].mapping
         if allocation is None:
-            raise Exception("process not found")
+            raise ValueError("process not found")
         assert isinstance(allocation, Block)
         if not allocation.contains(address):
-            raise Exception("address not found")
+            raise ValueError("address not found")
         return self.physical_memory.touch(process, address)
 
     def allocate(self, process: str, size: int):
+        pass
+
+    def deallocate(self, process: str):
         pass
 
     def terminate(self, process: str):
@@ -42,7 +45,6 @@ class FixedSegMm(MemoryManager):
     def report(self, rep: Reporter):
         rep.add_allocations(self.allocations)
         self.physical_memory.report(rep)
-        pass
 
     def merge_all_blocks(self):
         blocks = []

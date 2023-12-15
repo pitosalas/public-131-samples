@@ -12,23 +12,28 @@ class VarSegMm(MemoryManager):
         self.physical_memory = VarSegPhysMem(memory_param)
         self.allocations: dict[str, PCB] = {}
 
+# the size parameter is not used for variable segment memory
     def launch(self, process: str, size: int):
+        size *= eval(self.memory_param["default_multiplier"])
         block = self.physical_memory.allocate(size)
         if block is None:
-            raise ValueError("Allocation failed to find space")
-        self.allocations[process] = PCB(process, block)
+            raise ValueError("not enough memory")
+        self.allocations[process] = PCB(process, block)        
 
+ # Process accesses a certain address
+    # def allocate(self, process: str, size: int):
+    #     allocation = self.allocations[process]
+    #     if allocation is None:
+    #         raise ValueError("process not found")
+    #     if not allocation.mapping.contains(address):
+    #         raise ValueError("address not found")
+    #     self.physical_memory.touch(allocation.mapping, address)
+        
     def allocate(self, process: str, size: int):
-        pass
-
-    # Process accesses a certain address
-    def touch(self, process: str, address: int):
-        allocation = self.allocations[process]
-        if allocation is None:
-            raise ValueError("process not found")
-        if not allocation.mapping.contains(address):
-            raise ValueError("address not found")
-        self.physical_memory.touch(allocation.mapping, address)
+        raise ValueError("allocate not valid for variable segment memory. Use Launch")
+    
+    def deallocate(self, process: str):
+        raise ValueError("deallocate not valid for variable segment memory. Use Terminate")
 
     def terminate(self, process):
         allocation = self.allocations[process]
@@ -62,11 +67,11 @@ class VarSegMm(MemoryManager):
 
 
     def graph(self, dg: Diagram):
-        box = dg.add_box("Physical Memory", "physmem")
+        box = dg.add_box("Physical Memory", "physmem", 150)
         blocks = self.merge_all_blocks()
         for entry in blocks:
             sublabel = f"""start: {pretty_mem_str(entry["start"])}, size: {pretty_mem_str(entry["size"])}"""
             color = "bisque2" if entry["label"]=="FREE" else "gainsboro"
-            box.add_section_to_box(entry["label"], entry["label"],sublabel, color, entry["size"]/2000)
+            box.add_section_to_box(entry["label"], entry["label"],sublabel, color, int(entry["size"]/100))
         t1 = dg.add_tier("left", rank="sink")
         dg.render_box(box, t1)

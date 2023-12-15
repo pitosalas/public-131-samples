@@ -15,13 +15,13 @@ class PagedMm(MemoryManager):
     def launch(self, process, size):
         mapping = self.physical_memory.allocate(process, size)
         if mapping is None:
-            raise Exception(f"Allocation request {size} for process {process} failed")
+            raise ValueError(f"Allocation request {size} for process {process} failed")
         self.allocations[process] = PCB(process, mapping)
 
     def terminate(self, process: str):
         allocation = self.allocations[process]
         if allocation is None:
-            raise Exception("process not found")
+            raise ValueError("process not found")
         self.physical_memory.deallocate(allocation.mapping)
         del self.allocations[process]
 
@@ -48,10 +48,10 @@ class PagedMm(MemoryManager):
 
         # Now create boxes for each process' page table
         t2 = dg.add_tier("right", rank="source")
+        color = "grey15"
+        edgecolor = "grey15"
         for process, allocation in self.allocations.items():
             box = dg.add_box(process, process)
-            color = "grey15"
-            edgecolor = "grey15"
             for id, frame in enumerate(allocation.mapping.table):
                 box.add_section_to_box(
                     f"{id}", f"frame: {frame}", f"page: {id}", color, 30
