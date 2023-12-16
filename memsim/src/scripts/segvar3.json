@@ -2,12 +2,12 @@
     "scenario": "Variable Size Segments",
     "default_multiplier": "2**10",
     "script": [
-        ["a", "Excel", "128"],
-        ["a", "python", "48"],
-        ["a", "print_process", "16"],
-        ["d", "Excel"],
-        ["a", "cxx", "8"],
-        ["d", "print_process"]
+        ["l", "Excel", "128"],
+        ["l", "python", "48"],
+        ["l", "print_process", "16"],
+        ["t", "Excel"],
+        ["l", "cxx", "8"],
+        ["t", "print_process"]
     ],
     "algo": {
         "name": "var_seg"

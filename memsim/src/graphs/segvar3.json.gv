@@ -1,0 +1,9 @@
+digraph "graphs/segvar3.json" {
+	graph [fontname=Helvetica rankdir=LR ranksep=1.0]
+	node [fontname=Helvetica fontsize=8 margin="0.04 0.04" shape=none width=0.8]
+	edge [arrowsize=0.4]
+	subgraph left {
+		physmem [label=<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD border="0.0" ><font face="helvetica" color="grey15" point-size="12">Physical Memory</font></TD></TR><tr><td align="text" color="grey" bgcolor="gainsboro" height="8" port="cxx"><font point-size="11">cxx</font><br></br><font point-size="9">start:  0, size: 8.0 KB</font></td></tr><tr><td align="text" color="grey" bgcolor="bisque2" height="122" port="FREE"><font point-size="11">FREE</font><br></br><font point-size="9">start: 8.0 KB, size: 120.0 KB</font></td></tr><tr><td align="text" color="grey" bgcolor="gainsboro" height="49" port="python"><font point-size="11">python</font><br></br><font point-size="9">start: 128.0 KB, size: 48.0 KB</font></td></tr><tr><td align="text" color="grey" bgcolor="bisque2" height="81" port="FREE"><font point-size="11">FREE</font><br></br><font point-size="9">start: 176.0 KB, size: 80.0 KB</font></td></tr></table>>]
+		rank=sink
+	}
+}

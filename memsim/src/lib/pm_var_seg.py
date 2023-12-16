@@ -18,7 +18,6 @@ class VarSegPhysMem(PhysMem):
     def launch(self, process: str, size: int) -> Block | None:
         return None
 
-
     def find_free_block(self, size) -> Block | None:
         return next((block for block in self.freelist if block.size >= size), None)
 

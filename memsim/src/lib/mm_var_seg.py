@@ -72,6 +72,6 @@ class VarSegMm(MemoryManager):
         for entry in blocks:
             sublabel = f"""start: {pretty_mem_str(entry["start"])}, size: {pretty_mem_str(entry["size"])}"""
             color = "bisque2" if entry["label"]=="FREE" else "gainsboro"
-            box.add_section_to_box(entry["label"], entry["label"],sublabel, color, int(entry["size"]/100))
+            box.add_section_to_box(entry["label"], entry["label"],sublabel, color, int(entry["size"]/1000))
         t1 = dg.add_tier("left", rank="sink")
         dg.render_box(box, t1)

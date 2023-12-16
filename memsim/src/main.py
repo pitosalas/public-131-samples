@@ -10,7 +10,7 @@ from lib.mm_paged import PagedMm
 from lib.reporter import Reporter
 from lib.mm_var_seg import VarSegMm
 
-SCRIPT_FILE = "segvar1.json"
+SCRIPT_FILE = "segvar3.json"
 
 class Simulator:
     def __init__(self, reporter: Reporter, diag: Diagram):

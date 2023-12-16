@@ -1,0 +1,9 @@
+digraph "graphs/segvar4.json" {
+	graph [fontname=Helvetica rankdir=LR ranksep=1.0]
+	node [fontname=Helvetica fontsize=8 margin="0.04 0.04" shape=none width=0.8]
+	edge [arrowsize=0.4]
+	subgraph left {
+		physmem [label=<<table border="0.1" cellborder="1" cellspacing="0"><TR><TD border="0.0" ><font face="helvetica" color="grey15" point-size="12">Physical Memory</font></TD></TR><tr><td align="text" color="grey" bgcolor="gainsboro" height="4" port="Process 1"><font point-size="11">Process 1</font><br></br><font point-size="9">start:  0, size: 4.0 KB</font></td></tr><tr><td align="text" color="grey" bgcolor="gainsboro" height="12" port="Process 2"><font point-size="11">Process 2</font><br></br><font point-size="9">start: 4.0 KB, size: 12.0 KB</font></td></tr><tr><td align="text" color="grey" bgcolor="gainsboro" height="24" port="Process 3"><font point-size="11">Process 3</font><br></br><font point-size="9">start: 16.0 KB, size: 24.0 KB</font></td></tr><tr><td align="text" color="grey" bgcolor="gainsboro" height="12" port="Process 10"><font point-size="11">Process 10</font><br></br><font point-size="9">start: 48.0 KB, size: 12.0 KB</font></td></tr><tr><td align="text" color="grey" bgcolor="gainsboro" height="4" port="Process 8"><font point-size="11">Process 8</font><br></br><font point-size="9">start: 60.0 KB, size: 4.0 KB</font></td></tr><tr><td align="text" color="grey" bgcolor="bisque2" height="65" port="FREE"><font point-size="11">FREE</font><br></br><font point-size="9">start: 64.0 KB, size: 64.0 KB</font></td></tr></table>>]
+		rank=sink
+	}
+}

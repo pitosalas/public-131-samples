@@ -1,26 +1,13 @@
 {
     "scenario": "Bigger Paged Memory Manager",
-    "default_multiplier": "2**16",
+    "default_multiplier": "2**12",
     "script": [
-        ["a", "Process 1", 1],
-        ["a", "Process 2", 3],
-        ["a", "Process 3", 6],
-        ["d", "Process 2", 3],
-        ["d", "Process 1", 1],
-        ["a", "Process 5", 4],
-        ["a", "Process 6", 3],
-        ["a", "Process 7", 1],
-        ["a", "Process 8", 2],
-        ["d", "Process 6", 3],
-        ["d", "Process 8", 1],
-        ["a", "Process 1", 1],
-        ["a", "Process 2", 3],
-        ["a", "Process 9", 4],
-        ["a", "Process 6", 3],
-        ["d", "Process 7", 3],
-        ["a", "Process 8", 2],
-        ["a", "Process 10", 3],
-        ["d", "Process 8", 1]
+        ["l", "Process 1", 1],
+        ["l", "Process 2", 3],
+        ["l", "Process 3", 6],
+        ["l", "Process 8", 2],
+        ["l", "Process 10", 3],
+        ["l", "Process 8", 1]
     ],
     "algo": {
         "name": "var_seg"
@@ -28,7 +15,7 @@
     "memory": {
         "size": {
             "size": 32,
-            "multiplier": "2**16"
+            "multiplier": "2**12"
         }
     }
     }
