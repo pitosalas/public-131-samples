@@ -44,7 +44,7 @@ We are using the FFS to store three files, respectively of a) 2MB, and b) 9GB. L
 ### Analyze the tradeoff if we changed the FFS so that the 13th, 14th and 15th pointers all pointing to an indirect block (i.e. no double or triple). Answer this in general. You may pick examples of file sizes to illustrate your answers. 
 
 * Under what circumstances would this change cause some operations be faster or slower? (one part)
-* Under what circumstances would this change lead to using more or less ake more or less memory (one part)
+* Under what circumstances would this change lead to using more or less memory (one part)
 * Under what circumstances would this change work better for large or small files? Please explain your answers (one part)
 
 There are FOUR (4) Major questions and 13 total parts. All your answers should include the formulas you used to calculate your answers not just a number. Make them legible. Use this notation to indicate powers of two: 2^8 etc.

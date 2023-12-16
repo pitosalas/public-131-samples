@@ -22,9 +22,12 @@ Bullet 3: (+1 if they count the inode separately)
     Part 2: Min Mem Ref Small File: 1
     Part 3: Max Mem Ref Large FIle: 3
     Part 4: Min Mem Ref Large FIle: 1
+
+The key to these three questions is that by making the change in the data structure, the maximum file size that can be accommodated becomes a lot smaller.
+
 Bullet 4:
-    Part 1: New structure will always be either equal or faster
+    Part 1: If the file fits, the new structure will always be either equal or faster
 Bullet 5:
-    Part 1: New structure will always be either approx equal
+    Part 1: If the file fits, the new structure will use approximately equal amount of memory
 Bullet 6:
     Part 1: If the file fits, the new structure will always work better than the old
