@@ -20,15 +20,6 @@ class VarSegMm(MemoryManager):
             raise ValueError("not enough memory")
         self.allocations[process] = PCB(process, block)        
 
- # Process accesses a certain address
-    # def allocate(self, process: str, size: int):
-    #     allocation = self.allocations[process]
-    #     if allocation is None:
-    #         raise ValueError("process not found")
-    #     if not allocation.mapping.contains(address):
-    #         raise ValueError("address not found")
-    #     self.physical_memory.touch(allocation.mapping, address)
-        
     def allocate(self, process: str, size: int):
         raise ValueError("allocate not valid for variable segment memory. Use Launch")
     
