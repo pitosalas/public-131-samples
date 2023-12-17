@@ -1,6 +1,6 @@
 from diag.diag import Diagram
 from lib.mm_base import MemoryManager
-from lib.pagetables import PCB, Block
+from lib.pagetables import PCB
 from lib.reporter import Reporter
 from lib.utils import pretty_mem_str
 from lib.pm_fixed_seg import FixedSegPhysMem
@@ -15,25 +15,17 @@ class FixedSegMm(MemoryManager):
         self.allocations: dict[str, PCB] = {}
 
     def launch(self, process: str, size: int):
+        size *= eval(self.memory_param["default_multiplier"])
         mapping = self.physical_memory.allocate(process, size)
         if mapping is None:
-            raise ValueError(f"Allocation request {size} for process {process} failed")
+            raise ValueError(f"Launch request {size} for process {process} failed")
         self.allocations[process] = PCB(process, mapping)
-
-    def touch(self, process: str, address: int) -> bool:
-        allocation = self.allocations[process].mapping
-        if allocation is None:
-            raise ValueError("process not found")
-        assert isinstance(allocation, Block)
-        if not allocation.contains(address):
-            raise ValueError("address not found")
-        return self.physical_memory.touch(process, address)
-
+        
     def allocate(self, process: str, size: int):
-        pass
+        raise ValueError("FixedSegMm does not support allocate")
 
     def deallocate(self, process: str):
-        pass
+        raise ValueError("FixedSegMm does not support deallocate")
 
     def terminate(self, process: str):
         allocation = self.allocations[process]

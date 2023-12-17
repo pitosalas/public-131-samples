@@ -15,11 +15,11 @@ class Reporter:
 
     def add_trace(self, step):
         if step[0] == "l":
-            self.trace += f"       LAUNCH: {step[1]} (max {pretty_mem_str(int(step[2])*self.defailt_multiplier)})\n"
+            self.trace += f"       LAUNCH: {step[1]} ({pretty_mem_str(int(step[2])*self.defailt_multiplier)})\n"
         elif step[0] == "t":
-            self.trace += f"     TERMINATE: {step[1]}\n"
+            self.trace += f"       TERMINATE: {step[1]}\n"
         elif step[0] == "a":
-            self.trace += f"     ALLOCATE: {step[1]} (allocate logical page at offset {pretty_mem_str(int(step[2])*self.defailt_multiplier)})\n"
+            self.trace += f"       ALLOCATE: {step[1]} (offset {pretty_mem_str(int(step[2])*self.defailt_multiplier)})\n"
         else:
             raise ValueError(f"Invalid script file: {step}")
 
@@ -44,7 +44,7 @@ class Reporter:
             frame_table_str += f"{frame} "
             if i % 32 == 31:
                 frame_table_str += "\n           "
-        self.phys_memory_stats += f"\n        Frames (X means in use)\n           {frame_table_str}"
+        self.phys_memory_stats += f"\n        Frames (NONE means free)\n           {frame_table_str}"
 
     def add_seg_mem_stats(self, memsize: int, segsize: int):
         self.phys_memory_stats = f"Physical Memory:\n           {pretty_mem_str(memsize)}, segment size: {pretty_mem_str(segsize)}"
@@ -58,5 +58,5 @@ class Reporter:
         print(f"      Script file: {self.file_name}")
         print(f"\n   TRACE OF SIMULATION:\n{self.trace}")
         print("   AT COMPLETION:\n      Process Allocations:")
-        print(f"        {self.allocation_stats}")
-        print(f"        {self.phys_memory_stats}")
+        print(f"{self.allocation_stats}")
+        print(f"{self.phys_memory_stats}")

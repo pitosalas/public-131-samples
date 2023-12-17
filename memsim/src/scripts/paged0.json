@@ -2,9 +2,9 @@
     "scenario": "Tiny Example Paged Memory Manager",
     "default_multiplier": "2**12",
     "script": [
-        ["a", "p1", "1"],
-        ["a", "p2", "1"],
-        ["d", "p1"]
+        ["l", "p1", "1"],
+        ["l", "p2", "1"],
+        ["t", "p1"]
     ],
     "algo": {
         "name": "paged",

@@ -2,18 +2,18 @@
     "scenario": "Tiny Example Paged Memory Manager",
     "default_multiplier": "2**12",
     "script": [
-        ["a", "cxx", "1"],
-        ["a", "print spooler", "3"],
-        ["a", "kernelproc", "1"],
-        ["d", "kernelproc"],
-        ["a", "ai", "3"],
-        ["a", "ai helper", "3"],
-        ["a", "weekday", "2"],
-        ["a", "python", "2"],
-        ["d", "ai", "3"],
-        ["d", "cxx", "1"],
-        ["a", "ai", "3"],
-        ["a", "zuikco", 4]
+        ["l", "cxx", "1"],
+        ["l", "print spooler", "3"],
+        ["l", "kernelproc", "1"],
+        ["t", "kernelproc"],
+        ["l", "ai", "3"],
+        ["l", "ai helper", "3"],
+        ["l", "weekday", "2"],
+        ["l", "python", "2"],
+        ["t", "ai", "3"],
+        ["t", "cxx", "1"],
+        ["l", "ai", "3"],
+        ["l", "zuikco", 4]
 
     ],
     "algo": {

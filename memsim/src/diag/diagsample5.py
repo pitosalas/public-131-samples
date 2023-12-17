@@ -15,7 +15,7 @@ top.add_section_to_box("meta", "meta data", "names, sizes, <br/>owners, dates,<b
 
 colors = Colors("p4")
 
-for i in range(0, 8):
+for i in range(8):
     top.add_section_to_box(f"{i}", "ptr", None, colors.color(6), 18)
 
 top.add_section_to_box("8", "to indirect", None, colors.color(3), 18)
@@ -25,9 +25,9 @@ top.add_section_to_box("10", "to trpl indirect", None, colors.color(3), 18)
 d.render_box_in_tier(first, top)
 
 # Indirect pointer table (3x)
-for i in range(0, 3):
+for i in range(3):
     ibox = d.add_box(f"Ind Ptrs {i}", f"ibox{i}")
-    for j in range(0, 8):
+    for j in range(8):
         ibox.add_section_to_box(f"{j}", "-", None, colors.alternate(colors.color(3), -10), 18)
 
 d.render_boxname_in_tier(third, "ibox0")
@@ -35,9 +35,9 @@ d.render_boxname_in_tier(second, "ibox1")
 d.render_boxname_in_tier(third, "ibox2")
 
 # Double indirect pointer table
-for i in range(0, 2):
+for i in range(2):
     dbox = d.add_box(f"Dbl Indirect Ptrs {i}", f"dbox{i}")
-    for j in range(0, 8):
+    for j in range(8):
         dbox.add_section_to_box(f"{j}", "-", None, colors.alternate(colors.color(2), -10), 18)
 
 d.render_boxname_in_tier(second, "dbox0")
@@ -47,7 +47,7 @@ d.add_edge("top:9:c", "dbox0", "green", tailclip="false")
 
 # Triple indirect pointer table
 tbox = d.add_box("Tripl Ind Ptrs", "tbox0")
-for i in range(0, 8):
+for i in range(8):
     tbox.add_section_to_box(f"{i}", "-", None, colors.alternate(colors.color(6), -10), 18)
 d.render_box_in_tier(second, tbox)
 
@@ -56,7 +56,7 @@ d.add_edge("dbox1:1:c", "ibox2", "red", tailclip="false")
 d.add_edge("tbox0:3:c", "dbox1", "green", tailclip="false")
 
 # Actual Data Blocks
-for i in range(0, 9):
+for i in range(9):
     box = d.add_box(f"block{i}", f"tiny{i}")
     box.add_section_to_box("only", "data", None, colors.color(6), 18)
     d.render_box_in_tier(fourth, box)

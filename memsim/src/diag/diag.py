@@ -133,7 +133,7 @@ class Colors:
     def color(self, index: int) -> str:
         return self.palette[index % len(self.palette)]
 
-    def rotate(self, max: int) -> str:
+    def rotate(self, max: int = 99) -> str:
         self.last += 1
         max_val = min(max, len(self.palette))
         return self.palette[self.last % max_val]

@@ -1,15 +1,19 @@
 {
-    "scenario": "Example Two Level Paged Memory Manager",
+    "scenario": "Tiny Example Sparse Paged Memory Manager",
     "default_multiplier": "2**10",
     "script": [
         ["l", "p1", "128"],
         ["a", "p1", "0"],
         ["a", "p1", "1"],
-        ["a", "p1", "1024"]
+        ["a", "p1", "1024"],
+        ["l", "p2", "128"],
+        ["a", "p2", "0"],
+        ["a", "p2", "1"],
+        ["a", "p2", "1024"]
     ],
     "algo": {
         "name": "twolevel",
-        "page_size": 1024
+        "page_table_size": 1024
     },
     "memory": {
         "base_units": "hex",

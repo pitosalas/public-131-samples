@@ -9,7 +9,7 @@ class TestMemoryManager(unittest.TestCase):
         self.json_file = {
             "memory": {
                 "size": {"size": 2, "multiplier": "2**20"},
-                "seg": {"size": 1, "multiplier": "2**12"},
+                "seg": {"size": 1, "multiplier": "2**10"},
             },
             "default_multiplier": "2**10",
             "algo": { "page_size": 2048 }
@@ -20,12 +20,12 @@ class TestMemoryManager(unittest.TestCase):
         self.multiplier = eval(self.json_file["default_multiplier"])
 
     def test_allocate(self):
-        self.allocate(self.varsegmm)
-        self.allocate(self.fixedsegmm)
-        self.allocate(self.pagedmm)
+        self.launch(self.varsegmm)
+        self.launch(self.fixedsegmm)
+        self.launch(self.pagedmm)
 
-    def allocate(self, mm):
-        mm.allocate(process="process1", size=10 * self.multiplier)
+    def launch(self, mm):
+        mm.launch(process="process1", size=10 * self.multiplier)
         self.assertIn("process1", mm.allocations)
         self.assertEqual(mm.allocations["process1"].mapping.size, 10 * self.multiplier)
 
@@ -34,7 +34,7 @@ class TestMemoryManager(unittest.TestCase):
         self.deallocate(self.fixedsegmm)
 
     def deallocate(self, mm):
-        mm.allocate(process="process1", size=10)
+        mm.dealocate(process="process1", size=10)
         mm.deallocate(process="process1")
         self.assertNotIn("process1", mm.allocations)
 

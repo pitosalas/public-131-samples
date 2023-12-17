@@ -1,13 +1,16 @@
 {
     "scenario": "Tiny Example Paged Memory Manager",
-    "default_multiplier": "2**12",
+    "default_multiplier": "2**10",
     "script": [
-        ["a", "p1", "1"],
-        ["a", "p2", "3"],
-        ["a", "p3", "10"],
-        ["d", "p3", "3"],
-        ["a", "p5", "32"],
-        ["d", "p1", "1"]
+        ["l", "md", "1"],
+        ["l", "grep", "3"],
+        ["l", "vxx", "10"],
+        ["t", "grep"],
+        ["l", "ps", "3"],
+        ["l", "eclipse", "32"],
+        ["t", "vxx", "1"],
+        ["l", "guama", "32"]
+
     ],
     "algo": {
         "name": "paged",
@@ -16,8 +19,8 @@
     "memory": {
         "base_units": "hex",
         "size": {
-            "size": 1,
-            "multiplier": "2**18"
+            "size": 128,
+            "multiplier": "2**10"
         }
     }
 }

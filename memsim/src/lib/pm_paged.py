@@ -19,13 +19,13 @@ class PagedPhysMem(PhysMem):
         return f"PhysicalMemory = {self.memsize} MB"
 
     def launch(self, process: str, size: int) ->  PageTable | None:
-        return None
-
-    def allocate(self, process: str, size: int) -> PageTable | None:
         required_frames = size // self.pagesize
         if size % self.pagesize != 0:
             required_frames += 1
         return self.build_page_table(process, required_frames)
+
+    def allocate(self, process: str, size: int) -> PageTable | None:
+        return None
 
     def deallocate(self, mapping: PageTable) -> None:
         for frame in mapping.table:

@@ -9,7 +9,7 @@ class TwoLevelPagedPm(PhysMem):
         super().__init__(memory_param)
         self.memparam = memory_param
         self.memsize = convert_size_with_multiplier(memory_param["memory"]["size"])
-        self.pagesize = memory_param["algo"]["page_table_size"]
+        self.pagesize = memory_param["algo"]["page_size"]
         if self.memsize % self.pagesize != 0:
             raise ValueError("Memory size must be a multiple of page size")
         self.frame_count = self.memsize // self.pagesize

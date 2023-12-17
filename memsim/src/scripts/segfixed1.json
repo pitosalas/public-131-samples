@@ -1,13 +1,13 @@
 {
     "scenario": "Tiny Example Fixed Segment Memory Manager",
-    "default_multiplier":  "2**16",
+    "default_multiplier":  "2**10",
     "script": [
-        ["a", "grep", "1"],
-        ["a", "shell", "12"],
-        ["a", "cxx", "3"],
-        ["d", "shell"],
-        ["a", "ls", "2"],
-        ["a", "print", 9]
+        ["l", "grep", "1"],
+        ["l", "shell", "12"],
+        ["l", "cxx", "3"],
+        ["t", "shell"],
+        ["l", "ls", "2"],
+        ["l", "print", "9"]
     ],
     "algo": {
         "name": "fixed_seg"
@@ -16,11 +16,11 @@
         "base_units": "hex",
         "size": {
             "size": 16,
-            "multiplier": "2**16"
+            "multiplier": "2**10"
         },
         "seg": {
             "size": 1,
-            "multiplier": "2**16"
+            "multiplier": "2**10"
         }
     }
 }
