@@ -1,6 +1,6 @@
 import unittest
 from lib.pm_fixed_seg import FixedSegPhysMem
-from lib.pm_paged import PagedPhysMem
+from lib.pm_paged import PagedPm
 from lib.pm_var_seg import VarSegPhysMem
 
 from lib.utils import convert_size_with_multiplier
@@ -78,7 +78,7 @@ class TestPagedPhysMem(unittest.TestCase):
             "memory": {"size": {"size": 10, "multiplier": "2**10"}},
             "algo": {"page_size": 1024},
         }
-        self.mem = PagedPhysMem(self.paged)
+        self.mem = PagedPm(self.paged)
 
     def test_initialization(self):
         mem_size_bytes = convert_size_with_multiplier(self.paged["memory"]["size"])

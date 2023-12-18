@@ -15,11 +15,11 @@ class Reporter:
 
     def add_trace(self, step):
         if step[0] == "l":
-            self.trace += f"       LAUNCH: {step[1]} ({pretty_mem_str(int(step[2])*self.defailt_multiplier)})\n"
+            self.trace += f"       LAUNCH: {step[1]} ({int(step[2])})\n"
         elif step[0] == "t":
             self.trace += f"       TERMINATE: {step[1]}\n"
         elif step[0] == "a":
-            self.trace += f"       ALLOCATE: {step[1]} (offset {pretty_mem_str(int(step[2])*self.defailt_multiplier)})\n"
+            self.trace += f"       ALLOCATE: {step[1]} ({int(step[2])})\n"
         else:
             raise ValueError(f"Invalid script file: {step}")
 

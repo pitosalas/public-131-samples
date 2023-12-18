@@ -1,21 +1,21 @@
 from diag.diag import Colors, Diagram
 from lib.mm_base import MemoryManager
-from lib.pagetables import PCB
-from lib.pm_paged import PagedPhysMem
+from lib.pagetables import PCB, PageTable
+from lib.pm_paged import PagedPm
 from lib.reporter import Reporter
 
 
 class PagedMm(MemoryManager):
     def __init__(self, memory_param: dict) -> None:
         super().__init__(memory_param)
-        self.physical_memory = PagedPhysMem(memory_param)
+        self.physical_memory = PagedPm(memory_param)
         self.pcbs: dict[str, PCB] = {}
 
-    def launch(self, process, size):
-        size *= eval(self.memory_param["default_multiplier"])
-        mapping = self.physical_memory.launch(process, size)
+    def launch(self, process: str, _: int):
+#        size *= eval(self.memory_param["default_multiplier"])
+        mapping = PageTable(process, self.physical_memory)
         if mapping is None:
-            raise ValueError(f"Allocation request {size} for process {process} failed")
+            raise ValueError(f"Allocation request for page table for process {process} failed")
         self.pcbs[process] = PCB(process, mapping)
 
     def terminate(self, process: str):
@@ -34,7 +34,10 @@ class PagedMm(MemoryManager):
         self.physical_memory.report(rep)
 
     def allocate(self, process: str, size: int):
-        pass
+        allocation = self.pcbs[process]
+        if allocation is None:
+            raise ValueError("process not found")
+        allocation.mapping.allocate(size)
 
     def graph(self, dg: Diagram):
         colors = Colors("p2")

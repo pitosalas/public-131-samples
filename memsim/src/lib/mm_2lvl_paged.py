@@ -1,4 +1,4 @@
-from diag.diag import Colors, Diagram
+from diag.diag import Diagram
 from lib.mm_base import MemoryManager
 from lib.pm_2lvl_paged import TwoLevelPagedPm
 from lib.reporter import Reporter
@@ -14,6 +14,7 @@ class TwoLvlPagedMm(MemoryManager):
     def launch(self, process, size):
         # allocate a new process and its sparse page table of a fixed size
         # Fixed size is part of the launching of the process.
+        size *= eval(self.memory_param["default_multiplier"])
         mapping = self.physical_memory.launch(process, size)
         if mapping is None:
             raise ValueError(f"Allocation request {size} for process {process} failed")

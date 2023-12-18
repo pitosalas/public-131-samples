@@ -96,23 +96,30 @@ class Block:
 class PageTable:
 # A page table is an array, indexed by page number, that contains
 # the frame number where that page is stored in memory.
-    def __init__(self, pagesize: int):
+    def __init__(self, process: str, physical_memory):
         self.table: list[int | None] = []
         self.frame_count = 0
-        self.pagesize = pagesize
         self.size: int | None = None
+        self.phys_mem = physical_memory
+        self.process = process
+        page_table_frame = physical_memory.request_free_frame(process)
+        if page_table_frame is None:
+            raise ValueError(f"No free frames for process {process}'s page table")
+        self.page_table_frame = page_table_frame
+
     
-    def add_frame(self, frame: int):
-        self.table.append(frame)
-        self.frame_count += 1
-        self.size = self.frame_count * self.pagesize
+    def allocate(self, required_memory: int):
+        required_frames = self.phys_mem.memory_to_frames(required_memory)
+        for _ in range(required_frames):
+            frame = self.phys_mem.request_free_frame(self.process)
+            if frame is None:
+                raise ValueError(f"No free frames to allocate another page for {self.process}")
+            self.table.append(frame)
+            self.frame_count += 1
 
     def __str__(self):
         return f"PageTable:  {collapse_contiguous_ranges(self.table)}"
     
-    def total_allocated(self) -> int:
-        return self.frame_count * self.pagesize
-
 class PCB:
     def __init__(self, process: str, mapping: Block | PageTable):
         self.mapping: Block | PageTable | TwoLevelPageTable = mapping

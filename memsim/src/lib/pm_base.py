@@ -1,4 +1,3 @@
-from lib.reporter import Reporter
 from lib.pagetables import Block, PageTable, TwoLevelPageTable
 from abc import ABC, abstractmethod
 
@@ -26,7 +25,7 @@ class PhysMem(ABC):
 
 
     @abstractmethod
-    def report(self, rep: Reporter):
+    def report(self, rep):
         pass
 
     

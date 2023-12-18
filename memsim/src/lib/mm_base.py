@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from lib.reporter import Reporter
 from diag.diag import Diagram
 
 
@@ -27,7 +26,7 @@ class MemoryManager(ABC):
         pass
 
     @abstractmethod
-    def report(self, rep: Reporter):
+    def report(self, rep):
         pass
 
     @abstractmethod
