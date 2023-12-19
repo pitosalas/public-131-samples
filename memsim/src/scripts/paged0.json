@@ -12,7 +12,6 @@
         "page_size": 1024
     },
     "memory": {
-        "base_units": "hex",
         "size": {
             "size": 4,
             "multiplier": "2**12"

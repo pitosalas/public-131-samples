@@ -1,8 +1,9 @@
 import unittest
-from lib.utils import find_and_remove, collapse_contiguous_ranges
+from lib.utils import extract_fields, find_and_remove, collapse_contiguous_ranges
+from collections import Counter
 
 
-class TestFindAndREmove(unittest.TestCase):
+class TestFindAndRemove(unittest.TestCase):
     def test1(self):
         lst = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         n = 3
@@ -72,19 +73,26 @@ class TestFlattenFree(unittest.TestCase):
         expected_output = [(1, 1), (3, 3)]
         self.assertEqual(collapse_contiguous_ranges(free_segments), expected_output)
 
+class UtilsTest(unittest.TestCase):
+    def test_extract_fields1(self):
+        inner = 2
+        outer = 2
+        offset = 35
+        address = (outer << 20) + (inner << 8) + offset
+        outer_page_number, inner_page_number, page_offset = extract_fields(
+            address, 12, 12, 8
+        )
+        print(outer_page_number, inner_page_number, page_offset)
+        assert (
+            outer_page_number == outer
+            and inner_page_number == inner
+            and page_offset == offset
+        )
 
 def check_lists(list1, list2, list3):
-    from collections import Counter
-
     c1 = Counter(list1)
     c2 = Counter(list2)
     c3 = Counter(list3)
-    c2.update(c3)
-    for elem in c1:
-        if c1[elem] != c2[elem]:
-            return False
-    return True
+    c2 |= c3
+    return all(value == c2[elem] for elem, value in c1.items())
 
-
-if __name__ == "__main__":
-    unittest.main()

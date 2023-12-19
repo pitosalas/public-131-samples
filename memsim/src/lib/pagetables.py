@@ -96,13 +96,13 @@ class Block:
 class PageTable:
 # A page table is an array, indexed by page number, that contains
 # the frame number where that page is stored in memory.
-    def __init__(self, process: str, physical_memory):
+    def __init__(self, process: str, physmem_instance):
         self.table: list[int | None] = []
         self.frame_count = 0
         self.size: int | None = None
-        self.phys_mem = physical_memory
+        self.phys_mem = physmem_instance
         self.process = process
-        page_table_frame = physical_memory.request_free_frame(process)
+        page_table_frame = physmem_instance.request_free_frame(process)
         if page_table_frame is None:
             raise ValueError(f"No free frames for process {process}'s page table")
         self.page_table_frame = page_table_frame

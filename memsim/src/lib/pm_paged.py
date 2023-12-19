@@ -62,3 +62,5 @@ class PagedPm(PhysMem):
         fragment = 1 if required_memory % self.pagesize != 0 else 0
         return (required_memory // self.pagesize) + fragment
         
+    def free_frames(self):
+        return self.frame_table.count(None)
