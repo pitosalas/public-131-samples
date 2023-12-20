@@ -38,6 +38,7 @@ class PagedPm(PhysMem):
         for frame in mapping.table:
             if frame is not None:
                 self.frame_table[frame] = None
+        self.frame_table[mapping.page_table_frame] = None
 
     def __build_page_table(self, process: str, n_frames: int) -> PageTable | None:
         page_table = PageTable(self.pagesize)

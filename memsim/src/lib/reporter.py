@@ -1,6 +1,7 @@
 from lib.pagetables import PCB
 from lib.utils import pretty_mem_str
 
+
 class Reporter:
     def __init__(self):
         self.trace = ""
@@ -15,13 +16,13 @@ class Reporter:
 
     def add_trace(self, step):
         if step[0] == "l":
-            self.trace += f"       LAUNCH: {step[1]} ({int(step[2])})\n"
+            self.trace += f"       LNCH {step[1]}, {int(step[2])}\n"
         elif step[0] == "t":
-            self.trace += f"       TERMINATE: {step[1]}\n"
+            self.trace += f"       TERM: {step[1]}, {int(step[2])}\n"
         elif step[0] == "a":
-            self.trace += f"       ALLOCATE: {step[1]} ({int(step[2])})\n"
+            self.trace += f"       ALOC: {step[1]}, {int(step[2])}\n"
         else:
-            raise ValueError(f"Invalid script file: {step}")
+            raise ValueError(f"Invalid script file: {step[0]}")
 
     def add_allocations(self, allocs: dict[str, PCB]) -> None:
         self.allocation_stats = ""
@@ -37,18 +38,24 @@ class Reporter:
         print_string = f"Free Segments:\n        {strings}"
         self.phys_memory_stats = print_string
 
-    def add_paged_memory_stats(self, memsize: int, pagesize: int, framecount: int, frame_table: list[bool]):
-        self.phys_memory_stats = f"Physical Memory\n        {pretty_mem_str(memsize)}, pagesize: {pretty_mem_str(pagesize)}, framecount: {framecount}"
-        frame_table_str = ""
-        for i, frame in enumerate(frame_table):
-            frame_table_str += f"{frame} "
-            if i % 32 == 31:
-                frame_table_str += "\n           "
-        self.phys_memory_stats += f"\n        Frames (NONE means free)\n           {frame_table_str}"
+    def add_paged_memory_stats(
+        self, memsize: int, pagesize: int, framecount: int, frame_table: list[bool]
+    ):
+        self.phys_memory_stats = f"   PHYS MEM:\n        {pretty_mem_str(memsize)}, pagesize: {pretty_mem_str(pagesize)}, framecount: {framecount}"
+
+        copy_frame_table = frame_table
+        while copy_frame_table and copy_frame_table[-1] is None:
+            copy_frame_table.pop()
+        frame_table_list = map(lambda x: str(x) if x is not None else "x", copy_frame_table)
+        frame_table_str = ", ".join(frame_table_list)+"..."
+        self.phys_memory_stats += (
+            f"\n        Frames:\n           {frame_table_str}")
 
     def add_seg_mem_stats(self, memsize: int, segsize: int):
-        self.phys_memory_stats = f"Physical Memory:\n           {pretty_mem_str(memsize)}, segment size: {pretty_mem_str(segsize)}"
-        self.phys_memory_stats += "\n           Free segments: self.add_free_segments(self.free_segments)"
+        self.phys_memory_stats = f"PHYS MEM:\n           {pretty_mem_str(memsize)}, segment size: {pretty_mem_str(segsize)}"
+        self.phys_memory_stats += (
+            "\n           Free segments: self.add_free_segments(self.free_segments)"
+        )
 
     def report(self):
         print("----------------------------------------")

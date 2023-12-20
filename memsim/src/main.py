@@ -10,7 +10,7 @@ from lib.mm_paged import PagedMm
 from lib.reporter import Reporter
 from lib.mm_var_seg import VarSegMm
 
-SCRIPT_FILE = "paged0.json"
+SCRIPT_FILE = "twolevel2.json"
 
 class Simulator:
     def __init__(self, reporter: Reporter, diag: Diagram):
@@ -30,15 +30,6 @@ class Simulator:
     def import_json_file(self, filename):
         with open(filename, "r") as f:
             self.config_file = json.load(f)
-
-    # available commands: l, t, a, d
-    # l: launch (process, pointers per page table)
-    # t: touch (process, start, end)
-    # a: allocate (process, address)
-    #   allocate a block of memory at the address
-    # d: deallocate (process)
-    #   deallocate a block of memory at the address
-    
     def execute_command(self, command):
         self.rep.add_trace(command)
         assert self.mmanager is not None

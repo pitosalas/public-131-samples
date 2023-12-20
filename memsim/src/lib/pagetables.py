@@ -3,9 +3,35 @@ from abc import ABC
 from lib.utils import extract_fields, pretty_mem_str, collapse_contiguous_ranges
 
 class MemoryMapping(ABC):
-    def __init__(self, capacity_bytes):
-        self.capacity_bytes = capacity_bytes
+    def __init__(self, process: str, physmem_instance):
+        self.physmem = physmem_instance
+        self.process = process
 
+
+class PageTable:
+# A page table is an array, indexed by page number, that contains
+# the frame number where that page is stored in memory.
+    def __init__(self, process: str, physmem_instance):
+        self.table: list[int | None] = []
+        self.frame_count = 0
+        self.size: int | None = None
+        self.page_table_frame = physmem_instance.request_free_frame(f"{process}-page-table")
+        if self.page_table_frame is None:
+            raise ValueError(f"No free frames for process {process}'s page table")
+
+    
+    def allocate(self, required_memory: int):
+        required_frames = self.phys_mem.memory_to_frames(required_memory)
+        for _ in range(required_frames):
+            frame = self.phys_mem.request_free_frame(self.process)
+            if frame is None:
+                raise ValueError(f"No free frames to allocate another page for {self.process}")
+            self.table.append(frame)
+            self.frame_count += 1
+
+    def __str__(self):
+        return f"PageTable:  {collapse_contiguous_ranges(self.table)}"
+    
 class TwoLevelPageTable(MemoryMapping):
     """
     Two-level page table implementation.
@@ -35,23 +61,35 @@ class TwoLevelPageTable(MemoryMapping):
         __str__() -> str:
             Returns a string representation of the TwoLevelPageTable object.
     """
-    def __init__(self, page_size: int, entries_per_page_table: int):
-        super().__init__(entries_per_page_table**2 * page_size)
-        self.page_size = page_size
-        self.entries_per_page_table = entries_per_page_table
+    def __init__(self, process: str, physmem_instance, entries_per_page_table):
+        super().__init__(process, physmem_instance)
         self.table: list[None | list[int]] | None = [None] * entries_per_page_table
+        self.frame_count = 0
+        self.size: int | None = None
+        self.entries_per_page_table = entries_per_page_table
+        self.page_table_frame = self.physmem.request_free_frame(f"{self.process}-outer-pt")
+        if self.page_table_frame is None:
+            raise ValueError(f"No free frames to allocate outer page table for {self.process}")
     
     def allocate(self, logical_address: int):
         pt_bits = (self.entries_per_page_table-1).bit_length()
-        offset_bits = (self.page_size-1).bit_length()
+        offset_bits = (self.physmem.pagesize-1).bit_length()
         outer_page_number, inner_page_number, _ = extract_fields(logical_address, pt_bits, pt_bits, offset_bits)
         assert self.table is not None
         if self.table[outer_page_number] is None:
             self.table[outer_page_number] = [None] * self.entries_per_page_table
+            self.frame_count += 1
+            self.page_table_frame = self.physmem.request_free_frame(f"{self.process}-inner-pt")
+
         inner_page_table = self.table[outer_page_number]
         assert inner_page_table is not None
         if inner_page_table[inner_page_number] is None:
-            inner_page_table[inner_page_number] = "allocated"
+            frame = self.physmem.request_free_frame(f"{self.process}")
+            if frame is None:
+                raise ValueError(f"No free frames to allocate another page for {self.process}")
+            inner_page_table[inner_page_number] = frame
+            self.frame_count += 1
+
     
     def get_statistics(self) -> tuple[int, int]:
         inner_pt_count = 0
@@ -93,33 +131,7 @@ class Block:
     def contains(self, logical_address: int) -> bool:
         return logical_address <= self.size
 
-class PageTable:
-# A page table is an array, indexed by page number, that contains
-# the frame number where that page is stored in memory.
-    def __init__(self, process: str, physmem_instance):
-        self.table: list[int | None] = []
-        self.frame_count = 0
-        self.size: int | None = None
-        self.phys_mem = physmem_instance
-        self.process = process
-        page_table_frame = physmem_instance.request_free_frame(process)
-        if page_table_frame is None:
-            raise ValueError(f"No free frames for process {process}'s page table")
-        self.page_table_frame = page_table_frame
 
-    
-    def allocate(self, required_memory: int):
-        required_frames = self.phys_mem.memory_to_frames(required_memory)
-        for _ in range(required_frames):
-            frame = self.phys_mem.request_free_frame(self.process)
-            if frame is None:
-                raise ValueError(f"No free frames to allocate another page for {self.process}")
-            self.table.append(frame)
-            self.frame_count += 1
-
-    def __str__(self):
-        return f"PageTable:  {collapse_contiguous_ranges(self.table)}"
-    
 class PCB:
     def __init__(self, process: str, mapping: Block | PageTable):
         self.mapping: Block | PageTable | TwoLevelPageTable = mapping

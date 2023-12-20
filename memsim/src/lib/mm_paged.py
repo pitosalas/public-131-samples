@@ -12,7 +12,6 @@ class PagedMm(MemoryManager):
         self.pcbs: dict[str, PCB] = {}
 
     def launch(self, process: str, _: int):
-#        size *= eval(self.memory_param["default_multiplier"])
         mapping = PageTable(process, self.physical_memory)
         if mapping is None:
             raise ValueError(f"Allocation request for page table for process {process} failed")
@@ -25,19 +24,19 @@ class PagedMm(MemoryManager):
         self.physical_memory.deallocate(allocation.mapping)
         del self.pcbs[process]
 
-    def __str__(self) -> str:
-        return "Paged Memory Manager"
-
-
-    def report(self, rep: Reporter):
-        rep.add_allocations(self.pcbs)
-        self.physical_memory.report(rep)
-
     def allocate(self, process: str, size: int):
         allocation = self.pcbs[process]
         if allocation is None:
             raise ValueError("process not found")
         allocation.mapping.allocate(size)
+
+
+    def __str__(self) -> str:
+        return "Paged Memory Manager"
+
+    def report(self, rep: Reporter):
+        rep.add_allocations(self.pcbs)
+        self.physical_memory.report(rep)
 
     def graph(self, dg: Diagram):
         colors = Colors("p2")
