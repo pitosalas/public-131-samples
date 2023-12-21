@@ -43,24 +43,27 @@ class TwoLvlPagedMm(MemoryManager):
         self.physical_memory.report(rep)
 
     def graph(self, dg: Diagram):
-        c_outer = Colors("p2")
+        self.c_outer = Colors("p2")
+        self.c_inner = Colors("p1")
+        self.left = dg.add_tier("left", rank="source")
+        self.middle = dg.add_tier("middle", rank="middle")
+        self.right = dg.add_tier("left", rank="source")
+
         # Create the box which will be Physical Memory.
         phys = dg.add_box("Physical Memory", "physmem")
         for id, entry in enumerate(self.physical_memory.frame_table):
             color = "bisque2" if (id % 2) == 0 else "gainsboro"
             entrylabel = f"""frame {id}""" if entry is not None else "FREE"
             phys.add_section_to_box(f"""{id}""", entry, entrylabel, color, 30)
-        t1 = dg.add_tier("left", rank="sink")
-        dg.render_box(phys, t1)
+        dg.render_box_in_tier(self.left, phys)
 
         # Now create boxes for each process' Page Tables
-        t2 = dg.add_tier("right", rank="source")
         for process, allocation in self.pcbs.items():
-            rotated__outer_color = c_outer.rotate()
+            rotated__outer_color = self.c_outer.rotate()
             c_inner = Colors("p1")
             box = dg.add_box(process, f"outer-{process}")
             for id, frame in enumerate(allocation.mapping.table):
-                rotated_inner_olor = c_inner.rotate()
+                inner_color = c_inner.rotate()
                 # outer pt from process
                 if frame is None:
                     box.add_section_to_box(f"{id}", "outer pt entry", f"{id}", color, 30)
@@ -77,7 +80,7 @@ class TwoLvlPagedMm(MemoryManager):
                             box_inner.add_section_to_box(
                                 f"{id_inner}", "inner pt entry", f"{id_inner}", color, 30
                             )
-                            dg.add_edge(f"inner-{process}-{id}:{id_inner}", f"physmem:{inner_frame}", rotated_inner_olor)
+                            dg.add_edge(f"inner-{process}-{id}:{id_inner}", f"physmem:{inner_frame}", inner_color)
                     dg.add_edge(f"outer-{process}:{id}", f"inner-{process}-{id}:0", rotated__outer_color)
-                    dg.render_box(box_inner, t2)
-            dg.render_box(box, t2)
+                    dg.render_box_in_tier(self.middle, box_inner)
+            dg.render_box_in_tier(self.right, box)

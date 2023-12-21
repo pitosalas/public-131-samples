@@ -18,7 +18,7 @@ class Box:
     def add_section_to_box(
         self, ident: str, label: str, sub: str, color: str, height: int = 21
     ):
-        #print(f"Adding section {ident} to box {self.handle}")
+        print(f"Adding section {ident} to box {self.handle}")
         self.sections.append(
             {
                 "ident": ident,
@@ -63,7 +63,7 @@ class Diagram:
         self.tiers: dict = {}
 
     def add_edge(self, src: str, dest: str, col: str = "black", headclip: str = "true", tailclip: str = "true"):
-        #print(f"Adding edge from {src} to {dest}")
+        print(f"Adding edge from {src} to {dest}")
         self.dot.edge(src, dest, color=col, headclip=headclip, tailclip=tailclip)
 
     def add_tier(self, name: str, rank: str = "same"):
@@ -77,7 +77,7 @@ class Diagram:
         self.dot.render(outfile=f"{self.name}.pdf")
 
     def add_box(self, label: str, handle: str, height: int = 80):
-        #print(f"Adding box {label} with handle {handle}")
+        print(f"Adding box {label} with handle {handle}")
         self.boxes[handle] = Box(label, handle, self.dot, height)
         return self.boxes[handle]
 
