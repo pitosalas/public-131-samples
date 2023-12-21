@@ -73,6 +73,7 @@ class TestFlattenFree(unittest.TestCase):
         expected_output = [(1, 1), (3, 3)]
         self.assertEqual(collapse_contiguous_ranges(free_segments), expected_output)
 
+
 class UtilsTest(unittest.TestCase):
     def test_extract_fields1(self):
         inner = 2
@@ -89,10 +90,10 @@ class UtilsTest(unittest.TestCase):
             and page_offset == offset
         )
 
+
 def check_lists(list1, list2, list3):
     c1 = Counter(list1)
     c2 = Counter(list2)
     c3 = Counter(list3)
     c2 |= c3
     return all(value == c2[elem] for elem, value in c1.items())
-

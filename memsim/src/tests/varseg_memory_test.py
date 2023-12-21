@@ -39,6 +39,7 @@ class TestVarSegPhysMem(unittest.TestCase):
         self.assertEqual(len(self.mem.freelist), 1)
         self.assertEqual(self.mem.freelist[0].size, 1 * 2**30)
 
+
 class TestPagedPhysMem(unittest.TestCase):
     def setUp(self):
         self.mem_size = 1 * 2**30
@@ -51,7 +52,9 @@ class TestPagedPhysMem(unittest.TestCase):
     def test_initialization(self):
         mem_size_bytes = convert_size_with_multiplier(self.paged["memory"]["size"])
         self.assertEqual(self.mem.memsize, mem_size_bytes)
-        self.assertEqual(len(self.mem.frame_table), mem_size_bytes // self.paged["algo"]["page_size"])
+        self.assertEqual(
+            len(self.mem.frame_table), mem_size_bytes // self.paged["algo"]["page_size"]
+        )
 
     def test_allocate_deallocate(self):
         size = 1024  # 1 pages

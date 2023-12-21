@@ -1,7 +1,7 @@
 from diag.diag import Diagram
 
 
-d =  Diagram("test")
+d = Diagram("test")
 
 box1 = d.add_box("Box1", "box1")
 box2 = d.add_box("Box2", "box2")
@@ -42,7 +42,7 @@ box4.add_section_to_box("d", "life is good")
 box4.add_section_to_box("e", "life is good")
 box4.add_section_to_box("f", "life is good")
 
-d.render_box(box1, t1) 
+d.render_box(box1, t1)
 d.render_box(box2, t2)
 d.render_box(box3, t2)
 d.render_box(box4, t3)
@@ -53,7 +53,6 @@ d.add_edge("box3:b", "box1:g", "green")
 d.add_edge("box2:a", "box1:c", "red")
 d.add_edge("box4:a", "box1:d", "blue")
 d.add_edge("box4:c", "box1:c", "blue")
-
 
 
 d.generate_diagram()

@@ -11,7 +11,13 @@ fifth = d.add_tier("cluster_fifth", rank="source")
 # Top level pointers
 top = d.add_box("inode", "top")
 
-top.add_section_to_box("meta", "meta data", "names, sizes, <br/>owners, dates,<br/> etc.", "darkseagreen2", 50)
+top.add_section_to_box(
+    "meta",
+    "meta data",
+    "names, sizes, <br/>owners, dates,<br/> etc.",
+    "darkseagreen2",
+    50,
+)
 
 colors = Colors("p4")
 
@@ -28,7 +34,9 @@ d.render_box_in_tier(first, top)
 for i in range(3):
     ibox = d.add_box(f"Ind Ptrs {i}", f"ibox{i}")
     for j in range(8):
-        ibox.add_section_to_box(f"{j}", "-", None, colors.alternate(colors.color(3), -10), 18)
+        ibox.add_section_to_box(
+            f"{j}", "-", None, colors.alternate(colors.color(3), -10), 18
+        )
 
 d.render_boxname_in_tier(third, "ibox0")
 d.render_boxname_in_tier(second, "ibox1")
@@ -38,7 +46,9 @@ d.render_boxname_in_tier(third, "ibox2")
 for i in range(2):
     dbox = d.add_box(f"Dbl Indirect Ptrs {i}", f"dbox{i}")
     for j in range(8):
-        dbox.add_section_to_box(f"{j}", "-", None, colors.alternate(colors.color(2), -10), 18)
+        dbox.add_section_to_box(
+            f"{j}", "-", None, colors.alternate(colors.color(2), -10), 18
+        )
 
 d.render_boxname_in_tier(second, "dbox0")
 d.render_boxname_in_tier(third, "dbox1")
@@ -48,7 +58,9 @@ d.add_edge("top:9:c", "dbox0", "green", tailclip="false")
 # Triple indirect pointer table
 tbox = d.add_box("Tripl Ind Ptrs", "tbox0")
 for i in range(8):
-    tbox.add_section_to_box(f"{i}", "-", None, colors.alternate(colors.color(6), -10), 18)
+    tbox.add_section_to_box(
+        f"{i}", "-", None, colors.alternate(colors.color(6), -10), 18
+    )
 d.render_box_in_tier(second, tbox)
 
 d.add_edge("top:10:c", "tbox0", "orange", tailclip="false")

@@ -26,4 +26,6 @@ class UseCaseTest(unittest.TestCase):
     def test_alocation(self):
         self.fixedseg_mm.launch("p1", 4)
         allocation = self.fixedseg_mm.allocations["p1"]
-        self.assertEqual(allocation.mapping.size, 4 * eval(self.param["default_multiplier"]))
+        self.assertEqual(
+            allocation.mapping.size, 4 * eval(self.param["default_multiplier"])
+        )

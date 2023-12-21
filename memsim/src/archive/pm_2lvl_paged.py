@@ -26,7 +26,6 @@ class TwoLevelPagedPm(PhysMem):
         if page_table is None:
             raise ValueError("Invalid mapping")
         page_table.allocate(address)
-        
 
     def report(self, rep: Reporter):
         pass
@@ -36,7 +35,6 @@ class TwoLevelPagedPm(PhysMem):
 
     def reserve_free_frames(self, count: int):
         pass
-
 
     def deallocate(self, process: str) -> None:
         pass

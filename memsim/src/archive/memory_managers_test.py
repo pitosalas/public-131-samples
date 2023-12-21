@@ -4,6 +4,7 @@ from lib.mm_paged import PagedMm
 
 from lib.mm_var_seg import VarSegMm
 
+
 class TestMemoryManager(unittest.TestCase):
     def setUp(self):
         self.json_file = {
@@ -12,7 +13,7 @@ class TestMemoryManager(unittest.TestCase):
                 "seg": {"size": 1, "multiplier": "2**10"},
             },
             "default_multiplier": "2**10",
-            "algo": { "page_size": 2048 }
+            "algo": {"page_size": 2048},
         }
         self.varsegmm = VarSegMm(memory_param=self.json_file)
         self.fixedsegmm = FixedSegMm(memory_param=self.json_file)

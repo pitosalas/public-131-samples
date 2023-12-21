@@ -1,6 +1,7 @@
 """
 A simple memory magement simulation and demonstration app.
 """
+
 import json
 from diag.diag import Diagram
 from lib.mm_2lvl_paged import TwoLvlPagedMm
@@ -10,7 +11,8 @@ from lib.mm_paged import PagedMm
 from lib.reporter import Reporter
 from lib.mm_var_seg import VarSegMm
 
-SCRIPT_FILE = "twolevel2.json"
+SCRIPT_FILE = "twolevel3.json"
+
 
 class Simulator:
     def __init__(self, reporter: Reporter, diag: Diagram):
@@ -21,7 +23,7 @@ class Simulator:
         self.data = None
 
     def prepare_factory(self):
-        self.factory: MmFactory = MmFactory() 
+        self.factory: MmFactory = MmFactory()
         self.factory.register("var_seg", VarSegMm)
         self.factory.register("fixed_seg", FixedSegMm)
         self.factory.register("paged", PagedMm)
@@ -30,6 +32,7 @@ class Simulator:
     def import_json_file(self, filename):
         with open(filename, "r") as f:
             self.config_file = json.load(f)
+
     def execute_command(self, command):
         self.rep.add_trace(command)
         assert self.mmanager is not None
@@ -55,6 +58,7 @@ class Simulator:
             self.execute_command(step)
         self.mmanager.report(self.rep)
         self.mmanager.graph(self.dg)
+
 
 if __name__ == "__main__":
     rep = Reporter()

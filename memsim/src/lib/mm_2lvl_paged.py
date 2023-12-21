@@ -45,42 +45,62 @@ class TwoLvlPagedMm(MemoryManager):
     def graph(self, dg: Diagram):
         self.c_outer = Colors("p2")
         self.c_inner = Colors("p1")
-        self.left = dg.add_tier("left", rank="source")
-        self.middle = dg.add_tier("middle", rank="middle")
-        self.right = dg.add_tier("left", rank="source")
+        self.physical = dg.add_tier("physical", rank="source")
+        self.inner = dg.add_tier("inner", rank="middle")
+        self.outer = dg.add_tier("outer", rank="sink")
+        self.dg = dg
+        self.create_box_for_physical_memory()
+        self.create_box_for_outer_pt()
 
+    def create_box_for_physical_memory(self):
         # Create the box which will be Physical Memory.
-        phys = dg.add_box("Physical Memory", "physmem")
+        phys = self.dg.add_box("Physical Memory", "physmem")
         for id, entry in enumerate(self.physical_memory.frame_table):
             color = "bisque2" if (id % 2) == 0 else "gainsboro"
-            entrylabel = f"""frame {id}""" if entry is not None else "FREE"
+            entrylabel = f"""physical frame {id}""" if entry is not None else "FREE"
             phys.add_section_to_box(f"""{id}""", entry, entrylabel, color, 30)
-        dg.render_box_in_tier(self.left, phys)
+        self.dg.render_box_in_tier(self.physical, phys)
 
-        # Now create boxes for each process' Page Tables
+    def create_box_for_outer_pt(self):
+        color_palette = Colors("p5")
+        c1 = color_palette.random_color()
+        c2 = color_palette.alternate(c1, 50)
         for process, allocation in self.pcbs.items():
-            rotated__outer_color = self.c_outer.rotate()
-            c_inner = Colors("p1")
-            box = dg.add_box(process, f"outer-{process}")
+            box = self.dg.add_box(process, f"outer_{process}")
             for id, frame in enumerate(allocation.mapping.table):
-                inner_color = c_inner.rotate()
                 # outer pt from process
                 if frame is None:
-                    box.add_section_to_box(f"{id}", "outer pt entry", f"{id}", color, 30)
+                    box.add_section_to_box(f"{id}", "empty", f"pt slot {id}", c1, 30)
                 else:
-                    box.add_section_to_box(f"{id}", "outer pt entry", f"{id}", color, 30)
-                    box_inner = dg.add_box(f"inner-{process}-{id}", f"inner-{process}-{id}")
-                    for id_inner, inner_frame in enumerate(frame):
-                        # inner pt for outer pt slot id
-                        if inner_frame is None:
-                            box_inner.add_section_to_box(
-                                f"{id_inner}", "inner pt entry", f"{id_inner}", color, 30
-                            )
-                        else:
-                            box_inner.add_section_to_box(
-                                f"{id_inner}", "inner pt entry", f"{id_inner}", color, 30
-                            )
-                            dg.add_edge(f"inner-{process}-{id}:{id_inner}", f"physmem:{inner_frame}", inner_color)
-                    dg.add_edge(f"outer-{process}:{id}", f"inner-{process}-{id}:0", rotated__outer_color)
-                    dg.render_box_in_tier(self.middle, box_inner)
-            dg.render_box_in_tier(self.right, box)
+                    box.add_section_to_box(
+                        f"{id}", "to inner pt", f"pt slot {id}", c2, 30
+                    )
+                    self.create_box_for_inner_pt(process, id, frame)
+            self.dg.render_box_in_tier(self.outer, box)
+
+    def create_box_for_inner_pt(self, process, id, frame):
+        color_palette = Colors("p5")
+        c1 = color_palette.random_color()
+        c2 = color_palette.alternate(c1, 50)
+        box_inner = self.dg.add_box(f"inner_{process}_{id}", f"inner_{process}_{id}")
+        for id_inner, inner_frame in enumerate(frame):
+            # inner pt for outer pt slot id
+            if inner_frame is None:
+                box_inner.add_section_to_box(
+                    f"{id_inner}",
+                    "unused",
+                    f"{id_inner}",
+                    c1,
+                    30,
+                )
+            else:
+                box_inner.add_section_to_box(
+                    f"{id_inner}", "to physical", f"pt slot: {id_inner}", c2, 30
+                )
+                self.dg.add_edge(
+                    f"inner_{process}_{id}:{id_inner}",
+                    f"physmem:{inner_frame}",
+                    "orange",
+                )
+        self.dg.add_edge(f"outer_{process}:{id}", f"inner_{process}_{id}:0", "orange")
+        self.dg.render_box_in_tier(self.inner, box_inner)

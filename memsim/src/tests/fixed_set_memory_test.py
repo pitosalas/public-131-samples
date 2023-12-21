@@ -1,5 +1,3 @@
-
-
 import unittest
 
 from lib.pm_fixed_seg import FixedSegPhysMem
@@ -34,4 +32,3 @@ class TestFixedSegPhysMem(unittest.TestCase):
             len(self.mem.free_segments),
             initial_free_segments + (size // self.mem.segsize),
         )
-

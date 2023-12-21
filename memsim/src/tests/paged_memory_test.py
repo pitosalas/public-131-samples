@@ -19,8 +19,12 @@ class PageTableTest(unittest.TestCase):
         pt.allocate(2 * 2**10)
         assert physmem.free_frames() == 0
         assert pt.frame_count == 3
-        
-    @given(st.integers(min_value=1, max_value=12), st.integers(min_value=1, max_value=12), st.integers(min_value=1, max_value=31))
+
+    @given(
+        st.integers(min_value=1, max_value=12),
+        st.integers(min_value=1, max_value=12),
+        st.integers(min_value=1, max_value=31),
+    )
     def test_pagetable_hypo(self, block1: int, block2: int, block3: int):
         tot_frames = block1 + block2 + block3 + 2
         params = {

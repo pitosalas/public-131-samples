@@ -1,6 +1,6 @@
 import random
 
-import graphviz # type: ignore
+import graphviz  # type: ignore
 
 BOX_FONTSIZE = "11"
 LABEL_FONTSIZE = "10"
@@ -8,12 +8,12 @@ SUB_LABEL_FONTSIZE = "9"
 
 
 class Box:
-    def __init__(self, label: str, handle: str, dot: graphviz.Digraph, width:int = 80):
+    def __init__(self, label: str, handle: str, dot: graphviz.Digraph, width: int = 80):
         self.handle = handle
         self.label = label
         self.dot = dot
         self.width = width
-        self.sections: list[dict[str,object]] = []
+        self.sections: list[dict[str, object]] = []
 
     def add_section_to_box(
         self, ident: str, label: str, sub: str, color: str, height: int = 21
@@ -62,7 +62,14 @@ class Diagram:
         self.boxes: dict = {}
         self.tiers: dict = {}
 
-    def add_edge(self, src: str, dest: str, col: str = "black", headclip: str = "true", tailclip: str = "true"):
+    def add_edge(
+        self,
+        src: str,
+        dest: str,
+        col: str = "black",
+        headclip: str = "true",
+        tailclip: str = "true",
+    ):
         print(f"Adding edge from {src} to {dest}")
         self.dot.edge(src, dest, color=col, headclip=headclip, tailclip=tailclip)
 
@@ -121,8 +128,9 @@ pallettes = {
     "p3": ["#a6998c", "#f1e0c5", "#9c95dc", "#e84a65", "#cc66c0"],
     "p4": ["#6B240C", "#994D1C", "#E48F45", "#F5CCA0"],
     "p5": ["#c1b8ae", "#c2adbc", "#bd92dd", "#a48cae", "#8b867e", "#6e85af"],
-    "p6": ["#FDF7E4", "#FAEED1", "#DED0B6", "#BBAB8C"]
+    "p6": ["#FDF7E4", "#FAEED1", "#DED0B6", "#BBAB8C"],
 }
+
 
 class Colors:
     def __init__(self, pallette: str):
@@ -140,7 +148,7 @@ class Colors:
         self.last += 1
         max_val = min(max, len(self.palette))
         return self.palette[self.last % max_val]
-    
+
     def adjust_color(self, color: str, amount: int) -> str:
         color_hex = int(color.lstrip("#"), 16)
         red = (color_hex >> 16) & 0xFF
@@ -150,12 +158,12 @@ class Colors:
         newGreen = min(green + amount, 255)
         newBlue = min(blue + amount, 255)
         newColor = (newRed << 16) + (newGreen << 8) + newBlue
-        hex_str = hex(newColor) # convert int to hex 
-        hex_str = hex_str.lstrip("0x") # remove 0x prefix
+        hex_str = hex(newColor)  # convert int to hex
+        hex_str = hex_str.lstrip("0x")  # remove 0x prefix
         return f"#{hex_str}"
-    
+
     def alternate(self, color: str, amount: int) -> str:
-        if (self.flip_flop):
+        if self.flip_flop:
             self.flip_flop = False
             return self.adjust_color(color, amount)
         else:

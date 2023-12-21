@@ -1,0 +1,29 @@
+{
+    "scenario": "Tiny Example Sparse Paged Memory Manager",
+    "default_multiplier": "2**10",
+    "script": [
+        ["l", "p1", "8"],
+        ["a", "p1", "0"],
+        ["a", "p1", "1"],
+        ["a", "p1", "2"],
+        ["a", "p1", "10"],
+        ["a", "p1", "18"],
+        ["a", "p1", "25"],
+        ["l", "p2", "8"],
+        ["a", "p2", "0"],
+        ["a", "p2", "1"],
+        ["a", "p2", "9"],
+        ["a", "p2", "3"]
+    ],
+    "algo": {
+        "name": "twolevel",
+        "page_size": 1024
+    },
+    "memory": {
+        "base_units": "hex",
+        "size": {
+            "size": 32,
+            "multiplier": "2**10"
+        }
+    }
+}

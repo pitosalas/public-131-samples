@@ -1,0 +1,19 @@
+{
+    "scenario": "Example Two Level Paged Memory Manager",
+    "default_multiplier": "2**10",
+    "script": [
+        ["l", "p1", "8"],
+        ["a", "p1", "0"]
+    ],
+    "algo": {
+        "name": "twolevel",
+        "page_size": 1024
+    },
+    "memory": {
+        "base_units": "hex",
+        "size": {
+            "size": 32,
+            "multiplier": "2**10"
+        }
+    }
+}
